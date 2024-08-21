@@ -1,0 +1,101 @@
+<div cdkDropListGroup>
+	<div class="example-container">
+		<fieldset>
+			<legend>Main Queue</legend>
+
+			<div cdkDropList [cdkDropListData]="todo" class="example-list" (cdkDropListDropped)="drop($event)">
+				@for (item of todo; track item) {
+				<div class="example-box" cdkDrag>{{item}}</div>
+				}
+			</div>
+		</fieldset>
+	</div>
+
+	<div class="example-container">
+		<fieldset>
+			<legend>History</legend>
+
+			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
+				@for (item of done; track item) {
+				<div class="example-box" cdkDrag>{{item}}</div>
+				}
+			</div>
+		</fieldset>
+	</div>
+
+	<div class="example-container">
+		<fieldset>
+			<legend>Nachrichten 20:00</legend>
+
+			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
+				@for (item of done; track item) {
+				<div class="example-box" cdkDrag>{{item}}</div>
+				}
+			</div>
+		</fieldset>
+		<br>
+		<fieldset>
+			<legend>Nachrichten 21:00</legend>
+
+			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
+				@for (item of done; track item) {
+				<div class="example-box" cdkDrag>{{item}}</div>
+				}
+			</div>
+		</fieldset>
+	</div>
+
+	<div class="example-container">
+		<fieldset>
+			<legend>Werbung 20:15</legend>
+
+			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
+				@for (item of done; track item) {
+				<div class="example-box" cdkDrag>{{item}}</div>
+				}
+			</div>
+		</fieldset>
+		<br>
+		<fieldset>
+			<legend>Werbung 20:45</legend>
+
+			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
+				@for (item of done; track item) {
+				<div class="example-box" cdkDrag>{{item}}</div>
+				}
+			</div>
+		</fieldset>
+	</div>
+
+	<div class="example-container">
+		<fieldset>
+			<legend>Report 20:30</legend>
+
+			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
+				@for (item of done; track item) {
+				<div class="example-box" cdkDrag>{{item}}</div>
+				}
+			</div>
+		</fieldset>
+		<br>
+		<fieldset>
+			<legend>Eilmeldung</legend>
+
+			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
+				@for (item of done; track item) {
+				<div class="example-box" cdkDrag>{{item}}</div>
+				}
+			</div>
+		</fieldset>
+		<br>
+		<fieldset>
+			<legend>Musikwunsch ??:??</legend>
+
+			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
+				@for (item of done; track item) {
+				<div class="example-box" cdkDrag>{{item}}</div>
+				}
+			</div>
+		</fieldset>
+	</div>
+</div>

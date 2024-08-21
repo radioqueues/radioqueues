@@ -1,6 +1,5 @@
 import { Entry } from "./entry";
 
-export class Queue {
-	name?: string;
-	entries?: Entry[];
+export class Queue extends Entry {
+	entries!: Entry[];
 }

@@ -9,13 +9,15 @@ import {
 } from '@angular/cdk/drag-drop';
 
 import { Entry } from '../../model/entry';
+import { Queue } from 'src/app/model/queue';
+import { QueueComponent } from '../queue/queue.component';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
 	templateUrl: './queue-manager-main-window.component.html',
 	styleUrl: './queue-manager-main-window.component.css',
 	standalone: true,
-	imports: [CdkDropListGroup, CdkDropList, CdkDrag],
+	imports: [CdkDropListGroup, CdkDropList, CdkDrag, QueueComponent],
 })
 export class QueueManagerMainWindowComponent {
 	todo: Entry[] = [
@@ -24,7 +26,7 @@ export class QueueManagerMainWindowComponent {
 		},
 		{
 			name: 'Pick up groceries'
-			},
+		},
 		{
 			name: 'Go home'
 		},
@@ -39,7 +41,7 @@ export class QueueManagerMainWindowComponent {
 		},
 		{
 			name: 'Brush teeth'
-			},
+		},
 		{
 			name: 'Take a shower'
 		},
@@ -49,6 +51,56 @@ export class QueueManagerMainWindowComponent {
 		{
 			name: 'Walk dog'
 		}
+	];
+
+	queues: Queue[][] = [
+		[
+			{
+				name: 'Main Queue',
+				entries: this.todo
+			}
+		],
+		[
+			{
+				name: 'History',
+				entries: this.done
+			}
+		],
+		[
+			{
+				name: 'Nachrichten 20:00',
+				entries: this.done
+			},
+			{
+				name: 'Nachrichten 21:00',
+				entries: this.done
+			}
+		],
+		[
+			{
+				name: 'Werbung 20:15',
+				entries: this.done
+			},
+			{
+				name: 'Werbung 21:45',
+				entries: this.done
+			}
+		],
+		[
+			{
+				name: 'Report 20:30',
+				entries: this.done
+			},
+			{
+				name: 'Eilmeldung',
+				entries: this.done
+			},
+			{
+				name: 'Musikwunsch ??:??',
+				entries: this.done
+			}
+		]
+
 	];
 
 	drop(event: CdkDragDrop<Entry[]>) {

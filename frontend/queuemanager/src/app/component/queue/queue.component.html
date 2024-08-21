@@ -1,0 +1,9 @@
+<fieldset>
+	<legend>{{queue.name}}</legend>
+
+	<div cdkDropList [cdkDropListData]="queue.entries" class="example-list" (cdkDropListDropped)="drop($event)">
+		@for (item of queue.entries; track item) {
+			<div class="example-box" cdkDrag><span><span>20:00:00</span> X <span>{{item.name}}</span></span>	<span>3:00</span></div>
+		}
+	</div>
+</fieldset>

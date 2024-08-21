@@ -5,7 +5,7 @@
 
 			<div cdkDropList [cdkDropListData]="todo" class="example-list" (cdkDropListDropped)="drop($event)">
 				@for (item of todo; track item) {
-				<div class="example-box" cdkDrag>{{item}}</div>
+				<div class="example-box" cdkDrag><span><span>20:00:00</span> X <span>{{item.name}}</span></span>	<span>3:00</span></div>
 				}
 			</div>
 		</fieldset>
@@ -17,7 +17,7 @@
 
 			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
 				@for (item of done; track item) {
-				<div class="example-box" cdkDrag>{{item}}</div>
+				<div class="example-box" cdkDrag>{{item.name}}</div>
 				}
 			</div>
 		</fieldset>
@@ -29,7 +29,7 @@
 
 			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
 				@for (item of done; track item) {
-				<div class="example-box" cdkDrag>{{item}}</div>
+				<div class="example-box" cdkDrag>{{item.name}}</div>
 				}
 			</div>
 		</fieldset>
@@ -39,7 +39,7 @@
 
 			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
 				@for (item of done; track item) {
-				<div class="example-box" cdkDrag>{{item}}</div>
+				<div class="example-box" cdkDrag>{{item.name}}</div>
 				}
 			</div>
 		</fieldset>
@@ -51,7 +51,7 @@
 
 			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
 				@for (item of done; track item) {
-				<div class="example-box" cdkDrag>{{item}}</div>
+				<div class="example-box" cdkDrag>{{item.name}}</div>
 				}
 			</div>
 		</fieldset>
@@ -61,7 +61,7 @@
 
 			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
 				@for (item of done; track item) {
-				<div class="example-box" cdkDrag>{{item}}</div>
+				<div class="example-box" cdkDrag>{{item.name}}</div>
 				}
 			</div>
 		</fieldset>
@@ -73,7 +73,7 @@
 
 			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
 				@for (item of done; track item) {
-				<div class="example-box" cdkDrag>{{item}}</div>
+				<div class="example-box" cdkDrag>{{item.name}}</div>
 				}
 			</div>
 		</fieldset>
@@ -83,7 +83,7 @@
 
 			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
 				@for (item of done; track item) {
-				<div class="example-box" cdkDrag>{{item}}</div>
+				<div class="example-box" cdkDrag>{{item.name}}</div>
 				}
 			</div>
 		</fieldset>
@@ -93,7 +93,7 @@
 
 			<div cdkDropList [cdkDropListData]="done" class="example-list" (cdkDropListDropped)="drop($event)">
 				@for (item of done; track item) {
-				<div class="example-box" cdkDrag>{{item}}</div>
+				<div class="example-box" cdkDrag>{{item.name}}</div>
 				}
 			</div>
 		</fieldset>

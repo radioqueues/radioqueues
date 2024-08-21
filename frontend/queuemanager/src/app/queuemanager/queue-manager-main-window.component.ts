@@ -8,6 +8,8 @@ import {
 	transferArrayItem,
 } from '@angular/cdk/drag-drop';
 
+import { Entry } from '../model/entry';
+
 @Component({
 	selector: 'app-queue-manager-main-window',
 	templateUrl: './queue-manager-main-window.component.html',
@@ -16,11 +18,40 @@ import {
 	imports: [CdkDropListGroup, CdkDropList, CdkDrag],
 })
 export class QueueManagerMainWindowComponent {
-	todo = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
+	todo: Entry[] = [
+		{
+			name: 'Get to work'
+		},
+		{
+			name: 'Pick up groceries'
+			},
+		{
+			name: 'Go home'
+		},
+		{
+			name: 'Fall asleep'
+		}
+	];
 
-	done = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
+	done: Entry[] = [
+		{
+			name: 'Get up'
+		},
+		{
+			name: 'Brush teeth'
+			},
+		{
+			name: 'Take a shower'
+		},
+		{
+			name: 'Check e-mail'
+		},
+		{
+			name: 'Walk dog'
+		}
+	];
 
-	drop(event: CdkDragDrop<string[]>) {
+	drop(event: CdkDragDrop<Entry[]>) {
 		if (event.previousContainer === event.container) {
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {

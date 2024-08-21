@@ -8,7 +8,7 @@ import {
 	transferArrayItem,
 } from '@angular/cdk/drag-drop';
 
-import { Entry } from '../model/entry';
+import { Entry } from '../../model/entry';
 
 @Component({
 	selector: 'app-queue-manager-main-window',

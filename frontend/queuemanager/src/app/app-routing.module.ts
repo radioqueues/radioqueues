@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { QueueManagerMainWindowComponent } from './queuemanager/queue-manager-main-window.component';
+import { QueueManagerMainWindowComponent } from './component/queuemanager/queue-manager-main-window.component';
 
 const routes: Routes = [
 	{

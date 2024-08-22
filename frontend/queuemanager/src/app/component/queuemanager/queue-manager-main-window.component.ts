@@ -9,8 +9,8 @@ import {
 } from '@angular/cdk/drag-drop';
 
 import { Entry } from '../../model/entry';
-import { Queue } from 'src/app/model/queue';
 import { QueueComponent } from '../queue/queue.component';
+import { MockData } from 'src/app/service/queue.mock';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -20,6 +20,7 @@ import { QueueComponent } from '../queue/queue.component';
 	imports: [CdkDropListGroup, CdkDropList, CdkDrag, QueueComponent],
 })
 export class QueueManagerMainWindowComponent {
+	/*
 	todo: Entry[] = [
 		{
 			name: 'Get to work'
@@ -109,6 +110,8 @@ export class QueueManagerMainWindowComponent {
 		]
 
 	];
+	*/
+	queues = MockData.queues;
 	
 	constructor() {
 		this.queues[0][0].entries.push(this.queues[2][0]);

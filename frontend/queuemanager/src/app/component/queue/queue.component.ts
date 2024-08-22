@@ -33,4 +33,27 @@ export class QueueComponent {
 			);
 		}
 	}
+
+	pad2(num: number) {
+		if (num < 10) {
+			return "0" + num;
+		}
+		return "" + num;
+	}
+
+	formatOffset(offset?: Date|string) {
+		if (!offset) {
+			return "??:??:??";
+		}
+		return offset.toString().substring(11);
+	}
+
+	formatDuration(duration?: number) {
+		if (!duration) {
+			return "??:??";
+		}
+		let minutes = Math.floor(duration / 1000 / 60);
+		let seconds = Math.floor(duration / 1000 % 60);
+		return this.pad2(minutes) + ":" + this.pad2(seconds); 
+	}
 }

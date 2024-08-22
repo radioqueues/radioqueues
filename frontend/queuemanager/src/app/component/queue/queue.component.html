@@ -5,7 +5,7 @@
 		@for (item of queue.entries; track item) {
 			<div class="queue" [style.color]="item.color" cdkDrag>
 				<div class="queue-title">
-				<span><span>20:00:00</span> X <span>{{item.name}}</span></span>	<span>3:00</span>
+				<span><span>{{formatOffset(item.offset)}}</span> &nbsp; <span>{{item.name}}</span></span>	<span>{{formatDuration(item.duration)}}</span>
 				</div>
 				<ul class="subqueue">
 				@for (subitem of $any(item).entries; track subitem) {

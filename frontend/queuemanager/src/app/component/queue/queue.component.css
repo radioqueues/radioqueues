@@ -1,5 +1,4 @@
-.example-box {
-  /*padding: 20px 10px;*/
+.queue {
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   box-sizing: border-box;
@@ -8,14 +7,14 @@
   font-size: 14px;
 }
 
-.title {
+.queue-title {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-ul {
+ul.subqueue {
 	margin: 0;
 }
 

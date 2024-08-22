@@ -69,39 +69,51 @@ export class QueueManagerMainWindowComponent {
 		[
 			{
 				name: 'Nachrichten 20:00',
+				color: "#0A0",
 				entries: this.done
 			},
 			{
 				name: 'Nachrichten 21:00',
+				color: "#0A0",
 				entries: this.done
 			}
 		],
 		[
 			{
 				name: 'Werbung 20:15',
+				color: "#A0A",
 				entries: this.done
 			},
 			{
 				name: 'Werbung 21:45',
+				color: "#A0A",
 				entries: this.done
 			}
 		],
 		[
 			{
 				name: 'Report 20:30',
+				color: "#AA0",
 				entries: this.done
 			},
 			{
 				name: 'Eilmeldung',
+				color: "#A00",
 				entries: this.done
 			},
 			{
 				name: 'Musikwunsch ??:??',
+				color: "#00A",
 				entries: this.done
 			}
 		]
 
 	];
+	
+	constructor() {
+		this.queues[0][0].entries.push(this.queues[2][0]);
+		this.queues[0][0].entries.push(this.queues[3][0]);
+	}
 
 	drop(event: CdkDragDrop<Entry[]>) {
 		if (event.previousContainer === event.container) {

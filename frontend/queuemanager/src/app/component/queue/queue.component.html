@@ -1,9 +1,20 @@
-<fieldset>
+<fieldset [style.color]="queue.color">
 	<legend>{{queue.name}}</legend>
 
 	<div cdkDropList [cdkDropListData]="queue.entries" class="example-list" (cdkDropListDropped)="drop($event)">
 		@for (item of queue.entries; track item) {
-			<div class="example-box" cdkDrag><span><span>20:00:00</span> X <span>{{item.name}}</span></span>	<span>3:00</span></div>
+			<div class="example-box" [style.color]="item.color" cdkDrag>
+				<div class="	title">
+				<span><span>20:00:00</span> X <span>{{item.name}}</span></span>	<span>3:00</span>
+				</div>
+				<ul>
+				@for (subitem of $any(item).entries; track subitem) {
+					<li>
+						{{subitem.name}}
+					</li>
+				}
+				</ul>
+			</div>
 		}
 	</div>
 </fieldset>

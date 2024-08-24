@@ -3,18 +3,19 @@
 		<mat-panel-title [style.color]="queue.color"> {{queue.name}} </mat-panel-title>
 	</mat-expansion-panel-header>
 	<div>
-		@if (!readonly) {
-		<div class="toolbar">
-			<button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;<button>&nbsp;X&nbsp;</button>
-		</div>
-		<br>
+
+		@if (!readonly || subQueueContentToggle) {
+			<mat-toolbar>
+				@if (!readonly) {
+					<button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;<button>&nbsp;X&nbsp;</button>
+				}
+				@if (subQueueContentToggle) {
+					<mat-checkbox [(ngModel)]="showSubQueueContent">Show sub-queue content</mat-checkbox>
+				}
+			</mat-toolbar>
+			<br>
 		}
-		@if (subQueueContentToggle) {
-		<div class="toolbar">
-			<label><input type="checkbox" [(ngModel)]="showSubQueueContent">Show sub-queue content</label>
-		</div>
-		<br>
-		}
+
 		<app-queue [queue]="queue" [readonly]="readonly" [showSubQueueContent]="showSubQueueContent" />
 	</div>
 </mat-expansion-panel>

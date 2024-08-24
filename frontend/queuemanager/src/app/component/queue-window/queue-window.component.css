@@ -1,5 +1,6 @@
-fieldset {
-	border: 1px solid #000;
+mat-toolbar {
+	padding: 0;
+	height: inherit;
 }
 
 .toolbar {

@@ -1,0 +1,9 @@
+<fieldset [style.color]="queue.color">
+	<legend><b>{{queue.name}}</b></legend>
+	@if (!readonly) {
+		<div class="toolbar">
+			 <button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;<button>&nbsp;X&nbsp;</button>
+		</div>
+	}
+	<app-queue [queue]="queue" [readonly]="readonly" />
+</fieldset>

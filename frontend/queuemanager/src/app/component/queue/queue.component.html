@@ -1,25 +1,16 @@
-<fieldset [style.color]="queue.color">
-	<legend><b>{{queue.name}}</b></legend>
-	@if (!readonly) {
-		<div class="toolbar">
-			 <button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;<button>&nbsp;X&nbsp;</button>
+<div cdkDropList [cdkDropListData]="queue.entries" class="example-list" (cdkDropListDropped)="drop($event)">
+	@for (item of queue.entries; track item) {
+		<div class="queue" [style.color]="item.color" cdkDrag>
+			<div class="queue-title">
+			<span><span>{{formatOffset(item.offset)}}</span> &nbsp; <span>{{item.name}}</span></span>	<span>{{formatDuration(item.duration)}}</span>
+			</div>
+			<ul class="subqueue">
+			@for (subitem of $any(item).entries; track subitem) {
+				<li>
+					{{subitem.name}}
+				</li>
+			}
+			</ul>
 		</div>
 	}
-
-	<div cdkDropList [cdkDropListData]="queue.entries" class="example-list" (cdkDropListDropped)="drop($event)">
-		@for (item of queue.entries; track item) {
-			<div class="queue" [style.color]="item.color" cdkDrag>
-				<div class="queue-title">
-				<span><span>{{formatOffset(item.offset)}}</span> &nbsp; <span>{{item.name}}</span></span>	<span>{{formatDuration(item.duration)}}</span>
-				</div>
-				<ul class="subqueue">
-				@for (subitem of $any(item).entries; track subitem) {
-					<li>
-						{{subitem.name}}
-					</li>
-				}
-				</ul>
-			</div>
-		}
-	</div>
-</fieldset>
+</div>

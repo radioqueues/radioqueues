@@ -20,102 +20,22 @@ import { MockData } from 'src/app/service/queue.mock';
 	imports: [CdkDropListGroup, CdkDropList, CdkDrag, QueueComponent],
 })
 export class QueueManagerMainWindowComponent {
-	/*
-	todo: Entry[] = [
-		{
-			name: 'Get to work'
-		},
-		{
-			name: 'Pick up groceries'
-		},
-		{
-			name: 'Go home'
-		},
-		{
-			name: 'Fall asleep'
-		}
-	];
 
-	done: Entry[] = [
-		{
-			name: 'Get up'
-		},
-		{
-			name: 'Brush teeth'
-		},
-		{
-			name: 'Take a shower'
-		},
-		{
-			name: 'Check e-mail'
-		},
-		{
-			name: 'Walk dog'
-		}
-	];
-
-	queues: Queue[][] = [
-		[
-			{
-				name: 'Main Queue',
-				entries: this.todo
-			}
-		],
-		[
-			{
-				name: 'History',
-				entries: this.done
-			}
-		],
-		[
-			{
-				name: 'Nachrichten 20:00',
-				color: "#0A0",
-				entries: this.done
-			},
-			{
-				name: 'Nachrichten 21:00',
-				color: "#0A0",
-				entries: this.done
-			}
-		],
-		[
-			{
-				name: 'Werbung 20:15',
-				color: "#A0A",
-				entries: this.done
-			},
-			{
-				name: 'Werbung 21:45',
-				color: "#A0A",
-				entries: this.done
-			}
-		],
-		[
-			{
-				name: 'Report 20:30',
-				color: "#AA0",
-				entries: this.done
-			},
-			{
-				name: 'Eilmeldung',
-				color: "#A00",
-				entries: this.done
-			},
-			{
-				name: 'Musikwunsch ??:??',
-				color: "#00A",
-				entries: this.done
-			}
-		]
-
-	];
-	*/
 	queues = MockData.queues;
 	
 	constructor() {
-		this.queues[0][0].entries.push(this.queues[2][0]);
-		this.queues[0][0].entries.push(this.queues[3][0]);
+/*		this.queues[1][0].entries.push(this.queues[2][0]);
+		this.queues[1][0].entries.push({ "name": "Musik", "offset": "2024-08-16 10:03:20", duration: (11*60+40)*1000, color: "#AAA" });
+*/		this.queues[1][0].entries.push(this.queues[3][0]);
+		this.queues[1][0].entries.push({ "name": "Musik", "offset": "2024-08-16 10:16:22", duration: (28*60+38)*1000, color: "#AAA" });
+		this.queues[1][0].entries.push(this.queues[3][1]);
+		this.queues[1][0].entries.push({ "name": "Musik", "offset": "2024-08-16 10:46:34", duration: (13*60+26)*1000, color: "#AAA" });
+		this.queues[1][0].entries.push(this.queues[2][1]);
+		this.queues[1][0].entries.push({ "name": "Musik", "offset": "2024-08-16 11:04:08", duration: (10*60+52)*1000, color: "#AAA" });
+		this.queues[1][0].entries.push(this.queues[3][2]);
+		this.queues[1][0].entries.push({ "name": "Musik", "offset": "2024-08-16 11:17:03", duration: (12*60+57)*1000, color: "#AAA" });
+		this.queues[1][0].entries.push(this.queues[2][2]);
+		this.queues[1][0].entries.push({ "name": "Musik", "offset": "2024-08-16 11:31:40", duration: (13*60+20)*1000, color: "#AAA" });
 	}
 
 	drop(event: CdkDragDrop<Entry[]>) {

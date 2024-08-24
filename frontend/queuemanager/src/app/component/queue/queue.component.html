@@ -1,5 +1,10 @@
 <fieldset [style.color]="queue.color">
-	<legend>{{queue.name}}</legend>
+	<legend><b>{{queue.name}}</b></legend>
+	@if (!readonly) {
+		<div class="toolbar">
+			 <button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;<button>&nbsp;X&nbsp;</button>
+		</div>
+	}
 
 	<div cdkDropList [cdkDropListData]="queue.entries" class="example-list" (cdkDropListDropped)="drop($event)">
 		@for (item of queue.entries; track item) {

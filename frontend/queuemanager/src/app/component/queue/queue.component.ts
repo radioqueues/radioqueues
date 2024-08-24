@@ -20,6 +20,7 @@ import { Queue } from 'src/app/model/queue';
 })
 export class QueueComponent {
 	@Input({required: true}) queue!: Queue;
+	@Input() readonly?: boolean;
 
 	drop(event: CdkDragDrop<Entry[]>) {
 		if (event.previousContainer === event.container) {

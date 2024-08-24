@@ -7,6 +7,16 @@
   font-size: 14px;
 }
 
+fieldset {
+	border: 1px solid #000;
+}
+
+.toolbar {
+	text-align: right;
+	background-color: #DDD;
+	padding: 5px;
+}
+
 .queue-title {
   display: flex;
   flex-direction: row;

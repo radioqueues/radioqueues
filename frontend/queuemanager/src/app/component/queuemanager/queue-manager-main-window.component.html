@@ -2,7 +2,7 @@
 	@for (column of queues; track column) {
 	<div class="queue-container">
 		@for (queue of column; track queue) {
-			<app-queue [queue]="queue" />
+			<app-queue [queue]="queue" [readonly]="queue.name == 'History' || queue.name == 'Main Queue'" />
 			<br>
 		}
 	</div>

@@ -1,9 +1,13 @@
-<fieldset [style.color]="queue.color">
-	<legend><b>{{queue.name}}</b></legend>
-	@if (!readonly) {
+<mat-expansion-panel expanded="true">
+	<mat-expansion-panel-header>
+		<mat-panel-title [style.color]="queue.color"> {{queue.name}} </mat-panel-title>
+	</mat-expansion-panel-header>
+	<div>
+		@if (!readonly) {
 		<div class="toolbar">
-			 <button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;<button>&nbsp;X&nbsp;</button>
+			<button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;<button>&nbsp;X&nbsp;</button>
 		</div>
-	}
-	<app-queue [queue]="queue" [readonly]="readonly" />
-</fieldset>
+		}
+		<app-queue [queue]="queue" [readonly]="readonly" />
+	</div>
+</mat-expansion-panel>

@@ -1,17 +1,33 @@
-.queue {
-  border-bottom: solid 1px #ccc;
-  color: rgba(0, 0, 0, 0.87);
-  box-sizing: border-box;
-  cursor: move;
-  background: white;
-  font-size: 14px;
+.queue-list {
+	width: 500px;
+	max-width: 100%;
+	border: solid 1px #ccc;
+	min-height: 60px;
+	display: block;
+	background: white;
+	border-radius: 4px;
+	overflow: hidden;
 }
 
-.queue-title {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+.queue-entry:last-child {
+	border: none;
+}
+
+.queue-entry {
+	padding: 0 10px;
+	border-bottom: solid 1px #ccc;
+	color: rgba(0, 0, 0, 0.87);
+	box-sizing: border-box;
+	cursor: move;
+	background: white;
+	font-size: 14px;
+}
+
+.entry-title {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
 }
 
 ul.subqueue {
@@ -19,25 +35,25 @@ ul.subqueue {
 }
 
 .cdk-drag-preview {
-  box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+	box-sizing: border-box;
+	border-radius: 4px;
+	box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+		0 8px 10px 1px rgba(0, 0, 0, 0.14),
+		0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drag-placeholder {
-  opacity: 0;
+	opacity: 0;
 }
 
 .cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 .example-box:last-child {
-  border: none;
+	border: none;
 }
 
-.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+.queue-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

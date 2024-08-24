@@ -1,7 +1,7 @@
-<div cdkDropList [cdkDropListData]="queue.entries" class="example-list" (cdkDropListDropped)="drop($event)">
+<div cdkDropList [cdkDropListData]="queue.entries" class="queue-list" (cdkDropListDropped)="drop($event)">
 	@for (item of queue.entries; track item) {
-		<div class="queue" [style.color]="item.color" cdkDrag>
-			<div class="queue-title">
+		<div class="queue-entry" [style.color]="item.color" cdkDrag>
+			<div class="entry-title">
 			<span><span>{{formatOffset(item.offset)}}</span> &nbsp; <span>{{item.name}}</span></span>	<span>{{formatDuration(item.duration)}}</span>
 			</div>
 			<ul class="subqueue">

@@ -2,7 +2,10 @@
 	@for (column of queues; track column) {
 	<div class="queue-container">
 		@for (queue of column; track queue) {
-			<app-queue-window [queue]="queue" [readonly]="queue.name == 'History' || queue.name == 'Main Queue'" />
+			<app-queue-window 
+				[queue]="queue"
+				[readonly]="queue.name == 'History' || queue.name == 'Main Queue'"
+				[subQueueContentToggle]="queue.name == 'Main Queue'" />
 			<br>
 		}
 	</div>

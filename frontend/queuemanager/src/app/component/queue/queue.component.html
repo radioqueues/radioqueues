@@ -4,13 +4,15 @@
 			<div class="entry-title">
 			<span><span>{{formatOffset(item.offset)}}</span> &nbsp; <span>{{item.name}}</span></span>	<span>{{formatDuration(item.duration)}}</span>
 			</div>
-			<ul class="subqueue">
-			@for (subitem of $any(item).entries; track subitem) {
-				<li>
-					{{subitem.name}}
-				</li>
+			@if (showSubQueueContent) {
+				<ul class="subqueue">
+				@for (subitem of $any(item).entries; track subitem) {
+					<li>
+						{{subitem.name}}
+					</li>
+				}
+				</ul>
 			}
-			</ul>
 		</div>
 	}
 </div>

@@ -21,6 +21,7 @@ import { Queue } from 'src/app/model/queue';
 export class QueueComponent {
 	@Input({required: true}) queue!: Queue;
 	@Input() readonly?: boolean;
+	@Input() showSubQueueContent: boolean = true;
 
 	drop(event: CdkDragDrop<Entry[]>) {
 		if (event.previousContainer === event.container) {
@@ -57,4 +58,5 @@ export class QueueComponent {
 		let seconds = Math.floor(duration / 1000 % 60);
 		return this.pad2(minutes) + ":" + this.pad2(seconds); 
 	}
+
 }

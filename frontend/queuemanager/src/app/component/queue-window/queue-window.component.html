@@ -7,7 +7,14 @@
 		<div class="toolbar">
 			<button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;<button>&nbsp;X&nbsp;</button>
 		</div>
+		<br>
 		}
-		<app-queue [queue]="queue" [readonly]="readonly" />
+		@if (subQueueContentToggle) {
+		<div class="toolbar">
+			<label><input type="checkbox" [(ngModel)]="showSubQueueContent">Show sub-queue content</label>
+		</div>
+		<br>
+		}
+		<app-queue [queue]="queue" [readonly]="readonly" [showSubQueueContent]="showSubQueueContent" />
 	</div>
 </mat-expansion-panel>

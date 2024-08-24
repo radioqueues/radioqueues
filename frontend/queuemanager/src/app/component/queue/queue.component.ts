@@ -59,4 +59,14 @@ export class QueueComponent {
 		return this.pad2(minutes) + ":" + this.pad2(seconds); 
 	}
 
+	formatTitle(title?: string) {
+		if (!title) {
+			return "";
+		}
+		let lower = title.toLowerCase();
+		if (lower.endsWith(".wav") || lower.endsWith(".mp3")) {
+			title = title.substring(0, title.length - 4);
+		}
+		return title;
+	}
 }

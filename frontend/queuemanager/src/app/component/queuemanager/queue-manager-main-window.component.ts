@@ -39,9 +39,6 @@ export class QueueManagerMainWindowComponent {
 	}
 
 	onSettingsClicked() {
-		let dialogRef = this.dialog.open(QueueTypeEditorComponent, {
-		  height: '400px',
-		  width: '600px',
-		});
+		this.dialog.open(QueueTypeEditorComponent);
 	}
 }

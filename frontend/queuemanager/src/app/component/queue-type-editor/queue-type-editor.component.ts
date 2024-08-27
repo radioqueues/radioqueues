@@ -9,14 +9,18 @@ import {
   MatDialogContent,
   MatDialogTitle,
 } from '@angular/material/dialog';
+import {MatTableModule} from '@angular/material/table';
+
 
 @Component({
 	selector: 'app-queue-type-editor',
 	templateUrl: './queue-type-editor.component.html',
 	styleUrl: './queue-type-editor.component.css',
 	standalone: true,
-	imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule],
+	imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, MatTableModule],
 })
 export class QueueTypeEditorComponent {
-	queueTypes = MockData.queueTypes;
+	readonly displayedColumns = ["name", "color", "jingleStart", "jingleEnd", "scheduleTime", "scheduleStrategy", "folder"];
+	
+	queueTypes = Object.values(MockData.queueTypes);
 }

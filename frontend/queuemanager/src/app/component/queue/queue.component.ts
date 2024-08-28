@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import {
 	CdkDragDrop,
 	CdkDrag,
@@ -19,20 +19,47 @@ import { Queue } from 'src/app/model/queue';
 	imports: [CdkDropListGroup, CdkDropList, CdkDrag],
 })
 export class QueueComponent {
+
 	@Input({required: true}) queue!: Queue;
 	@Input() readonly?: boolean;
 	@Input() showSubQueueContent: boolean = true;
+	selectedIndex = -1;
+
+	@HostListener('window:mousedown')
+	onGlobalClick() {
+		this.selectedIndex = -1;
+	}
+
+	onClick(event: MouseEvent) {
+		let entryElement = (event.target as HTMLElement).closest(".queue-entry");
+		if (!entryElement) {
+			return;
+		}
+		this.selectedIndex = Array.from(entryElement.parentElement!.children).indexOf(entryElement);
+	}
 
 	drop(event: CdkDragDrop<Entry[]>) {
+		this.selectedIndex = -1;
 		if (event.previousContainer === event.container) {
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {
+			/*
 			transferArrayItem(
 				event.previousContainer.data,
 				event.container.data,
 				event.previousIndex,
 				event.currentIndex,
-			);
+			);*/
+			event.container.data.splice(event.currentIndex, 0, event.previousContainer.data[event.previousIndex]);
+		}
+	}
+
+	onKeydown($event: KeyboardEvent) {
+		if ($event.key === "Delete") {
+			if (this.selectedIndex > -1) {
+				this.queue.entries.splice(this.selectedIndex, 1);
+				this.selectedIndex = -1;
+			}
 		}
 	}
 

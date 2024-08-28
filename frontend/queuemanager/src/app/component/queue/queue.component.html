@@ -1,8 +1,21 @@
-<div cdkDropList [cdkDropListData]="queue.entries" class="queue-list" (cdkDropListDropped)="drop($event)">
-	@for (item of queue.entries; track item) {
-		<div class="queue-entry" [style.color]="item.color" cdkDrag>
+<div 
+	cdkDropList
+	[cdkDropListData]="queue.entries"
+	class="queue-list"
+	(cdkDropListDropped)="drop($event)"
+	(keydown)="onKeydown($event)"
+	tabindex="0"
+	>
+	@for (item of queue.entries; track item; let i=$index) {
+		<div class="queue-entry" 
+			[style.color]="item.color"
+			[class.selectedEntry]="i == selectedIndex"
+			cdkDrag
+			(click)="onClick($event)">
+
 			<div class="entry-title">
-			<span><span>{{formatOffset(item.offset)}}</span> &nbsp; <span>{{formatTitle(item.name)}}</span></span>	<span>{{formatDuration(item.duration)}}</span>
+				<span><span>{{formatOffset(item.offset)}}</span> &nbsp; <span>{{formatTitle(item.name)}}</span></span>
+				<span>{{formatDuration(item.duration)}}</span>
 			</div>
 			@if (showSubQueueContent) {
 				<ul class="subqueue">

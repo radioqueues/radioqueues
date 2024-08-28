@@ -18,9 +18,13 @@
 	border-bottom: solid 1px #ccc;
 	color: rgba(0, 0, 0, 0.87);
 	box-sizing: border-box;
-	cursor: move;
+	cursor: default;
 	background: white;
 	font-size: 14px;
+}
+
+.selectedEntry {
+	background-color:#77F;
 }
 
 .entry-title {

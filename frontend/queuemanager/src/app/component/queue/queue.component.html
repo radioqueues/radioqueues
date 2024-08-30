@@ -1,8 +1,10 @@
 <div 
+	class="queue-list"
 	cdkDropList
 	[cdkDropListData]="queue.entries"
-	class="queue-list"
-	(cdkDropListDropped)="drop($event)"
+	(cdkDropListDropped)="onCdkDrop($event)"
+	(drop)="onDrop($event)"
+	(dragover)="onDragOver($event)"
 	(keydown)="onKeydown($event)"
 	tabindex="0"
 	>

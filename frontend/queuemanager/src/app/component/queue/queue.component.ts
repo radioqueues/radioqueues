@@ -1,15 +1,15 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, HostListener, Input, inject } from '@angular/core';
 import {
 	CdkDragDrop,
 	CdkDrag,
 	CdkDropList,
 	CdkDropListGroup,
 	moveItemInArray,
-	transferArrayItem,
 } from '@angular/cdk/drag-drop';
 
 import { Entry } from '../../model/entry';
 import { Queue } from 'src/app/model/queue';
+import { FileSystemService } from 'src/app/service/filesystem.service';
 
 @Component({
 	selector: 'app-queue',
@@ -24,6 +24,7 @@ export class QueueComponent {
 	@Input() readonly?: boolean;
 	@Input() showSubQueueContent: boolean = true;
 	selectedIndex = -1;
+	fileSystemService = inject(FileSystemService);
 
 	@HostListener('window:mousedown')
 	onGlobalClick() {
@@ -50,80 +51,54 @@ export class QueueComponent {
 		if (event.previousContainer === event.container) {
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {
-			/*
-			transferArrayItem(
-				event.previousContainer.data,
-				event.container.data,
-				event.previousIndex,
-				event.currentIndex,
-			);*/
 			event.container.data.splice(event.currentIndex, 0, event.previousContainer.data[event.previousIndex]);
 		}
 	}
 
-	/*
-	async function* getFilesRecursively(entry) {
-	  if (entry.kind === "file") {
-		const file = await entry.getFile();
-		if (file !== null) {
-		  file.relativePath = getRelativePath(entry);
-		  yield file;
-		}
-	  } else if (entry.kind === "directory") {
-		for await (const handle of entry.values()) {
-		  yield* getFilesRecursively(handle);
-		}
-	  }
-	}
-	for await (const fileHandle of getFilesRecursively(directoryHandle)) {
-	  console.log(fileHandle);
-	}*/
-
 	createQueueEntry(queue: Queue, name: string) {
-		return new Entry(name, "00:00:00", 0, queue.color);
+		return new Entry(name, "2024-01-01 00:00:00", 0, queue.color);
 	}
-	
+
 	onDragEnter(event: Event) {
-		let entryElement = (event.target as HTMLElement).closest(".queue-entry");
-		if (!entryElement) {
-			return;
-		}
-		entryElement.classList.add("dragover");
 		event.preventDefault();
-		
+		let entryElement = (event.target as HTMLElement).closest(".queue-entry");
+		entryElement?.classList?.add("dragover");
 	}
+
 	onDragLeave(event: Event) {
-		let entryElement = (event.target as HTMLElement).closest(".queue-entry");
-		if (!entryElement) {
-			return;
-		}
-		entryElement.classList.remove("dragover");
 		event.preventDefault();
+		let entryElement = (event.target as HTMLElement).closest(".queue-entry");
+		entryElement?.classList?.remove("dragover");
 	}
 
-
-	onDrop(event) {
+	async onDrop(event: DragEvent) {
 		console.log("File(s) dropped", event);
+		let entryElement = (event.target as HTMLElement).closest(".queue-entry");
+		entryElement?.classList?.remove("dragover");
 
 		// Prevent default behavior (Prevent file from being opened)
 		event.preventDefault();
 
-		if (event.dataTransfer.items) {
+		if (event.dataTransfer?.items) {
 			console.log("items", event.dataTransfer.items);
 
 			// Use DataTransferItemList interface to access the file(s)
 			let newEntries: Array<Entry> = [];
-			[...event.dataTransfer.items].forEach((item, i) => {
+			[...event.dataTransfer.items].forEach(async (item, i) => {
 				// If dropped items aren't files, reject them
 				console.log("item", item, JSON.stringify(item));
 				if (item.kind === "file") {
 					const file = item.getAsFile();
-					console.log(`… file[${i}].name = ${file.name}`, file);
-					newEntries.push(this.createQueueEntry(this.queue, file.name));
+					if (file) {
+						console.log(`… file[${i}].name = ${file?.name}`, file);
+						newEntries.push(this.createQueueEntry(this.queue, file?.name));
+					}
 				}
 				// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryHandle
-				if (item.getAsFileSystemHandle) {
-					console.log(item.getAsFileSystemHandle());
+				if ((item as any).getAsFileSystemHandle) {
+					let fileSystemHandle = await (item as any).getAsFileSystemHandle();
+					let path = await this.fileSystemService.rootHandle?.resolve(fileSystemHandle);
+					console.log(path);
 				}
 			});
 			if (newEntries) {
@@ -132,19 +107,12 @@ export class QueueComponent {
 			}
 		}
 
-		console.log("files", event.dataTransfer.files);
-		// Use DataTransfer interface to access the file(s)
-		[...event.dataTransfer.files].forEach((file, i) => {
-			console.log(`… file[${i}].name = ${file.name}`, file);
-		});
-
 	}
 
 	onDragOver(event) {
-		/*console.log("File(s) in drop zone");
+		console.log("File(s) in drop zone");
 		// Prevent default behavior (Prevent file from being opened)
 		event.preventDefault();
-		*/
 	}
 
 	onKeydown(event: KeyboardEvent) {

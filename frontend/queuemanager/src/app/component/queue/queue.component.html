@@ -4,6 +4,8 @@
 	[cdkDropListData]="queue.entries"
 	(cdkDropListDropped)="onCdkDrop($event)"
 	(drop)="onDrop($event)"
+	(dragenter)="onDragEnter($event)"
+	(dragleave)="onDragLeave($event)"
 	(dragover)="onDragOver($event)"
 	(keydown)="onKeydown($event)"
 	tabindex="0"

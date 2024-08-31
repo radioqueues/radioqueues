@@ -10,7 +10,7 @@
 }
 
 .queue-entry:last-child {
-	border: none;
+	border-bottom: none;
 }
 
 .queue-entry {
@@ -24,7 +24,7 @@
 }
 
 .selectedEntry {
-	background-color:#77F;
+	background-color: #77F;
 }
 
 .entry-title {
@@ -54,10 +54,14 @@ ul.subqueue {
 	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.example-box:last-child {
-	border: none;
-}
-
 .queue-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
 	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.dragover {
+	border-top: 1px solid #55F;
+}
+
+.queue-entry * {
+	pointer-events: none;
 }

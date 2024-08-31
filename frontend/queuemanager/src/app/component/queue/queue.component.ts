@@ -82,6 +82,25 @@ export class QueueComponent {
 	createQueueEntry(queue: Queue, name: string) {
 		return new Entry(name, "00:00:00", 0, queue.color);
 	}
+	
+	onDragEnter(event: Event) {
+		let entryElement = (event.target as HTMLElement).closest(".queue-entry");
+		if (!entryElement) {
+			return;
+		}
+		entryElement.classList.add("dragover");
+		event.preventDefault();
+		
+	}
+	onDragLeave(event: Event) {
+		let entryElement = (event.target as HTMLElement).closest(".queue-entry");
+		if (!entryElement) {
+			return;
+		}
+		entryElement.classList.remove("dragover");
+		event.preventDefault();
+	}
+
 
 	onDrop(event) {
 		console.log("File(s) dropped", event);
@@ -122,9 +141,10 @@ export class QueueComponent {
 	}
 
 	onDragOver(event) {
-		console.log("File(s) in drop zone");
+		/*console.log("File(s) in drop zone");
 		// Prevent default behavior (Prevent file from being opened)
 		event.preventDefault();
+		*/
 	}
 
 	onKeydown(event: KeyboardEvent) {

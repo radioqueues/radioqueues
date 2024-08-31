@@ -69,3 +69,18 @@ Queues
   - für Main Queue, History, Nachrichten, Werbung, Reportagen, Rest
   - TODO: vermutlich zu breit
 
+Bugs/Features
+-------------
+- Drop von Dateien unter dem letzten Entry einer Queue
+- Directory Picker beim Aufruf der Seite
+- Fehlermeldung wenn reingezogene Datei nicht unterhalb des Root-Verzeichnisses ist
+- History ausblendbar
+- Float:left für queues? besser Queues mit der Maus verschieben und Resizen können
+- Audio-Pannel
+- Uhr
+- Datenbank im Dateisystem speichern
+- Schließen und öffnen von Queues implementieren
+- Fenster mit nicht eingeplanten Queues
+- Fenster mit Fehlermeldungen
+- Clone implementieren
+- Musik-Füllung

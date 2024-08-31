@@ -21,7 +21,7 @@ async function scan(rootHandle: FileSystemDirectoryHandle, entry: any) {
 	for await (const file of itr) {
 		result[file.relativePath] = {
 			size: file.size,
-			lastModified: file.lastModified
+			lastModified: file.lastModified,
 		}
 	}
 	return result;

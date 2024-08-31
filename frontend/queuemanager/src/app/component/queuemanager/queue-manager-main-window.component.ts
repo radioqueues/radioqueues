@@ -10,6 +10,7 @@ import {
 import { MockData } from 'src/app/service/queue.mock';
 import { QueueWindowComponent } from '../queue-window/queue-window.component';
 import { QueueTypeEditorComponent } from '../queue-type-editor/queue-type-editor.component';
+import { FileSystemService } from 'src/app/service/filesystem.service';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -19,7 +20,9 @@ import { QueueTypeEditorComponent } from '../queue-type-editor/queue-type-editor
 	imports: [CdkDropListGroup, QueueWindowComponent],
 })
 export class QueueManagerMainWindowComponent {
+
 	readonly dialog = inject(MatDialog);
+	readonly fileSystemService = inject(FileSystemService);
 
 	queues = MockData.queues;
 
@@ -40,5 +43,9 @@ export class QueueManagerMainWindowComponent {
 
 	onSettingsClicked() {
 		this.dialog.open(QueueTypeEditorComponent);
+	}
+
+	onPickRoot() {
+		this.fileSystemService.pickRoot();
 	}
 }

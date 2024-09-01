@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { QueueManagerMainWindowComponent } from './component/queuemanager/queue-manager-main-window.component';
 import { FileSystemService } from './service/filesystem.service';
+import { IndexeddbCacheService } from './service/indexeddb-cache.service';
 
 const routes: Routes = [
 	{
@@ -16,7 +17,8 @@ const routes: Routes = [
 		RouterModule.forRoot(routes)
 	],
 	providers: [
-		FileSystemService
+		FileSystemService,
+		IndexeddbCacheService
 	],
 	exports: [
 		RouterModule

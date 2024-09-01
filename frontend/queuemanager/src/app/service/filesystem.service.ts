@@ -1,10 +1,13 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
+import { IndexeddbCacheService } from "./indexeddb-cache.service";
 
 @Injectable()
 export class FileSystemService {
 	worker: Worker;
 	rootHandle?: FileSystemDirectoryHandle;
 	files: Record<string, any> = {};
+
+	private indexeddbCacheService = inject(IndexeddbCacheService);
 
 	constructor() {
 		this.worker = new Worker(new URL('./filesystem.worker', import.meta.url));
@@ -15,6 +18,19 @@ export class FileSystemService {
 				this.loadDurations();
 			}
 		};
+	}
+
+	public async init() {
+		this.rootHandle = await this.indexeddbCacheService.getSavedDirectoryHandle() as any;
+	}
+
+	public async getJsonFromFilename(filename: string) {
+		let file = await this.getFile(filename);
+		let text = await file?.text();
+		if (text) {
+			return JSON.parse(text);
+		}
+		return undefined;
 	}
 
 	public async getFile(filename: string) {
@@ -54,6 +70,7 @@ export class FileSystemService {
 			mode: "readwrite",
 			startIn: "music"
 		});
+		this.indexeddbCacheService.saveDirectoryHandle(this.rootHandle);
 
 		this.worker.postMessage({
 			cmd: "getFilesRecursively",

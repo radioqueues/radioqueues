@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
 	CdkDropListGroup,
 } from '@angular/cdk/drag-drop';
@@ -7,10 +7,10 @@ import {
   MatDialog
 } from '@angular/material/dialog';
 
-import { MockData } from 'src/app/service/queue.mock';
 import { QueueWindowComponent } from '../queue-window/queue-window.component';
 import { QueueTypeEditorComponent } from '../queue-type-editor/queue-type-editor.component';
 import { FileSystemService } from 'src/app/service/filesystem.service';
+import { Queue } from 'src/app/model/queue';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -19,14 +19,19 @@ import { FileSystemService } from 'src/app/service/filesystem.service';
 	standalone: true,
 	imports: [CdkDropListGroup, QueueWindowComponent],
 })
-export class QueueManagerMainWindowComponent {
+export class QueueManagerMainWindowComponent implements OnInit {
 
 	readonly dialog = inject(MatDialog);
 	readonly fileSystemService = inject(FileSystemService);
 
-	queues = MockData.queues;
+	queues!: Queue[];
+	
+	async ngOnInit() {
+		await this.fileSystemService.init();
+		
+		// this.queueTypes = await this.fileSystemService.getJsonFromFilename("queuemanager/queue-types.json"));
+		this.queues = await this.fileSystemService.getJsonFromFilename("queuemanager/queues.json");
 
-	constructor() {
 		this.queues[1].entries.push(this.queues[2]);
 		this.queues[1].entries.push({ "name": "Musik", "offset": "2024-08-16 10:03:20", duration: (11*60+40)*1000, color: "#AAA" });
 		this.queues[1].entries.push(this.queues[7]);

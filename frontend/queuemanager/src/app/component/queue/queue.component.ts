@@ -43,7 +43,14 @@ export class QueueComponent {
 	}
 
 	onClick(event: MouseEvent) {
-		this.selectedIndex = this.getIndexFromElement(event.target);
+		let index = this.getIndexFromElement(event.target);
+		this.selectedIndex = index;
+	}
+
+	onDoubleClick(event: MouseEvent) {
+		this.selectedIndex = -1;
+		let index = this.getIndexFromElement(event.target);
+		let subQueue = (this.queue.entries[index] as Queue).visible = true;
 	}
 
 	onCdkDrop(event: CdkDragDrop<Entry[]>) {

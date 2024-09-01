@@ -21,6 +21,9 @@ export class QueueWindowComponent {
 	@Input({ required: true }) queue!: Queue;
 	@Input() readonly?: boolean;
 	@Input() subQueueContentToggle: boolean = false;
-	showSubQueueContent: boolean = true;
+	showSubQueueContent: boolean = false;
 
+	onCloseClicked() {
+		this.queue.visible = false;
+	}
 }

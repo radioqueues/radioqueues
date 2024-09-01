@@ -27,9 +27,9 @@ export class QueueManagerMainWindowComponent {
 	queues = MockData.queues;
 
 	constructor() {
-/*		this.queues[1].entries.push(this.queues[2]);
+		this.queues[1].entries.push(this.queues[2]);
 		this.queues[1].entries.push({ "name": "Musik", "offset": "2024-08-16 10:03:20", duration: (11*60+40)*1000, color: "#AAA" });
-*/		this.queues[1].entries.push(this.queues[7]);
+		this.queues[1].entries.push(this.queues[7]);
 		this.queues[1].entries.push({ "name": "Musik", "offset": "2024-08-16 10:16:22", duration: (28 * 60 + 38) * 1000, color: "#AAA" });
 		this.queues[1].entries.push(this.queues[8]);
 		this.queues[1].entries.push({ "name": "Musik", "offset": "2024-08-16 10:46:34", duration: (13 * 60 + 26) * 1000, color: "#AAA" });

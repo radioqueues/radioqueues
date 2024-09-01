@@ -4,17 +4,16 @@
 	</mat-expansion-panel-header>
 	<div>
 
-		@if (!readonly || subQueueContentToggle) {
-			<mat-toolbar>
-				@if (!readonly) {
-					<button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;<button>&nbsp;X&nbsp;</button>
-				}
-				@if (subQueueContentToggle) {
-					<mat-checkbox [(ngModel)]="showSubQueueContent">Show sub-queue content</mat-checkbox>
-				}
-			</mat-toolbar>
-			<br>
-		}
+		<mat-toolbar>
+			@if (subQueueContentToggle) {
+				<mat-checkbox [(ngModel)]="showSubQueueContent">Show sub-queue content</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
+			}
+			@if (!readonly) {
+				<button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;
+			}
+			<button (click)="onCloseClicked()">&nbsp;X&nbsp;</button>
+		</mat-toolbar>
+		<br>
 
 		<app-queue [queue]="queue" [readonly]="readonly" [showSubQueueContent]="showSubQueueContent" />
 	</div>

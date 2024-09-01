@@ -1,11 +1,18 @@
 .queue-container {
-  width: 500px;
   max-width: 100%;
   margin: 0 25px 25px 0;
   display: inline-block;
   vertical-align: top;
+  
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .toolbar {
 	text-align: right;
+}
+
+app-queue-window {
+	margin-right: 1em;
+	margin-bottom: 1em;
 }

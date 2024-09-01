@@ -3,10 +3,11 @@
 	max-width: 100%;
 	border: solid 1px #ccc;
 	min-height: 60px;
+	max-height:50vh;
+	overflow-y: scroll;
 	display: block;
 	background: white;
 	border-radius: 4px;
-	overflow: hidden;
 }
 
 .queue-entry:last-child {

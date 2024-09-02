@@ -9,7 +9,7 @@ export class DatabaseService {
 
 	private inited = false;
 	private queues: Queue[] = [];
-	private queueTypes: QueueType[] = [];
+	private queueTypes: Record<string, QueueType> = {};
 	
 	private async init() {
 		await this.fileSystemService.init();
@@ -24,7 +24,7 @@ export class DatabaseService {
 		return this.queues;
 	}
 
-	public async getQueueTypes(): Promise<QueueType[]> {
+	public async getQueueTypes(): Promise<Record<string, QueueType>> {
 		if (!this.inited) {
 			await this.init();
 		}

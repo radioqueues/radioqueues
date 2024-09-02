@@ -10,7 +10,7 @@ export class QueueService {
 	readonly databaseService = inject(DatabaseService);
 
 	queueTypes!: Record<string, QueueType>;
-	queues!: Queue[];
+	queues!: Record<string, Queue>;
 
 	constructor() {
 		this.init();
@@ -32,7 +32,7 @@ export class QueueService {
 	}
 
 	showQueueByTypeName(queueTypeName: string) {
-		for (let queue of this.queues) {
+		for (let queue of Object.values(this.queues)) {
 			if (queue.name === queueTypeName) {
 				queue.visible = true;
 			}
@@ -41,6 +41,7 @@ export class QueueService {
 
 	createNewQueue(queueType: QueueType) {
 		let queue = {
+			uuid: Date.now().toString(36) + "-" + crypto.randomUUID(),
 			name: queueType.name + " (unscheduled)",
 			color: queueType.color,
 			visible: true,
@@ -53,15 +54,17 @@ export class QueueService {
 		if (queueType.jingleEnd) {
 			queue.entries.push(new Entry(queueType.jingleEnd, "2024-01-01 00:00:00", 0, queue.color));
 		}
-		this.queues.push(queue);
+		this.queues[queue.uuid] = queue;
 	}		
 
 	cloneQueue(queue: Queue) {
 	    let newQueue: Queue = JSON.parse(JSON.stringify(queue));
+		// prefix uuid with timestamp for sorting
+		newQueue.uuid = Date.now().toString(36) + "-" + crypto.randomUUID();
 		newQueue.name = newQueue.type + " (unscheduled)";
 
 		// TODO: schedule or unscheduled
 		newQueue.offset = "2024-01-01 00:00:00";
-		this.queues.push(newQueue);
+		this.queues[newQueue.uuid] = newQueue;
 	}
 }

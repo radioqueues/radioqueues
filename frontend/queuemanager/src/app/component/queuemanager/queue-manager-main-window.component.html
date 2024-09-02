@@ -10,12 +10,12 @@
 </div>
 <div cdkDropListGroup>
 	<div class="queue-container">
-		@for (queue of queues; track queue) {
-			@if (queue.visible) {
+		@for (item of queues | keyvalue; track item.key) {
+			@if (item.value.visible) {
 				<app-queue-window 
-					[queue]="queue"
-					[readonly]="queue.name == 'History' || queue.name == 'Main Queue'"
-					[subQueueContentToggle]="queue.name == 'Main Queue'" />
+					[queue]="item.value"
+					[readonly]="item.value.name == 'History' || item.value.name == 'Main Queue'"
+					[subQueueContentToggle]="item.value.name == 'Main Queue'" />
 			}
 		}
 	</div>

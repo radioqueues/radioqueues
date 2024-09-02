@@ -8,7 +8,7 @@ export class DatabaseService {
 	fileSystemService = inject(FileSystemService);
 
 	private inited = false;
-	private queues: Queue[] = [];
+	private queues: Record<string, Queue> = {};
 	private queueTypes: Record<string, QueueType> = {};
 	
 	private async init() {
@@ -17,7 +17,7 @@ export class DatabaseService {
 		this.queueTypes = await this.fileSystemService.getJsonFromFilename("queuemanager/queue-types.json")
 	}
 
-	public async getQueues(): Promise<Queue[]> {
+	public async getQueues(): Promise<Record<string, Queue>> {
 		if (!this.inited) {
 			await this.init();
 		}

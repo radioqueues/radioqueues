@@ -47,13 +47,12 @@ export class QueueService {
 			type: queueType.name,
 			entries: new Array<Entry>()
 		};
-		/* TODO: create entries
 		if (queueType.jingleStart) {
-			queue.entries.push(queueType.jingleStart);
+			queue.entries.push(new Entry(queueType.jingleStart, "2024-01-01 00:00:00", 0, queue.color));
 		}
 		if (queueType.jingleEnd) {
-			queue.entries.push(queueType.jingleEnd);
-		}*/
+			queue.entries.push(new Entry(queueType.jingleEnd, "2024-01-01 00:00:00", 0, queue.color));
+		}
 		this.queues.push(queue);
 	}		
 }

@@ -1,4 +1,10 @@
 <div class="toolbar">
+	<select [(ngModel)]="newQueueType" (change)="newQueue()">
+		<option value="">-- New --</option>
+	    @for (queueType of queueTypeArray; track queueType) {
+	      <option [value]="queueType.name" [style.color]="queueType.color">{{queueType.name}}</option>
+	    }
+	</select>
 	<button (click)="onPickRoot()">Open</button>
 	<button (click)="onSettingsClicked()">⚙️</button>
 </div>

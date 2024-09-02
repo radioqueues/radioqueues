@@ -174,6 +174,10 @@ export class QueueComponent {
 		if (lower.endsWith(".wav") || lower.endsWith(".mp3")) {
 			title = title.substring(0, title.length - 4);
 		}
+		let pos = title.lastIndexOf("/");
+		if (pos > -1) {
+			title = title.substring(pos + 1);
+		}
 		return title;
 	}
 }

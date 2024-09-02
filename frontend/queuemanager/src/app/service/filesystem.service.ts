@@ -21,7 +21,11 @@ export class FileSystemService {
 	}
 
 	public async init() {
-		this.rootHandle = await this.indexeddbCacheService.getSavedDirectoryHandle() as any;
+		let handle = await this.indexeddbCacheService.getSavedDirectoryHandle() as any;
+		let permission = await handle.queryPermission({ mode: 'readwrite' });
+		if (permission === 'granted') {
+		    this.rootHandle = handle;
+		}
 	}
 
 	public async getJsonFromFilename(filename: string) {
@@ -34,6 +38,9 @@ export class FileSystemService {
 	}
 
 	public async getFile(filename: string) {
+		if (!this.rootHandle) {
+			return undefined;
+		}
 		let components = filename.split("/");
 		let directory = this.rootHandle;
 		for (let i = 0; i < components.length - 1; i++) {

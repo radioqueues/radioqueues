@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {MatButtonModule} from '@angular/material/button';
 import {
@@ -10,7 +10,7 @@ import {
 } from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
 import { QueueType } from 'src/app/model/queue-type';
-import { FileSystemService } from 'src/app/service/filesystem.service';
+import { DatabaseService } from 'src/app/service/database.service';
 
 
 @Component({
@@ -21,14 +21,14 @@ import { FileSystemService } from 'src/app/service/filesystem.service';
 	imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, MatTableModule],
 })
 export class QueueTypeEditorComponent implements OnInit {
-	readonly fileSystemService = inject(FileSystemService);
+	readonly databaseService = inject(DatabaseService);
 
 	readonly displayedColumns = ["name", "color", "jingleStart", "jingleEnd", "scheduleTime", "scheduleStrategy", "folder"];
 	
 	queueTypes!: Array<QueueType>;
 
 	async ngOnInit() {
-		this.queueTypes = Object.values(await this.fileSystemService.getJsonFromFilename("queuemanager/queue-types.json"));
+		this.queueTypes = Object.values(await this.databaseService.getQueueTypes());
 
 	}
 	

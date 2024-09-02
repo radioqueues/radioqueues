@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { QueueManagerMainWindowComponent } from './component/queuemanager/queue-manager-main-window.component';
 import { FileSystemService } from './service/filesystem.service';
 import { IndexeddbCacheService } from './service/indexeddb-cache.service';
+import { DatabaseService } from './service/database.service';
 
 const routes: Routes = [
 	{
@@ -17,6 +18,7 @@ const routes: Routes = [
 		RouterModule.forRoot(routes)
 	],
 	providers: [
+		DatabaseService,
 		FileSystemService,
 		IndexeddbCacheService
 	],

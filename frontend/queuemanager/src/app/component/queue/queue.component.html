@@ -22,9 +22,9 @@
 				<span><span>{{formatOffset(item.offset)}}</span> &nbsp; <span>{{formatTitle(item.name)}}</span></span>
 				<span>{{formatDuration(item.duration)}}</span>
 			</div>
-			@if (showSubQueueContent) {
+			@if (showSubQueueContent && item.queueRef) {
 				<ul class="subqueue">
-				@for (subitem of $any(item).entries; track subitem) {
+				@for (subitem of queues[item.queueRef].entries; track subitem) {
 					<li>
 						{{formatTitle(subitem.name)}}
 					</li>

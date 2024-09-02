@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,9 @@ import { QueueService } from 'src/app/service/queue.service';
 export class QueueWindowComponent {
 	private queueService = inject(QueueService);
 
+	@Input() queues!: Record<string, Queue>;
+	@Output() queuesChange = new EventEmitter<Record<string, Queue>>();
+	
 	@Input({ required: true }) queue!: Queue;
 	@Input() readonly?: boolean;
 	@Input() subQueueContentToggle: boolean = false;

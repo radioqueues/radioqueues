@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, inject } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, inject } from '@angular/core';
 import {
 	CdkDragDrop,
 	CdkDrag,
@@ -10,6 +10,7 @@ import {
 import { Entry } from '../../model/entry';
 import { Queue } from 'src/app/model/queue';
 import { FileSystemService } from 'src/app/service/filesystem.service';
+import { DatabaseService } from 'src/app/service/database.service';
 
 @Component({
 	selector: 'app-queue',
@@ -19,12 +20,16 @@ import { FileSystemService } from 'src/app/service/filesystem.service';
 	imports: [CdkDropListGroup, CdkDropList, CdkDrag],
 })
 export class QueueComponent {
+	fileSystemService = inject(FileSystemService);
+	databaseService = inject(DatabaseService);
+	
+	@Input() queues!: Record<string, Queue>;
+	@Output() queuesChange = new EventEmitter<Record<string, Queue>>();
 
 	@Input({ required: true }) queue!: Queue;
 	@Input() readonly?: boolean;
 	@Input() showSubQueueContent: boolean = true;
 	selectedIndex = -1;
-	fileSystemService = inject(FileSystemService);
 
 	@HostListener('window:mousedown')
 	onGlobalClick() {
@@ -50,7 +55,14 @@ export class QueueComponent {
 	onDoubleClick(event: MouseEvent) {
 		this.selectedIndex = -1;
 		let index = this.getIndexFromElement(event.target);
-		let subQueue = (this.queue.entries[index] as Queue).visible = true;
+		let queueRef = this.queue.entries[index].queueRef;
+		if (queueRef) {
+			let subQueue = this.queues[queueRef];
+			if (subQueue) {
+				subQueue.visible = true;
+				this.queuesChange.emit(this.queues);
+			}
+		}
 	}
 
 	onCdkDrop(event: CdkDragDrop<Entry[]>) {

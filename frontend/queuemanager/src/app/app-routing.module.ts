@@ -5,6 +5,7 @@ import { QueueManagerMainWindowComponent } from './component/queuemanager/queue-
 import { FileSystemService } from './service/filesystem.service';
 import { IndexeddbCacheService } from './service/indexeddb-cache.service';
 import { DatabaseService } from './service/database.service';
+import { QueueService } from './service/queue.service';
 
 const routes: Routes = [
 	{
@@ -20,7 +21,8 @@ const routes: Routes = [
 	providers: [
 		DatabaseService,
 		FileSystemService,
-		IndexeddbCacheService
+		IndexeddbCacheService,
+		QueueService
 	],
 	exports: [
 		RouterModule

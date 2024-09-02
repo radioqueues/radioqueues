@@ -15,6 +15,7 @@ import { DatabaseService } from 'src/app/service/database.service';
 import { QueueType } from 'src/app/model/queue-type';
 import { FormsModule } from '@angular/forms';
 import { Entry } from 'src/app/model/entry';
+import { QueueService } from 'src/app/service/queue.service';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -28,6 +29,7 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	readonly dialog = inject(MatDialog);
 	readonly databaseService = inject(DatabaseService);
 	readonly fileSystemService = inject(FileSystemService);
+	readonly queueService = inject(QueueService);
 
 	queueTypes!: Record<string, QueueType>;
 	queueTypeArray!: QueueType[];
@@ -57,33 +59,10 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	newQueue() {
 		console.log(this.newQueueType);
 		if (this.newQueueType) {
-			let queueType = this.queueTypes[this.newQueueType];
-			if (queueType.scheduleStrategy === "internal") {
-				for (let queue of this.queues) {
-					if (queue.name === this.newQueueType) {
-						queue.visible = true;
-					}
-				}
-			} else {
-				let queue = {
-					name: queueType.name + " (unscheduled)",
-					color: queueType.color,
-					visible: true,
-					type: queueType.name,
-					entries: new Array<Entry>()
-				};
-				/* TODO: create entries
-				if (queueType.jingleStart) {
-					queue.entries.push(queueType.jingleStart);
-				}
-				if (queueType.jingleEnd) {
-					queue.entries.push(queueType.jingleEnd);
-				}*/
-				this.queues.push(queue);
-			}
+			this.queueService.createNewQueueOrShowInternalQueue(this.newQueueType);
 		}
 
-		// TODO: reset select box to emptry entry
+		// TODO: reset select box to empty entry does not work
 		this.newQueueType = "";
 	}
 

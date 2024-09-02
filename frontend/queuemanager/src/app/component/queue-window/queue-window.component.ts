@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { Queue } from 'src/app/model/queue';
 import { QueueComponent } from '../queue/queue.component';
+import { QueueService } from 'src/app/service/queue.service';
 
 @Component({
 	selector: 'app-queue-window',
@@ -18,6 +19,8 @@ import { QueueComponent } from '../queue/queue.component';
 	imports: [FormsModule, MatCheckboxModule, MatToolbarModule, MatButtonModule, MatIconModule, MatExpansionModule, QueueComponent],
 })
 export class QueueWindowComponent {
+	private queueService = inject(QueueService);
+
 	@Input({ required: true }) queue!: Queue;
 	@Input() readonly?: boolean;
 	@Input() subQueueContentToggle: boolean = false;
@@ -25,5 +28,9 @@ export class QueueWindowComponent {
 
 	onCloseClicked() {
 		this.queue.visible = false;
+	}
+
+	onCloneClicked() {
+		this.queueService.cloneQueue(this.queue);
 	}
 }

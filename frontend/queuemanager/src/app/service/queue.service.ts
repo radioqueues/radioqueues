@@ -55,4 +55,13 @@ export class QueueService {
 		}
 		this.queues.push(queue);
 	}		
+
+	cloneQueue(queue: Queue) {
+	    let newQueue: Queue = JSON.parse(JSON.stringify(queue));
+		newQueue.name = newQueue.type + " (unscheduled)";
+
+		// TODO: schedule or unscheduled
+		newQueue.offset = "2024-01-01 00:00:00";
+		this.queues.push(newQueue);
+	}
 }

@@ -9,7 +9,8 @@
 				<mat-checkbox [(ngModel)]="showSubQueueContent">Show sub-queue content</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
 			}
 			@if (!readonly) {
-				<button>Clone</button>&nbsp;<button>Schedule</button>&nbsp;
+				<button (click)="onCloneClicked()">Clone</button>&nbsp;
+				<button>Schedule</button>&nbsp;
 			}
 			<button (click)="onCloseClicked()">&nbsp;X&nbsp;</button>
 		</mat-toolbar>

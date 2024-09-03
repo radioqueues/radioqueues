@@ -1,11 +1,12 @@
 import { Injectable, inject } from "@angular/core";
 import { IndexeddbCacheService } from "./indexeddb-cache.service";
+import { Subject } from "rxjs";
 
 @Injectable()
 export class FileSystemService {
 	worker: Worker;
 	rootHandle?: FileSystemDirectoryHandle;
-	files: Record<string, any> = {};
+	newFiles: Subject<any> = new Subject();
 
 	private indexeddbCacheService = inject(IndexeddbCacheService);
 
@@ -13,9 +14,7 @@ export class FileSystemService {
 		this.worker = new Worker(new URL('./filesystem.worker', import.meta.url));
 		this.worker.onmessage = ({ data }) => {
 			if (data.cmd === "getFilesRecursively") {
-				this.files = data.result;
-				console.log(data.result);
-				this.loadDurations();
+				this.newFiles.next(data.result);
 			}
 		};
 	}
@@ -48,27 +47,6 @@ export class FileSystemService {
 		}
 		let fileHandle = await directory?.getFileHandle(components[components.length - 1]);
 		return await fileHandle?.getFile();
-	}
-
-	private async loadDurations() {
-		for (let filename in this.files) {
-			let blob = await this.getFile(filename);
-			if (blob) {
-				let audio = new Audio();
-				audio.src = URL.createObjectURL(blob!)
-				audio.addEventListener("loadedmetadata", () => {
-					console.log("loaded", filename, audio.duration);
-					this.files[filename].duration = audio.duration;
-				})
-				audio.addEventListener("error", (event) => {
-					this.files[filename].duration = -1;
-					console.log("error", filename, event);
-				});
-			} else {
-				console.log("File not found", filename);
-				this.files[filename].duration = -1;
-			}
-		}
 	}
 
 	async pickRoot() {

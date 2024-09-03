@@ -6,6 +6,7 @@ import { FileSystemService } from './service/filesystem.service';
 import { IndexeddbCacheService } from './service/indexeddb-cache.service';
 import { DatabaseService } from './service/database.service';
 import { QueueService } from './service/queue.service';
+import { AudioFileService } from './service/audio-file.service';
 
 const routes: Routes = [
 	{
@@ -19,6 +20,7 @@ const routes: Routes = [
 		RouterModule.forRoot(routes)
 	],
 	providers: [
+		AudioFileService,
 		DatabaseService,
 		FileSystemService,
 		IndexeddbCacheService,

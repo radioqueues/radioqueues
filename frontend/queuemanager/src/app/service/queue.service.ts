@@ -55,6 +55,7 @@ export class QueueService {
 			queue.entries.push(new Entry(queueType.jingleEnd, "2024-01-01 00:00:00", 0, queue.color));
 		}
 		this.queues[queue.uuid] = queue;
+		return queue;
 	}		
 
 	cloneQueue(queue: Queue) {

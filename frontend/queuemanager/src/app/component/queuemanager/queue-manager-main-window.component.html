@@ -1,4 +1,5 @@
 <div class="toolbar">
+	<button (click)="onDebugClicked()">D</button>
 	<select [(ngModel)]="newQueueType" (change)="newQueue()">
 		<option value="">-- New --</option>
 	    @for (queueType of queueTypeArray; track queueType) {

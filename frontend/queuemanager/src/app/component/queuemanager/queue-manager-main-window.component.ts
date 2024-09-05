@@ -17,13 +17,14 @@ import { FormsModule } from '@angular/forms';
 import { QueueService } from 'src/app/service/queue.service';
 import { KeyValuePipe } from '@angular/common';
 import { AudioFileService } from 'src/app/service/audio-file.service';
+import { AudioControlComponent } from '../audio-control/audio-control.component';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
 	templateUrl: './queue-manager-main-window.component.html',
 	styleUrl: './queue-manager-main-window.component.css',
 	standalone: true,
-	imports: [CdkDropListGroup, FormsModule, KeyValuePipe, QueueWindowComponent],
+	imports: [CdkDropListGroup, FormsModule, KeyValuePipe, AudioControlComponent, QueueWindowComponent],
 })
 export class QueueManagerMainWindowComponent implements OnInit {
 
@@ -77,6 +78,8 @@ export class QueueManagerMainWindowComponent implements OnInit {
 			if (entry.name!.indexOf("Nachrichten") > -1) {
 				queueTypeName = "Nachrichten";
 			} else if (entry.name!.indexOf("Worlds Best Hits") > -1) {
+				queueTypeName = "Nachrichten";
+			} else if (entry.name!.indexOf("Jingle Verkehr") > -1) {
 				queueTypeName = "Nachrichten";
 			} else if (entry.name!.indexOf("Werbung") > -1) {
 				queueTypeName = "Werbung";

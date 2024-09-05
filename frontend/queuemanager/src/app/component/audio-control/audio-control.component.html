@@ -1,0 +1,18 @@
+<span [style.color]="currentParentEntry?.color">{{currentParentEntry?.name | title}}</span>
+➡
+<span [style.color]="currentEntry?.color">{{currentEntry?.name | title}}</span>
+
+&nbsp;
+
+{{remainingTime | duration}}
+
+<audio #audio autoplay [src]="url" (timeupdate)="onTimeUpdate($event)"></audio>
+&nbsp;
+
+<button (click)="onPlayClicked()">Play</button>
+<!--
+{{entry.name}}
+
+timeupdate  [currentTime]
+ended
+-->

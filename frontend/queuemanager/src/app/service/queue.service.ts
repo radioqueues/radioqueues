@@ -31,11 +31,19 @@ export class QueueService {
 		}
 	}
 
-	showQueueByTypeName(queueTypeName: string) {
+	getQueueByType(queueTypeName: string): Queue|undefined {
 		for (let queue of Object.values(this.queues)) {
 			if (queue.name === queueTypeName) {
-				queue.visible = true;
+				return queue;
 			}
+		}
+		return undefined;
+	}
+
+	private showQueueByTypeName(queueTypeName: string) {
+		let queue = this.getQueueByType(queueTypeName);
+		if (queue) {
+			queue.visible = true;
 		}
 	}
 

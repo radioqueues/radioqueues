@@ -32,6 +32,9 @@ export class QueueService {
 	}
 
 	getQueueByType(queueTypeName: string): Queue|undefined {
+		if (!this.queues) {
+			return undefined;
+		}
 		for (let queue of Object.values(this.queues)) {
 			if (queue.name === queueTypeName) {
 				return queue;

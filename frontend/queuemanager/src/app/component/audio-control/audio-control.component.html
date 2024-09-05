@@ -6,7 +6,14 @@
 
 {{remainingTime | duration}}
 
-<audio #audio autoplay [src]="url" (timeupdate)="onTimeUpdate($event)"></audio>
+<audio 
+	#audio
+	autoplay
+	[src]="url"
+	(timeupdate)="onTimeUpdate()"
+	(ended)="onEnded()"
+	(error)="onError()">
+</audio>
 &nbsp;
 
 <button (click)="onPlayClicked()">Play</button>

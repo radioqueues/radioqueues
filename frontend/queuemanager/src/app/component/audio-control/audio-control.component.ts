@@ -28,15 +28,24 @@ export class AudioControlComponent {
     remainingTime?: number;
 	url?: string;
 
+	mainQueueIndex = 0;
+	subQueueIndex = 0;
+
 	async onPlayClicked() {
+		console.log("onPlayClicked", this.mainQueueIndex, this.subQueueIndex);
+		this.play();
+	}
+
+	async play() {
+		console.log("play", this.mainQueueIndex, this.subQueueIndex);
 		this.mainQueue = this.queueService.getQueueByType("Main Queue")!;
 		if (this.mainQueue && this.mainQueue.entries) {
-			this.currentParentEntry = this.mainQueue.entries[0];
+			this.currentParentEntry = this.mainQueue.entries[this.mainQueueIndex];
 			this.currentEntry = this.currentParentEntry;
 			if (this.currentParentEntry.queueRef) {
 				let subQueue = this.queues[this.currentParentEntry.queueRef];
 				if (subQueue && subQueue.entries) {
-					this.currentEntry = subQueue.entries[0];
+					this.currentEntry = subQueue.entries[this.subQueueIndex];
 				}
 			}
 		}
@@ -46,11 +55,42 @@ export class AudioControlComponent {
 		}
 		let blob = await this.fileSystemService.getFile(this.currentEntry?.name);
 		if (blob) {
-			this.url = URL.createObjectURL(blob!);
+			this.url = URL.createObjectURL(blob);
 		}
 	}
 
-	onTimeUpdate($event) {
+	onEnded() {
+		this.subQueueIndex++;
+		console.log("ended", this.mainQueueIndex, this.subQueueIndex);
+
+		this.mainQueue = this.queueService.getQueueByType("Main Queue")!;
+		if (this.mainQueue && this.mainQueue.entries) {
+			while (this.mainQueueIndex < this.mainQueue.entries.length) {
+				this.currentParentEntry = this.mainQueue.entries[this.mainQueueIndex];
+				if (!this.currentParentEntry?.queueRef) {
+					this.mainQueueIndex++;
+					this.subQueueIndex = 0;
+					continue;
+				}
+				let subQueue = this.queues[this.currentParentEntry.queueRef];
+				if (!subQueue || !subQueue.entries || this.subQueueIndex >= subQueue.entries.length) {
+					this.mainQueueIndex++;
+					this.subQueueIndex = 0;
+					continue;
+				}
+		 		this.play();
+				break;
+			}
+		}
+	}
+
+	onError() {
+		if (this.url) {
+			this.onEnded();
+		}
+	}
+
+	onTimeUpdate() {
 		let duration = this.currentEntry?.duration;
 		let currentTime = this.audio?.nativeElement?.currentTime;
 		if (!duration || !currentTime) {

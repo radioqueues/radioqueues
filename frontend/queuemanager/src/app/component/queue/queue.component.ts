@@ -11,13 +11,19 @@ import { Entry } from '../../model/entry';
 import { Queue } from 'src/app/model/queue';
 import { FileSystemService } from 'src/app/service/filesystem.service';
 import { DatabaseService } from 'src/app/service/database.service';
+import { OffsetPipe } from 'src/app/pipe/offset.pipe';
+import { TitlePipe } from 'src/app/pipe/title.pipe';
+import { DurationPipe } from 'src/app/pipe/duration.pipe';
 
 @Component({
 	selector: 'app-queue',
 	templateUrl: './queue.component.html',
 	styleUrl: './queue.component.css',
 	standalone: true,
-	imports: [CdkDropListGroup, CdkDropList, CdkDrag],
+	imports: [
+		CdkDropListGroup, CdkDropList, CdkDrag,
+		DurationPipe, OffsetPipe, TitlePipe
+	],
 })
 export class QueueComponent {
 	fileSystemService = inject(FileSystemService);
@@ -143,41 +149,4 @@ export class QueueComponent {
 		}
 	}
 
-	pad2(num: number) {
-		if (num < 10) {
-			return "0" + num;
-		}
-		return "" + num;
-	}
-
-	formatOffset(offset?: Date | string) {
-		if (!offset) {
-			return "??:??:??";
-		}
-		return offset.toString().substring(11);
-	}
-
-	formatDuration(duration?: number) {
-		if (!duration || duration < 0) {
-			return "??:??";
-		}
-		let minutes = Math.floor(duration / 60);
-		let seconds = Math.floor(duration % 60);
-		return this.pad2(minutes) + ":" + this.pad2(seconds);
-	}
-
-	formatTitle(title?: string) {
-		if (!title) {
-			return "";
-		}
-		let lower = title.toLowerCase();
-		if (lower.endsWith(".wav") || lower.endsWith(".mp3")) {
-			title = title.substring(0, title.length - 4);
-		}
-		let pos = title.lastIndexOf("/");
-		if (pos > -1) {
-			title = title.substring(pos + 1);
-		}
-		return title;
-	}
 }

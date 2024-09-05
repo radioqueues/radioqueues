@@ -19,14 +19,14 @@
 			(dblclick)="onDoubleClick($event)">
 
 			<div class="entry-title">
-				<span><span>{{formatOffset(item.offset)}}</span> &nbsp; <span>{{formatTitle(item.name)}}</span></span>
-				<span>{{formatDuration(item.duration)}}</span>
+				<span><span>{{item.offset | offset}}</span> &nbsp; <span>{{item.name | title}}</span></span>
+				<span>{{item.duration | duration}}</span>
 			</div>
 			@if (showSubQueueContent && item.queueRef) {
 				<ul class="subqueue">
 				@for (subitem of queues[item.queueRef].entries; track subitem) {
 					<li>
-						{{formatTitle(subitem.name)}}
+						{{subitem.name | title}}
 					</li>
 				}
 				</ul>

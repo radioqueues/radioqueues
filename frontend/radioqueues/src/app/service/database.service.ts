@@ -70,18 +70,18 @@ export class DatabaseService {
 			return;
 		}
 		try {
-			this.files = await this.fileSystemService.getJsonFromFilename("queuemanager/files.json")
+			this.files = await this.fileSystemService.getJsonFromFilename("radioqueues/files.json")
 		} catch (e) {
 			console.log("loading files", e);
 		}
 		try {
-			this.queues = await this.fileSystemService.getJsonFromFilename("queuemanager/queues.json");
+			this.queues = await this.fileSystemService.getJsonFromFilename("radioqueues/queues.json");
 		} catch(e) {
 			console.log("loading queues", e);
 		}
 			
 		try {
-			this.queueTypes = await this.fileSystemService.getJsonFromFilename("queuemanager/queue-types.json")
+			this.queueTypes = await this.fileSystemService.getJsonFromFilename("radioqueues/queue-types.json")
 		} catch(e) {
 			console.log("loading queueTypes", e);
 		}

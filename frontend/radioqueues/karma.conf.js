@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/queuemanager'),
+      dir: require('path').join(__dirname, './coverage/radioqueues'),
       subdir: '.',
       reporters: [
         { type: 'html' },

@@ -1,6 +1,6 @@
 {
-  "name": "queuemanager",
-  "version": "0.0.0",
+  "name": "radioqueues",
+  "version": "0.0.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

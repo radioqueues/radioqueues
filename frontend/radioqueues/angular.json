@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "queuemanager": {
+    "radioqueues": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -14,7 +14,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/queuemanager"
+              "base": "dist/radioqueues"
             },
             "index": "src/index.html",
             "polyfills": [
@@ -70,10 +70,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "queuemanager:build:production"
+              "buildTarget": "radioqueues:build:production"
             },
             "development": {
-              "buildTarget": "queuemanager:build:development"
+              "buildTarget": "radioqueues:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -81,7 +81,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "queuemanager:build"
+            "buildTarget": "radioqueues:build"
           }
         },
         "test": {

@@ -4,7 +4,8 @@ import {
 } from '@angular/cdk/drag-drop';
 
 import {
-  MatDialog
+  MatDialog,
+  MatDialogRef
 } from '@angular/material/dialog';
 
 import { QueueWindowComponent } from '../queue-window/queue-window.component';
@@ -18,6 +19,7 @@ import { QueueService } from 'src/app/service/queue.service';
 import { KeyValuePipe } from '@angular/common';
 import { AudioFileService } from 'src/app/service/audio-file.service';
 import { AudioControlComponent } from '../audio-control/audio-control.component';
+import { ProgressOverlayComponent } from '../progress-overlay/progress-overlay.component';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -34,6 +36,8 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	readonly fileSystemService = inject(FileSystemService);
 	readonly queueService = inject(QueueService);
 
+	progressDialog?: MatDialogRef<ProgressOverlayComponent, any>;
+
 	queueTypes!: Record<string, QueueType>;
 	queueTypeArray!: QueueType[];
 	queues!: Record<string, Queue>;
@@ -44,6 +48,15 @@ export class QueueManagerMainWindowComponent implements OnInit {
 		this.queueTypeArray = Object.values(this.queueTypes);
 		this.queues = await this.databaseService.getQueues();
 		this.audioFileService.init();
+		this.audioFileService.process.subscribe((status: any) => {
+			if (status && !this.progressDialog) {
+				this.progressDialog = this.dialog.open(ProgressOverlayComponent);
+			} else if (!status && this.progressDialog) {
+				this.progressDialog?.close();
+				this.progressDialog = undefined;
+			}
+		});
+
 		console.log(this.queues);
 	}
 

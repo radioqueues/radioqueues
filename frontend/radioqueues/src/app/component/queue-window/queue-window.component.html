@@ -16,6 +16,6 @@
 		</mat-toolbar>
 		<br>
 
-		<app-queue [(queues)]="queues" [queue]="queue" [readonly]="readonly" [showSubQueueContent]="showSubQueueContent" />
+		<app-queue [(queues)]="queues" (queuesChange)="onQueuesChange($event)" [queue]="queue" [readonly]="readonly" [showSubQueueContent]="showSubQueueContent" />
 	</div>
 </mat-expansion-panel>

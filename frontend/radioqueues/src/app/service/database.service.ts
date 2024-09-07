@@ -91,6 +91,14 @@ export class DatabaseService {
 		this.inited = true;
 	}
 
+	public async saveFiles() {
+		this.fileSystemService.saveJsonToFilename("radioqueues/files.json", this.files);
+	}
+
+	public async saveQueues() {
+		this.fileSystemService.saveJsonToFilename("radioqueues/queues.json", this.queues);
+	}
+
 	public async getQueues(): Promise<Record<string, Queue>> {
 		if (!this.inited) {
 			await this.init();

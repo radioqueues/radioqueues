@@ -59,6 +59,7 @@ export class AudioFileService {
 				current: i
 			});
 		}
+		this.databaseService.saveFiles();
 		this.process.next(undefined);
 		if (!this.databaseService.loaded) {
 			window.location.reload();

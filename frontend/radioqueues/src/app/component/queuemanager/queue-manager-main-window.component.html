@@ -17,6 +17,7 @@
 				<app-queue-window
 					[(queues)]="queues"
 					[queue]="item.value"
+					(queuesChange)="onQueueChange()"
 					[readonly]="item.value.name == 'History' || item.value.name == 'Main Queue'"
 					[subQueueContentToggle]="item.value.name == 'Main Queue'" />
 			}

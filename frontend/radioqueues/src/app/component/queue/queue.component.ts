@@ -78,6 +78,7 @@ export class QueueComponent {
 		} else {
 			event.container.data.splice(event.currentIndex, 0, event.previousContainer.data[event.previousIndex]);
 		}
+		this.queuesChange.emit(this.queues);
 	}
 
 	createQueueEntry(queue: Queue, name: string) {
@@ -130,6 +131,7 @@ export class QueueComponent {
 				let index = this.getIndexFromElement(event.target)
 				this.queue.entries.splice(index, 0, ...newEntries);
 			}
+			this.queuesChange.emit(this.queues);
 		}
 
 	}

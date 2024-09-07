@@ -31,9 +31,14 @@ export class QueueWindowComponent {
 
 	onCloseClicked() {
 		this.queue.visible = false;
+		this.queuesChange.emit(this.queues);
 	}
 
 	onCloneClicked() {
 		this.queueService.cloneQueue(this.queue);
+	}
+
+	onQueuesChange(queues: Record<string, Queue>) {
+		this.queuesChange.emit(queues);
 	}
 }

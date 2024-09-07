@@ -148,4 +148,9 @@ export class QueueManagerMainWindowComponent implements OnInit {
 				
 		console.log(this.queues);
 	}
+
+	onQueueChange() {
+		this.databaseService.saveQueues();
+	}
+
 }

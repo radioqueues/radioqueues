@@ -31,7 +31,6 @@ export class AudioFileService {
 				let audio = new Audio();
 				audio.src = URL.createObjectURL(blob!)
 				audio.addEventListener("loadedmetadata", () => {
-					console.log("loaded", filename, audio.duration);
 					loadedFiles[filename].duration = audio.duration;
 				})
 				audio.addEventListener("error", (event) => {
@@ -50,6 +49,10 @@ export class AudioFileService {
 		}
 		console.log(files);
 		this.process.next(undefined);
+		console.log("loaded", this.databaseService.loaded);
+		if (!this.databaseService.loaded) {
+			window.location.reload();
+		}
 	}
 
 }

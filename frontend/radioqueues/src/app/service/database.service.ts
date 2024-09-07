@@ -9,6 +9,8 @@ export class DatabaseService {
 	fileSystemService = inject(FileSystemService);
 
 	private inited = false;
+	public loaded = true;
+
 	private queues: Record<string, Queue> = {
 		"00000000-a78095b4-0c65-44a7-9555-bdcbd93d00a6": {
 			"uuid": "00000000-a78095b4-0c65-44a7-9555-bdcbd93d00a6",
@@ -67,6 +69,7 @@ export class DatabaseService {
 	private async init() {
 		await this.fileSystemService.init();
 		if (!this.fileSystemService.rootHandle) {
+			this.loaded = false;
 			return;
 		}
 		try {
@@ -85,6 +88,7 @@ export class DatabaseService {
 		} catch(e) {
 			console.log("loading queueTypes", e);
 		}
+		this.inited = true;
 	}
 
 	public async getQueues(): Promise<Record<string, Queue>> {

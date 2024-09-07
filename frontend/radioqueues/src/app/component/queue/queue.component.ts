@@ -14,6 +14,7 @@ import { DatabaseService } from 'src/app/service/database.service';
 import { OffsetPipe } from 'src/app/pipe/offset.pipe';
 import { TitlePipe } from 'src/app/pipe/title.pipe';
 import { DurationPipe } from 'src/app/pipe/duration.pipe';
+import { QueueService } from 'src/app/service/queue.service';
 
 @Component({
 	selector: 'app-queue',
@@ -28,6 +29,7 @@ import { DurationPipe } from 'src/app/pipe/duration.pipe';
 export class QueueComponent {
 	fileSystemService = inject(FileSystemService);
 	databaseService = inject(DatabaseService);
+	queueService = inject(QueueService);
 	
 	@Input() queues!: Record<string, Queue>;
 	@Output() queuesChange = new EventEmitter<Record<string, Queue>>();
@@ -76,8 +78,10 @@ export class QueueComponent {
 		if (event.previousContainer === event.container) {
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {
-			event.container.data.splice(event.currentIndex, 0, event.previousContainer.data[event.previousIndex]);
+			let entry = this.queueService.cloneEntry(event.previousContainer.data[event.previousIndex]);
+			event.container.data.splice(event.currentIndex, 0, entry);
 		}
+		this.queueService.recalculateQueue(this.queue);
 		this.queuesChange.emit(this.queues);
 	}
 
@@ -131,12 +135,13 @@ export class QueueComponent {
 				let index = this.getIndexFromElement(event.target)
 				this.queue.entries.splice(index, 0, ...newEntries);
 			}
+			this.queueService.recalculateQueue(this.queue);
 			this.queuesChange.emit(this.queues);
 		}
 
 	}
 
-	onDragOver(event) {
+	onDragOver(event: Event) {
 		console.log("File(s) in drop zone");
 		// Prevent default behavior (Prevent file from being opened)
 		event.preventDefault();
@@ -147,6 +152,7 @@ export class QueueComponent {
 			if (this.selectedIndex > -1) {
 				this.queue.entries.splice(this.selectedIndex, 1);
 				this.selectedIndex = -1;
+				this.queueService.recalculateQueue(this.queue);
 				this.queuesChange.emit(this.queues);
 			}
 		}

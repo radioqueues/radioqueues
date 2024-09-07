@@ -55,6 +55,7 @@ export class QueueService {
 			uuid: Date.now().toString(36) + "-" + crypto.randomUUID(),
 			name: queueType.name + " (unscheduled)",
 			color: queueType.color,
+			offset: new Date("2024-01-01 00:00:00"),
 			visible: true,
 			type: queueType.name,
 			entries: new Array<Entry>()
@@ -78,5 +79,20 @@ export class QueueService {
 		// TODO: schedule or unscheduled
 		newQueue.offset = new Date("2024-01-01 00:00:00");
 		this.queues[newQueue.uuid] = newQueue;
+	}
+
+
+	cloneEntry(entry: Entry): Entry {
+		return new Entry(entry.name, entry.offset, entry.duration, entry.color, entry.queueRef);
+	}
+
+	recalculateQueue(queue: Queue) {
+		let offset = queue.offset?.getTime() || 0;
+		let durationSum = 0;
+		for (let entry of queue.entries) {
+			entry.offset = new Date(offset + durationSum);
+			durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration * 1000 : 0); 
+		}
+		queue.duration = durationSum;
 	}
 }

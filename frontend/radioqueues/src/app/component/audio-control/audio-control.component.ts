@@ -7,12 +7,13 @@ import { QueueService } from 'src/app/service/queue.service';
 import { Entry } from 'src/app/model/entry';
 import { DurationPipe } from 'src/app/pipe/duration.pipe';
 import { TitlePipe } from 'src/app/pipe/title.pipe';
+import { FormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'app-audio-control',
 	templateUrl: './audio-control.component.html',
 	standalone: true,
-	imports: [DurationPipe, TitlePipe],
+	imports: [DurationPipe, FormsModule, TitlePipe],
 })
 export class AudioControlComponent {
 	fileSystemService = inject(FileSystemService);
@@ -30,6 +31,7 @@ export class AudioControlComponent {
 
 	mainQueueIndex = 0;
 	subQueueIndex = 0;
+	volumne = 0.8;
 
 	async onPlayClicked() {
 		console.log("onPlayClicked", this.mainQueueIndex, this.subQueueIndex);

@@ -1,3 +1,6 @@
+  <label for="volume">Volume:</label>
+  <input type="range" min="0" max="1" step="0.01" [(ngModel)]="volumne" />
+
 <span [style.color]="currentParentEntry?.color">{{currentParentEntry?.name | title}}</span>
 ➡
 <span [style.color]="currentEntry?.color">{{currentEntry?.name | title}}</span>
@@ -9,6 +12,7 @@
 <audio 
 	#audio
 	autoplay
+	[volume]="volumne"
 	[src]="url"
 	(timeupdate)="onTimeUpdate()"
 	(ended)="onEnded()"

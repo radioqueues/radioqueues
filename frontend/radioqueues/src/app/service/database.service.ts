@@ -65,6 +65,13 @@ export class DatabaseService {
 	};
 
 	private files: Record<string, FileMetaData> = {};
+
+	private jsonDeserializer(key: string, value: any): any {
+		if (key === "offset") {
+			return new Date(value);
+		}
+		return value;
+	}
 	
 	private async init() {
 		await this.fileSystemService.init();
@@ -78,7 +85,7 @@ export class DatabaseService {
 			console.log("loading files", e);
 		}
 		try {
-			this.queues = await this.fileSystemService.getJsonFromFilename("radioqueues/queues.json");
+			this.queues = await this.fileSystemService.getJsonFromFilename("radioqueues/queues.json", this.jsonDeserializer);
 		} catch(e) {
 			console.log("loading queues", e);
 		}

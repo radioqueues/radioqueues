@@ -27,12 +27,12 @@ export class FileSystemService {
 		}
 	}
 
-	public async getJsonFromFilename(filename: string) {
+	public async getJsonFromFilename(filename: string, deserializer?: any) {
 		let fileHandle = await this.getFileHandle(filename);
 		let file = await fileHandle?.getFile();
 		let text = await file?.text();
 		if (text) {
-			return JSON.parse(text);
+			return JSON.parse(text, deserializer);
 		}
 		return undefined;
 	}

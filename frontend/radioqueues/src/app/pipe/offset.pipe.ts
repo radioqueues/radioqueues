@@ -5,12 +5,22 @@ import { Pipe, PipeTransform } from '@angular/core';
 	standalone: true
 })
 export class OffsetPipe implements PipeTransform {
+	formatter: Intl.DateTimeFormat;
 
-	transform(offset?: Date | string): string {
+	constructor() {
+		this.formatter = new Intl.DateTimeFormat('en-GB', {
+		  hour: '2-digit',
+		  minute: '2-digit',
+		  second: '2-digit',
+		  hour12: false,
+		});
+	}
+
+	transform(offset?: Date): string {
 		if (!offset) {
 			return "??:??:??";
 		}
-		return offset.toString().substring(11);
+		return this.formatter.format(offset);
 	}
 
 }

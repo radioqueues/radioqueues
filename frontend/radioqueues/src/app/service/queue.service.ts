@@ -60,10 +60,10 @@ export class QueueService {
 			entries: new Array<Entry>()
 		};
 		if (queueType.jingleStart) {
-			queue.entries.push(new Entry(queueType.jingleStart, "2024-01-01 00:00:00", 0, queue.color));
+			queue.entries.push(new Entry(queueType.jingleStart, new Date("2024-01-01 00:00:00"), 0, queue.color));
 		}
 		if (queueType.jingleEnd) {
-			queue.entries.push(new Entry(queueType.jingleEnd, "2024-01-01 00:00:00", 0, queue.color));
+			queue.entries.push(new Entry(queueType.jingleEnd, new Date("2024-01-01 00:00:00"), 0, queue.color));
 		}
 		this.queues[queue.uuid] = queue;
 		return queue;
@@ -76,7 +76,7 @@ export class QueueService {
 		newQueue.name = newQueue.type + " (unscheduled)";
 
 		// TODO: schedule or unscheduled
-		newQueue.offset = "2024-01-01 00:00:00";
+		newQueue.offset = new Date("2024-01-01 00:00:00");
 		this.queues[newQueue.uuid] = newQueue;
 	}
 }

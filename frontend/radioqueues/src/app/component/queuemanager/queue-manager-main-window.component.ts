@@ -120,7 +120,7 @@ export class QueueManagerMainWindowComponent implements OnInit {
 				}
 				queue = queue = {
 					uuid: "zzzz" + entry.offset + "-" + crypto.randomUUID(),
-					name: queueTypeName + " " + (entry.offset as string).substring(11, 16),
+					name: queueTypeName + " " + entry.offset?.getHours() + ":" + entry.offset?.getMinutes(),
 					offset: entry.offset,
 					color: queueType.color,
 					duration: 0,

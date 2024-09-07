@@ -147,6 +147,7 @@ export class QueueComponent {
 			if (this.selectedIndex > -1) {
 				this.queue.entries.splice(this.selectedIndex, 1);
 				this.selectedIndex = -1;
+				this.queuesChange.emit(this.queues);
 			}
 		}
 	}

@@ -28,7 +28,8 @@ export class FileSystemService {
 	}
 
 	public async getJsonFromFilename(filename: string) {
-		let file = await this.getFile(filename);
+		let fileHandle = await this.getFileHandle(filename);
+		let file = await fileHandle?.getFile();
 		let text = await file?.text();
 		if (text) {
 			return JSON.parse(text);
@@ -36,17 +37,25 @@ export class FileSystemService {
 		return undefined;
 	}
 
-	public async getFile(filename: string) {
+	public async saveJsonToFilename(filename: string, data: object) {
+		let fileHandle = await this.getFileHandle(filename, {create: true});
+		const stream = await fileHandle!.createWritable();
+		const json = JSON.stringify(data, null, 2);
+		await stream.write(json);
+		await stream.close();
+	}
+
+	public async getFileHandle(filename: string, options?: FileSystemGetFileOptions) {
 		if (!this.rootHandle) {
 			return undefined;
 		}
 		let components = filename.split("/");
 		let directory = this.rootHandle;
 		for (let i = 0; i < components.length - 1; i++) {
-			directory = await directory?.getDirectoryHandle(components[i]);
+			directory = await directory?.getDirectoryHandle(components[i], options);
 		}
-		let fileHandle = await directory?.getFileHandle(components[components.length - 1]);
-		return await fileHandle?.getFile();
+		let fileHandle = await directory?.getFileHandle(components[components.length - 1], options);
+		return fileHandle;
 	}
 
 	async pickRoot() {

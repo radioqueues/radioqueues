@@ -37,7 +37,8 @@ export class AudioFileService {
 			if (this.isFileKnown(files, filename, loadedFiles[filename])) {
 				continue;
 			}
-			let blob = await this.fileSystemService.getFile(filename);
+			let fileHandle = await this.fileSystemService.getFileHandle(filename);
+			let blob = await fileHandle?.getFile();
 			if (blob) {
 				let audio = new Audio();
 				audio.src = URL.createObjectURL(blob!)

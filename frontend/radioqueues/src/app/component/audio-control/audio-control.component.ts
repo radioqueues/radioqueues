@@ -53,7 +53,8 @@ export class AudioControlComponent {
 		if (!this.currentEntry?.name) {
 			return;
 		}
-		let blob = await this.fileSystemService.getFile(this.currentEntry?.name);
+		let fileHandle = await this.fileSystemService.getFileHandle(this.currentEntry?.name);
+		let blob = await fileHandle?.getFile();
 		if (blob) {
 			this.url = URL.createObjectURL(blob);
 		}

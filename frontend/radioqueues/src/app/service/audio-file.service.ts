@@ -2,6 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { FileSystemService } from "./filesystem.service";
 import { DatabaseService } from "./database.service";
 import { Subject } from "rxjs";
+import { FileMetaData } from "../model/file-meta-data";
 
 @Injectable()
 export class AudioFileService {
@@ -16,16 +17,26 @@ export class AudioFileService {
 		})
 	};
 
+	private isFileKnown(files: Record<string, FileMetaData>, filename: string, metadata: FileMetaData): boolean {
+		let known = files[filename];
+		if (!known) {
+			return false;
+		}
+		return known.size === metadata.size && known.lastModified === metadata.lastModified;
+	}
+
 	private async loadDurations(loadedFiles: any) {
 		let files = await this.databaseService.getFiles();
 		this.process.next({
 			count: Object.keys(loadedFiles).length,
 			current: 0
 		});
-		console.log(files);
 		let i = 0;
 		for (let filename in loadedFiles) {
 			i++;
+			if (this.isFileKnown(files, filename, loadedFiles[filename])) {
+				continue;
+			}
 			let blob = await this.fileSystemService.getFile(filename);
 			if (blob) {
 				let audio = new Audio();
@@ -47,9 +58,7 @@ export class AudioFileService {
 				current: i
 			});
 		}
-		console.log(files);
 		this.process.next(undefined);
-		console.log("loaded", this.databaseService.loaded);
 		if (!this.databaseService.loaded) {
 			window.location.reload();
 		}

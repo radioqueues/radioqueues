@@ -56,6 +56,7 @@ export class QueueService {
 			name: queueType.name + " (unscheduled)",
 			color: queueType.color,
 			offset: new Date("2024-01-01 00:00:00"),
+			duration: 0,
 			visible: true,
 			type: queueType.name,
 			entries: new Array<Entry>()
@@ -86,12 +87,85 @@ export class QueueService {
 		return new Entry(entry.name, undefined, entry.offset, entry.duration, entry.color, entry.queueRef);
 	}
 
+	private getQueueTypeFromEntry(entry?: Entry): QueueType|undefined {
+		let queueTypeName = (entry as Queue).type;
+		let queueRef = entry?.queueRef;
+		if (queueRef) {
+			queueTypeName = this.queues[queueRef]?.type;
+		}
+		if (!queueTypeName) {
+			return undefined;
+		}
+		return this.queueTypes[queueTypeName];
+	}
+
+	private getSubsetSumQueueType() {
+		for (let queueType of Object.values(this.queueTypes)) {
+			if (queueType.scheduleStrategy === "subset-sum") {
+				return queueType;
+			}
+		}
+		console.error("No QueueType with schedule strategy 'subset-sum'");
+		return undefined;
+	}
+
 	recalculateQueue(queue: Queue) {
+		let now = new Date();
 		let offset = queue.offset?.getTime() || 0;
 		let durationSum = 0;
-		for (let entry of queue.entries) {
-			entry.offset = new Date(offset + durationSum);
-			durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0); 
+		for (let i = 0; i < queue.entries.length; i++) {
+			let entry = queue.entries[i];
+			let start = new Date(offset + durationSum);
+			if (start < now || (entry.scheduled && entry.scheduled < now)) {
+				continue;
+			}
+			if (entry.scheduled) {
+				let subsetSumQueue: Queue|undefined = undefined;
+
+				// If this is the first entry, or the previous entry is not of type subset-sub,
+				// We need to insert one.
+				if (i == 0 || this.getQueueTypeFromEntry(queue.entries[i - 1])?.scheduleStrategy !== "subset-sum") {
+					if (entry.scheduled > start) {
+						let subsetSumQueueType = this.getSubsetSumQueueType();
+						subsetSumQueue = this.createNewQueue(subsetSumQueueType!);
+						subsetSumQueue.name = subsetSumQueueType!.name,
+						subsetSumQueue.offset = start;
+						subsetSumQueue.visible = false;
+						queue.entries.splice(i, 0, subsetSumQueue);
+						i++;
+					}
+				} else {
+					subsetSumQueue = queue.entries[i - 1] as Queue;
+				}
+				if (subsetSumQueue) {
+					if (!subsetSumQueue.duration) {
+						subsetSumQueue.duration = 0;
+					}
+					let diff = entry.scheduled.getTime() - (offset + durationSum);
+					if (diff < 0) {
+						console.log("Too long");
+						if (subsetSumQueue.duration && subsetSumQueue.duration >= -diff) {
+							subsetSumQueue.duration = subsetSumQueue.duration + diff;
+							durationSum = durationSum + diff; 
+						} else {
+							console.error("Unable to fit schedule", entry);
+							if (subsetSumQueue.duration) {
+								durationSum = durationSum - subsetSumQueue.duration; 
+								subsetSumQueue.duration = 0;
+							}
+						}
+					} else if (diff > 0) {
+						subsetSumQueue.duration = subsetSumQueue.duration + diff;
+						durationSum = durationSum + diff; 
+					}
+				}
+
+				entry.offset = new Date(offset + durationSum);;
+				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
+			} else {
+				entry.offset = start;
+				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
+			} 
 		}
 		queue.duration = durationSum;
 	}

@@ -46,12 +46,12 @@ export class AudioFileService {
 					loadedFiles[filename].duration = audio.duration * 1000;
 				})
 				audio.addEventListener("error", (event) => {
-					loadedFiles[filename].duration = -1;
+					loadedFiles[filename].duration = undefined;
 					console.log("error", filename, event);
 				});
 			} else {
 				console.log("File not found", filename);
-				loadedFiles[filename].duration = -1;
+				loadedFiles[filename].duration = undefined;
 			}
 			files[filename] = loadedFiles[filename];
 			this.process.next({

@@ -15,6 +15,7 @@ import { OffsetPipe } from 'src/app/pipe/offset.pipe';
 import { TitlePipe } from 'src/app/pipe/title.pipe';
 import { DurationPipe } from 'src/app/pipe/duration.pipe';
 import { QueueService } from 'src/app/service/queue.service';
+import { QueueType } from 'src/app/model/queue-type';
 
 @Component({
 	selector: 'app-queue',
@@ -31,9 +32,11 @@ export class QueueComponent {
 	databaseService = inject(DatabaseService);
 	queueService = inject(QueueService);
 	
-	@Input() queues!: Record<string, Queue>;
+	@Input({required: true}) queues!: Record<string, Queue>;
+	@Input({required: true}) queueTypes!: Record<string, QueueType>;
 	@Output() queuesChange = new EventEmitter<Record<string, Queue>>();
 
+	@Input() supportsSubQueues = false;
 	@Input({ required: true }) queue!: Queue;
 	@Input() readonly?: boolean;
 	@Input() showSubQueueContent: boolean = true;

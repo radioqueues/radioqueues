@@ -19,7 +19,19 @@
 			(dblclick)="onDoubleClick($event)">
 
 			<div class="entry-title">
-				<span><span>{{item.offset | offset}}</span> &nbsp; <span>{{item.name | title}}</span></span>
+				<span><span>{{item.offset | offset}}
+					@if (supportsSubQueues) {
+						&nbsp;
+						@if (item.scheduled) {
+							🔨
+						} @else if ($any(item).type && queueTypes[$any(item).type].scheduleStrategy=="subset-sum") {
+							↕️
+						} @else {
+							🏊
+						}
+					}
+				</span> &nbsp; 
+				<span>{{item.name | title}}</span></span>
 				<span>{{item.duration | duration}}</span>
 			</div>
 			@if (showSubQueueContent && item.queueRef) {

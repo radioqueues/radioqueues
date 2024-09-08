@@ -5,7 +5,7 @@
 	<div>
 
 		<mat-toolbar>
-			@if (subQueueContentToggle) {
+			@if (supportsSubQueues) {
 				<mat-checkbox [(ngModel)]="showSubQueueContent">Show sub-queue content</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
 			}
 			@if (!readonly) {
@@ -16,6 +16,13 @@
 		</mat-toolbar>
 		<br>
 
-		<app-queue [(queues)]="queues" (queuesChange)="onQueuesChange($event)" [queue]="queue" [readonly]="readonly" [showSubQueueContent]="showSubQueueContent" />
+		<app-queue
+			[(queues)]="queues"
+			[supportsSubQueues]="supportsSubQueues"
+			(queuesChange)="onQueuesChange($event)"
+			[queue]="queue"
+			[queueTypes]="queueTypes"
+			[readonly]="readonly"
+			[showSubQueueContent]="showSubQueueContent" />
 	</div>
 </mat-expansion-panel>

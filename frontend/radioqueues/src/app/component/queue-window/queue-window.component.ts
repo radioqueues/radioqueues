@@ -10,6 +10,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Queue } from 'src/app/model/queue';
 import { QueueComponent } from '../queue/queue.component';
 import { QueueService } from 'src/app/service/queue.service';
+import { QueueType } from 'src/app/model/queue-type';
 
 @Component({
 	selector: 'app-queue-window',
@@ -21,12 +22,13 @@ import { QueueService } from 'src/app/service/queue.service';
 export class QueueWindowComponent {
 	private queueService = inject(QueueService);
 
-	@Input() queues!: Record<string, Queue>;
+	@Input({required: true}) queues!: Record<string, Queue>;
+	@Input({required: true}) queueTypes!: Record<string, QueueType>;
 	@Output() queuesChange = new EventEmitter<Record<string, Queue>>();
 	
 	@Input({ required: true }) queue!: Queue;
 	@Input() readonly?: boolean;
-	@Input() subQueueContentToggle: boolean = false;
+	@Input() supportsSubQueues: boolean = false;
 	showSubQueueContent: boolean = false;
 
 	onCloseClicked() {

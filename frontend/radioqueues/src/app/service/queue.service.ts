@@ -43,6 +43,21 @@ export class QueueService {
 		return undefined;
 	}
 
+	private getEntryRefsForQueue(queue: Queue): Entry[] {
+		let uuid = queue.uuid;
+		let res: Array<Entry> = [];
+		for (let q of Object.values(this.queues)) {
+			if (q.entries) {
+				for (let entry of q.entries) {
+					if (entry.queueRef === uuid) {
+						res.push(entry);
+					}
+				}
+			}
+		}
+		return res; 
+	}
+
 	private showQueueByTypeName(queueTypeName: string) {
 		let queue = this.getQueueByType(queueTypeName);
 		if (queue) {
@@ -168,5 +183,10 @@ export class QueueService {
 			} 
 		}
 		queue.duration = durationSum;
+
+		// update references (e. g. from the Main Queue)
+		for (let entry of this.getEntryRefsForQueue(queue)) {
+			entry.duration = durationSum;
+		}
 	}
 }

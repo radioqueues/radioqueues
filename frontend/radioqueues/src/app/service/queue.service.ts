@@ -61,10 +61,10 @@ export class QueueService {
 			entries: new Array<Entry>()
 		};
 		if (queueType.jingleStart) {
-			queue.entries.push(new Entry(queueType.jingleStart, new Date("2024-01-01 00:00:00"), 0, queue.color));
+			queue.entries.push(new Entry(queueType.jingleStart, undefined, new Date("2024-01-01 00:00:00"), 0, queue.color));
 		}
 		if (queueType.jingleEnd) {
-			queue.entries.push(new Entry(queueType.jingleEnd, new Date("2024-01-01 00:00:00"), 0, queue.color));
+			queue.entries.push(new Entry(queueType.jingleEnd, undefined, new Date("2024-01-01 00:00:00"), 0, queue.color));
 		}
 		this.queues[queue.uuid] = queue;
 		return queue;
@@ -83,7 +83,7 @@ export class QueueService {
 
 
 	cloneEntry(entry: Entry): Entry {
-		return new Entry(entry.name, entry.offset, entry.duration, entry.color, entry.queueRef);
+		return new Entry(entry.name, undefined, entry.offset, entry.duration, entry.color, entry.queueRef);
 	}
 
 	recalculateQueue(queue: Queue) {

@@ -13,8 +13,8 @@ export class DurationPipe implements PipeTransform {
 		if (duration <= 0) {
 			return "00:00"
 		}
-		let minutes = Math.floor(duration / 60);
-		let seconds = Math.floor(duration % 60);
+		let minutes = Math.floor((duration / 1000) / 60);
+		let seconds = Math.floor((duration / 1000) % 60);
 		return this.pad2(minutes) + ":" + this.pad2(seconds);
 	}
 

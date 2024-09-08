@@ -43,7 +43,7 @@ export class AudioFileService {
 				let audio = new Audio();
 				audio.src = URL.createObjectURL(blob!)
 				audio.addEventListener("loadedmetadata", () => {
-					loadedFiles[filename].duration = audio.duration;
+					loadedFiles[filename].duration = audio.duration * 1000;
 				})
 				audio.addEventListener("error", (event) => {
 					loadedFiles[filename].duration = -1;

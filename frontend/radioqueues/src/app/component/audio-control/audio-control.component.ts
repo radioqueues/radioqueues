@@ -95,7 +95,7 @@ export class AudioControlComponent {
 
 	onTimeUpdate() {
 		let duration = this.currentEntry?.duration;
-		let currentTime = this.audio?.nativeElement?.currentTime;
+		let currentTime = this.audio?.nativeElement?.currentTime * 1000;
 		if (!duration || !currentTime) {
 			console.log(duration, currentTime);
 			this.remainingTime = duration;

@@ -91,7 +91,7 @@ export class QueueService {
 		let durationSum = 0;
 		for (let entry of queue.entries) {
 			entry.offset = new Date(offset + durationSum);
-			durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration * 1000 : 0); 
+			durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0); 
 		}
 		queue.duration = durationSum;
 	}

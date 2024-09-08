@@ -67,7 +67,7 @@ export class DatabaseService {
 	private files: Record<string, FileMetaData> = {};
 
 	private jsonDeserializer(key: string, value: any): any {
-		if (key === "offset") {
+		if ((key === "offset") || (key === "scheduled")) {
 			return new Date(value);
 		}
 		return value;

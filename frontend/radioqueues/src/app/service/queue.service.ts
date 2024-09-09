@@ -158,7 +158,6 @@ export class QueueService {
 					}
 					let diff = entry.scheduled.getTime() - (offset + durationSum);
 					if (diff < 0) {
-						console.log("Too long");
 						if (subsetSumQueue.duration && subsetSumQueue.duration >= -diff) {
 							subsetSumQueue.duration = subsetSumQueue.duration + diff;
 							durationSum = durationSum + diff; 
@@ -188,5 +187,7 @@ export class QueueService {
 		for (let entry of this.getEntryRefsForQueue(queue)) {
 			entry.duration = durationSum;
 		}
+		// TODO: recalc main queue
+		// TODO: recalc all referencing queues without circle
 	}
 }

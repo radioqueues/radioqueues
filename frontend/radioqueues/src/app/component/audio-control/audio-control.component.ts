@@ -55,14 +55,21 @@ export class AudioControlComponent {
 		if (!this.currentEntry?.name) {
 			return;
 		}
-		let fileHandle = await this.fileSystemService.getFileHandle(this.currentEntry?.name);
-		let blob = await fileHandle?.getFile();
-		if (blob) {
-			this.url = URL.createObjectURL(blob);
+		try {
+			let fileHandle = await this.fileSystemService.getFileHandle(this.currentEntry?.name);
+			let blob = await fileHandle?.getFile();
+			if (blob) {
+				this.url = URL.createObjectURL(blob);
+			}
+		} catch (e) {
+			console.error(e);
+			this.onEnded();
 		}
 	}
 
 	onEnded() {
+		// TODO: schedule clone of for last automatic queue
+		// TODO: if the next (or the next after subset-sum) entry is scheduled, recalculate current (or insert) subset-sum entry 
 		this.subQueueIndex++;
 		console.log("ended", this.mainQueueIndex, this.subQueueIndex);
 

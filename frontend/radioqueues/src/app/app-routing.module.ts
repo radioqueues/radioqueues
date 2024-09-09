@@ -7,6 +7,7 @@ import { IndexeddbCacheService } from './service/indexeddb-cache.service';
 import { DatabaseService } from './service/database.service';
 import { QueueService } from './service/queue.service';
 import { AudioFileService } from './service/audio-file.service';
+import { ErrorService } from './service/error.service';
 
 const routes: Routes = [
 	{
@@ -22,6 +23,7 @@ const routes: Routes = [
 	providers: [
 		AudioFileService,
 		DatabaseService,
+		ErrorService,
 		FileSystemService,
 		IndexeddbCacheService,
 		QueueService

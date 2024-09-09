@@ -15,11 +15,13 @@ import { Queue } from 'src/app/model/queue';
 import { DatabaseService } from 'src/app/service/database.service';
 import { QueueType } from 'src/app/model/queue-type';
 import { FormsModule } from '@angular/forms';
+import { ErrorService } from 'src/app/service/error.service';
 import { QueueService } from 'src/app/service/queue.service';
 import { KeyValuePipe } from '@angular/common';
 import { AudioFileService } from 'src/app/service/audio-file.service';
 import { AudioControlComponent } from '../audio-control/audio-control.component';
 import { ProgressOverlayComponent } from '../progress-overlay/progress-overlay.component';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -33,6 +35,7 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	readonly audioFileService = inject(AudioFileService);
 	readonly dialog = inject(MatDialog);
 	readonly databaseService = inject(DatabaseService);
+	readonly errorService = inject(ErrorService);
 	readonly fileSystemService = inject(FileSystemService);
 	readonly queueService = inject(QueueService);
 
@@ -54,6 +57,15 @@ export class QueueManagerMainWindowComponent implements OnInit {
 			} else if (!status && this.progressDialog) {
 				this.progressDialog?.close();
 				this.progressDialog = undefined;
+			}
+		});
+		this.errorService.errors.subscribe((status: any) => {
+			if (status) {
+				this.dialog.open(ErrorDialogComponent, {
+					data: {
+						errorMessage: status.errorMessage
+					}
+				});
 			}
 		});
 

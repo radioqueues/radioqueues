@@ -16,6 +16,7 @@ import { TitlePipe } from 'src/app/pipe/title.pipe';
 import { DurationPipe } from 'src/app/pipe/duration.pipe';
 import { QueueService } from 'src/app/service/queue.service';
 import { QueueType } from 'src/app/model/queue-type';
+import { ErrorService } from 'src/app/service/error.service';
 
 @Component({
 	selector: 'app-queue',
@@ -28,6 +29,7 @@ import { QueueType } from 'src/app/model/queue-type';
 	],
 })
 export class QueueComponent {
+	errorService = inject(ErrorService);
 	fileSystemService = inject(FileSystemService);
 	databaseService = inject(DatabaseService);
 	queueService = inject(QueueService);
@@ -79,9 +81,17 @@ export class QueueComponent {
 	onCdkDrop(event: CdkDragDrop<Entry[]>) {
 		this.selectedIndex = -1;
 		if (event.previousContainer === event.container) {
+			// TODO: ensure that scheduled entries are not moved out of order
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {
-			let entry = this.queueService.cloneEntry(event.previousContainer.data[event.previousIndex]);
+			let orgEntry = event.previousContainer.data[event.previousIndex];
+			if (orgEntry.queueRef || (orgEntry as Queue).type) {
+				this.errorService.errors.next({
+					errorMessage: "Cannot copy a queue into another queue."
+				});
+				return;
+			}
+			let entry = this.queueService.cloneEntry(orgEntry);
 			event.container.data.splice(event.currentIndex, 0, entry);
 		}
 		this.queueService.recalculateQueue(this.queue);

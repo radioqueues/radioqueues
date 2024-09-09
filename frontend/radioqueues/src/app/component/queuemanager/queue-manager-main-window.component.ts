@@ -4,8 +4,8 @@ import {
 } from '@angular/cdk/drag-drop';
 
 import {
-  MatDialog,
-  MatDialogRef
+	MatDialog,
+	MatDialogRef
 } from '@angular/material/dialog';
 
 import { QueueWindowComponent } from '../queue-window/queue-window.component';
@@ -22,6 +22,7 @@ import { AudioFileService } from 'src/app/service/audio-file.service';
 import { AudioControlComponent } from '../audio-control/audio-control.component';
 import { ProgressOverlayComponent } from '../progress-overlay/progress-overlay.component';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { Entry } from 'src/app/model/entry';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -45,7 +46,7 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	queueTypeArray!: QueueType[];
 	queues!: Record<string, Queue>;
 	newQueueType: string = "";
-	
+
 	async ngOnInit() {
 		this.queueTypes = await this.databaseService.getQueueTypes();
 		this.queueTypeArray = Object.values(this.queueTypes);
@@ -94,9 +95,11 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	onDebugClicked() {
 		let history = this.queues["m0lhjdqh-a78095b4-0c65-44a7-9555-bdcbd93d00a6"];
 		let mainQueue = this.queues["m0lhjegw-8deb427b-ec8e-40de-a4ba-b30dbbcd5e0b"];
+		mainQueue.entries = [];
+		mainQueue.offset = history.entries[0].offset;
 		console.log(history);
 		let lastQueueType = "";
-		let queue: Queue|undefined = undefined;
+		let queue: Queue | undefined = undefined;
 		for (let entry of history.entries) {
 
 			let queueTypeName = "Musik";
@@ -114,7 +117,7 @@ export class QueueManagerMainWindowComponent implements OnInit {
 			if (lastQueueType != "Nachrichten" && queueTypeName == "Nachrichten" && entry.name!.indexOf("Jingle") < 0) {
 				queueTypeName = "Reportage";
 			}
-			
+
 
 			if (queueTypeName != lastQueueType) {
 				let queueType = this.queueTypes[queueTypeName];
@@ -122,13 +125,17 @@ export class QueueManagerMainWindowComponent implements OnInit {
 					queueType = this.queueTypes["Musik"];
 				}
 				if (queue) {
-					mainQueue.entries.push({
+					let entry: Entry = {
 						"queueRef": queue.uuid,
 						"name": queue.name,
 						"offset": queue.offset,
 						"duration": queue.duration,
 						"color": queue.color
-					});
+					};
+					if (queue.type === "Nachrichten" || queue.type === "Werbung" || queue.type === "Reportage") {
+						entry.scheduled = entry.offset;
+					}
+					mainQueue.entries.push(entry);
 				}
 				queue = queue = {
 					uuid: "zzzz" + entry.offset + "-" + crypto.randomUUID(),
@@ -156,8 +163,6 @@ export class QueueManagerMainWindowComponent implements OnInit {
 				"color": queue.color
 			});
 		}
-
-				
 		console.log(this.queues);
 	}
 

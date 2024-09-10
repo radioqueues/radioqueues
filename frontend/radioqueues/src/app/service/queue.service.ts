@@ -65,22 +65,27 @@ export class QueueService {
 		}
 	}
 
-	createNewQueue(queueType: QueueType) {
+	async createNewQueue(queueType: QueueType) {
 		let queue = {
 			uuid: Date.now().toString(36) + "-" + crypto.randomUUID(),
 			name: queueType.name + " (unscheduled)",
 			color: queueType.color,
-			offset: new Date("2024-01-01 00:00:00"),
+			offset: new Date("+100000-01-01T00:00:00"),
 			duration: 0,
 			visible: true,
 			type: queueType.name,
 			entries: new Array<Entry>()
 		};
+		let temp = 0;
+		let files = await this.databaseService.getFiles();
 		if (queueType.jingleStart) {
-			queue.entries.push(new Entry(queueType.jingleStart, undefined, new Date("2024-01-01 00:00:00"), 0, queue.color));
+			let duration = files[queueType.jingleStart]?.duration;
+			queue.entries.push(new Entry(queueType.jingleStart, undefined, queue.offset, duration, queue.color));
+			temp = duration ? duration : 0;
 		}
 		if (queueType.jingleEnd) {
-			queue.entries.push(new Entry(queueType.jingleEnd, undefined, new Date("2024-01-01 00:00:00"), 0, queue.color));
+			let duration = files[queueType.jingleEnd]?.duration;
+			queue.entries.push(new Entry(queueType.jingleEnd, undefined, new Date(queue.offset.getTime() + temp), duration, queue.color));
 		}
 		this.queues[queue.uuid] = queue;
 		return queue;
@@ -93,7 +98,7 @@ export class QueueService {
 		newQueue.name = newQueue.type + " (unscheduled)";
 
 		// TODO: schedule or unscheduled
-		newQueue.offset = new Date("2024-01-01 00:00:00");
+		newQueue.offset = new Date("+100000-01-01T00:00:00");
 		this.queues[newQueue.uuid] = newQueue;
 	}
 
@@ -124,7 +129,7 @@ export class QueueService {
 		return undefined;
 	}
 
-	recalculateQueue(queue: Queue) {
+	async recalculateQueue(queue: Queue) {
 		let now = new Date();
 		let offset = queue.offset?.getTime() || 0;
 		let durationSum = 0;
@@ -142,7 +147,7 @@ export class QueueService {
 				if (i == 0 || this.getQueueTypeFromEntry(queue.entries[i - 1])?.scheduleStrategy !== "subset-sum") {
 					if (entry.scheduled > start) {
 						let subsetSumQueueType = this.getSubsetSumQueueType();
-						subsetSumQueue = this.createNewQueue(subsetSumQueueType!);
+						subsetSumQueue = await this.createNewQueue(subsetSumQueueType!);
 						subsetSumQueue.name = subsetSumQueueType!.name,
 						subsetSumQueue.offset = start;
 						subsetSumQueue.visible = false;

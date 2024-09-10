@@ -83,40 +83,30 @@ export class QueueComponent {
 		if (event.previousContainer === event.container) {
 			let entry = event.container.data[event.previousIndex] as Entry;
 			if (entry.scheduled) {
-				this.errorService.errors.next({
-					errorMessage: "Cannot move scheduled queues to another position."
-				});
+				this.errorService.errorDialog("Cannot move scheduled queues to another position.");
 				return;
 			}
 			if (entry.offset && entry.offset < new Date()) {
-				this.errorService.errors.next({
-					errorMessage: "Cannot move an entry from the past around."
-				});
+				this.errorService.errorDialog("Cannot move an entry from the past around.");
 				return;
 			}
 			let movedToEntry = event.container.data[event.currentIndex] as Entry;
 			if (movedToEntry.offset && movedToEntry.offset < new Date()) {
-				this.errorService.errors.next({
-					errorMessage: "Cannot move an entry into the past."
-				});
+				this.errorService.errorDialog("Cannot move an entry into the past.");
 				return;
 			}
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {
 			let orgEntry = event.previousContainer.data[event.previousIndex];
 			if (orgEntry.queueRef || (orgEntry as Queue).type) {
-				this.errorService.errors.next({
-					errorMessage: "Cannot copy a queue into another queue."
-				});
+				this.errorService.errorDialog("Cannot copy a queue into another queue.");
 				return;
 			}
 			let entry = this.queueService.cloneEntry(orgEntry);
 
 			let movedToEntry = event.container.data[event.currentIndex] as Entry;
 			if (movedToEntry.offset && movedToEntry.offset < new Date()) {
-				this.errorService.errors.next({
-					errorMessage: "Cannot move an entry into the past."
-				});
+				this.errorService.errorDialog("Cannot move an entry into the past.");
 				return;
 			}
 			event.container.data.splice(event.currentIndex, 0, entry);

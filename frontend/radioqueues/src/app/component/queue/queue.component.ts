@@ -81,7 +81,26 @@ export class QueueComponent {
 	onCdkDrop(event: CdkDragDrop<Entry[]>) {
 		this.selectedIndex = -1;
 		if (event.previousContainer === event.container) {
-			// TODO: ensure that scheduled entries are not moved out of order
+			let entry = event.container.data[event.previousIndex] as Entry;
+			if (entry.scheduled) {
+				this.errorService.errors.next({
+					errorMessage: "Cannot move scheduled queues to another position."
+				});
+				return;
+			}
+			if (entry.offset && entry.offset < new Date()) {
+				this.errorService.errors.next({
+					errorMessage: "Cannot move an entry from the past around."
+				});
+				return;
+			}
+			let movedToEntry = event.container.data[event.currentIndex] as Entry;
+			if (movedToEntry.offset && movedToEntry.offset < new Date()) {
+				this.errorService.errors.next({
+					errorMessage: "Cannot move an entry into the past."
+				});
+				return;
+			}
 			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 		} else {
 			let orgEntry = event.previousContainer.data[event.previousIndex];
@@ -92,6 +111,14 @@ export class QueueComponent {
 				return;
 			}
 			let entry = this.queueService.cloneEntry(orgEntry);
+
+			let movedToEntry = event.container.data[event.currentIndex] as Entry;
+			if (movedToEntry.offset && movedToEntry.offset < new Date()) {
+				this.errorService.errors.next({
+					errorMessage: "Cannot move an entry into the past."
+				});
+				return;
+			}
 			event.container.data.splice(event.currentIndex, 0, entry);
 		}
 		this.queueService.recalculateQueue(this.queue);

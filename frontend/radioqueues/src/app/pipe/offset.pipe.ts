@@ -17,7 +17,7 @@ export class OffsetPipe implements PipeTransform {
 	}
 
 	transform(offset?: Date): string {
-		if (!offset) {
+		if (!offset || isNaN(offset.getTime())) {
 			return "??:??:??";
 		}
 		return this.formatter.format(offset);

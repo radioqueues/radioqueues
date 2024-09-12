@@ -17,6 +17,7 @@ import { DurationPipe } from 'src/app/pipe/duration.pipe';
 import { QueueService } from 'src/app/service/queue.service';
 import { QueueType } from 'src/app/model/queue-type';
 import { ErrorService } from 'src/app/service/error.service';
+import { AudioFileService } from 'src/app/service/audio-file.service';
 
 @Component({
 	selector: 'app-queue',
@@ -29,13 +30,14 @@ import { ErrorService } from 'src/app/service/error.service';
 	],
 })
 export class QueueComponent {
+	audioFileService = inject(AudioFileService);
 	errorService = inject(ErrorService);
 	fileSystemService = inject(FileSystemService);
 	databaseService = inject(DatabaseService);
 	queueService = inject(QueueService);
-	
-	@Input({required: true}) queues!: Record<string, Queue>;
-	@Input({required: true}) queueTypes!: Record<string, QueueType>;
+
+	@Input({ required: true }) queues!: Record<string, Queue>;
+	@Input({ required: true }) queueTypes!: Record<string, QueueType>;
 	@Output() queuesChange = new EventEmitter<Record<string, Queue>>();
 
 	@Input() supportsSubQueues = false;
@@ -115,8 +117,10 @@ export class QueueComponent {
 		this.queuesChange.emit(this.queues);
 	}
 
-	createQueueEntry(queue: Queue, name: string) {
-		return new Entry(name, undefined, new Date("2024-01-01 00:00:00"), 0, queue.color);
+	async createQueueEntry(queue: Queue, name: string) {
+		let files = await this.databaseService.getFiles();
+		let duration = files[name]?.duration;
+		return new Entry(name, undefined, new Date("2024-01-01 00:00:00"), duration, queue.color);
 	}
 
 	onDragEnter(event: Event) {
@@ -132,47 +136,55 @@ export class QueueComponent {
 	}
 
 	async onDrop(event: DragEvent) {
-		console.log("File(s) dropped", event);
 		let entryElement = (event.target as HTMLElement).closest(".queue-entry");
 		entryElement?.classList?.remove("dragover");
 
 		// Prevent default behavior (Prevent file from being opened)
 		event.preventDefault();
 
-		if (event.dataTransfer?.items) {
-			console.log("items", event.dataTransfer.items);
-
-			// Use DataTransferItemList interface to access the file(s)
-			let newEntries: Array<Entry> = [];
-			[...event.dataTransfer.items].forEach(async (item, i) => {
-				// If dropped items aren't files, reject them
-				console.log("item", item, JSON.stringify(item));
-				if (item.kind === "file") {
-					const file = item.getAsFile();
-					if (file) {
-						console.log(`… file[${i}].name = ${file?.name}`, file);
-						newEntries.push(this.createQueueEntry(this.queue, file?.name));
-					}
-				}
-				// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryHandle
-				if ((item as any).getAsFileSystemHandle) {
-					let fileSystemHandle = await (item as any).getAsFileSystemHandle();
-					let path = await this.fileSystemService.rootHandle?.resolve(fileSystemHandle);
-					console.log(path);
-				}
-			});
-			if (newEntries) {
-				let index = this.getIndexFromElement(event.target)
-				this.queue.entries.splice(index, 0, ...newEntries);
-			}
-			this.queueService.recalculateQueue(this.queue);
-			this.queuesChange.emit(this.queues);
+		if (!event.dataTransfer?.items) {
+			return;
 		}
 
+		let promisses: Array<Promise<FileSystemFileHandle>> = [];
+		[...event.dataTransfer.items].forEach(async (item) => {
+			if (item.kind !== "file") {
+				this.errorService.errorDialog("The dropped item is not a file.");
+				return undefined;
+			}
+			promisses.push((item as any).getAsFileSystemHandle());
+		});
+
+		let fileHandles = await Promise.all(promisses);
+		let loadedFiles = {};
+		for (let fileHandle of fileHandles) {
+			let path = await this.fileSystemService.rootHandle?.resolve(fileHandle);
+			if (!path) {
+				this.errorService.errorDialog("Dropped files are not in the known project folder and cannot be accessed.");
+				return;
+			}
+			let filename = path.join("/");
+			let file = await fileHandle.getFile();
+			loadedFiles[filename] = {
+				size: file.size,
+				lastModified: file.lastModified,
+			}
+		}
+		await this.audioFileService.loadDurations(loadedFiles);
+		let newEntries: Array<Entry> = [];
+		for (let filename in loadedFiles) {
+			newEntries.push(await this.createQueueEntry(this.queue, filename));
+		}
+		if (newEntries) {
+			let index = this.getIndexFromElement(event.target)
+			this.queue.entries.splice(index, 0, ...newEntries);
+		}
+		this.queueService.recalculateQueue(this.queue);
+		this.queuesChange.emit(this.queues);
 	}
 
+
 	onDragOver(event: Event) {
-		console.log("File(s) in drop zone");
 		// Prevent default behavior (Prevent file from being opened)
 		event.preventDefault();
 	}

@@ -19,7 +19,10 @@ import { AudioFileService } from 'src/app/service/audio-file.service';
 })
 export class ProgressOverlayComponent implements OnInit {
 	audioFileService = inject(AudioFileService);
-	status: any;
+	status = {
+		current: 0,
+		count: "?"
+	};
 
 	async ngOnInit() {
 		this.audioFileService.process.subscribe((status: any) => {

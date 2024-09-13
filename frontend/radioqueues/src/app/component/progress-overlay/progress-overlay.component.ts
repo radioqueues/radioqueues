@@ -19,7 +19,7 @@ import { AudioFileService } from 'src/app/service/audio-file.service';
 })
 export class ProgressOverlayComponent implements OnInit {
 	audioFileService = inject(AudioFileService);
-	status = {
+	status: any = {
 		current: 0,
 		count: "?"
 	};

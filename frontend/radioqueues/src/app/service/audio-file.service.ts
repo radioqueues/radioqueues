@@ -11,7 +11,6 @@ export class AudioFileService {
 	process: Subject<any> = new Subject();
 
 	init() {
-		console.log("AudioFileService");
 		this.fileSystemService.newFiles.subscribe((loadedFiles: any) => {
 			this.loadDurations(loadedFiles);
 		})

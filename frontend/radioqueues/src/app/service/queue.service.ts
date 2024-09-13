@@ -100,6 +100,7 @@ export class QueueService {
 		// TODO: schedule or unscheduled
 		newQueue.offset = new Date("+100000-01-01T00:00:00");
 		this.queues[newQueue.uuid] = newQueue;
+		this.recalculateQueue(newQueue);
 	}
 
 

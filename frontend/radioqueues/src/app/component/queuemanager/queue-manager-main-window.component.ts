@@ -79,8 +79,9 @@ export class QueueManagerMainWindowComponent implements OnInit {
 			this.queueService.createNewQueueOrShowInternalQueue(this.newQueueType);
 		}
 
-		// TODO: reset select box to empty entry does not work
 		this.newQueueType = "";
+		// reset select box to empty entry using the above line does not work
+		(document.getElementById("newQueue") as HTMLSelectElement).value = "";
 	}
 
 

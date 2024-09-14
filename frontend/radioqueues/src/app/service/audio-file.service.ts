@@ -43,6 +43,7 @@ export class AudioFileService {
 			if (this.isFileKnown(files, filename, loadedFiles[filename])) {
 				i++;
 				this.updateStatus(i, Object.keys(loadedFiles).length);
+				continue;
 			}
 			let promise = new Promise<void>(async (resolve) => {
 				let fileHandle = await this.fileSystemService.getFileHandle(filename);

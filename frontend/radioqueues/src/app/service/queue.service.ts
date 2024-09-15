@@ -69,7 +69,7 @@ export class QueueService {
 		}
 	}
 
-	async createNewQueue(queueType: QueueType): Promise<Queue> {
+	createNewQueue(queueType: QueueType): Queue {
 		let queue = {
 			uuid: Date.now().toString(36) + "-" + crypto.randomUUID(),
 			name: queueType.name + " (unscheduled)",
@@ -139,17 +139,12 @@ export class QueueService {
 			return;
 		}
 
-		let queueTypeName = (entry as any)?.type;
-		let queueRef = entry?.queueRef;
-		if (queueRef) {
-			queueTypeName = this.queues[queueRef].type;
-		}
-		let queueType = this.queueTypes[queueTypeName];
-		if (queueType.scheduleStrategy !== "subset-sum") {
+		let queueType = this.getQueueTypeFromEntry(entry);
+		if (queueType?.scheduleStrategy !== "subset-sum") {
 			return;
 		}
 
-		if (!queueRef) {
+		if (!entry.queueRef) {
 			let queue = await this.createNewQueue(queueType);
 			queue.name = entry.name;
 			queue.offset = entry.offset;
@@ -157,7 +152,7 @@ export class QueueService {
 			entry.queueRef = queue.uuid;
 		}
 
-		let queue = this.queues[entry.queueRef!];
+		let queue = this.queues[entry.queueRef];
 		if (queue.entries?.length) {
 			return;
 		}
@@ -172,9 +167,11 @@ export class QueueService {
 		}
 		this.recalculateQueue(queue);
 		// TODO: recalc main queue
+		// TODO: save queue
+		// TODO: save used songs in DynamicQueueService
 	}
 
-	async recalculateQueue(queue: Queue) {
+	recalculateQueue(queue: Queue) {
 		let now = new Date();
 		let offset = queue.offset?.getTime() || 0;
 		let durationSum = 0;
@@ -192,10 +189,11 @@ export class QueueService {
 				if (i == 0 || this.getQueueTypeFromEntry(queue.entries[i - 1])?.scheduleStrategy !== "subset-sum") {
 					if (entry.scheduled > start) {
 						let subsetSumQueueType = this.getSubsetSumQueueType();
-						subsetSumQueue = await this.createNewQueue(subsetSumQueueType!);
+						subsetSumQueue = this.createNewQueue(subsetSumQueueType!);
 						subsetSumQueue.name = subsetSumQueueType!.name,
 						subsetSumQueue.offset = start;
 						subsetSumQueue.visible = false;
+						
 						// TODO: insert entry with queueRef BUG
 						queue.entries.splice(i, 0, subsetSumQueue);
 						i++;

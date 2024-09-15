@@ -145,10 +145,11 @@ export class QueueService {
 		}
 
 		if (!entry.queueRef) {
-			let queue = await this.createNewQueue(queueType);
+			let queue = this.createNewQueue(queueType);
 			queue.name = entry.name;
 			queue.offset = entry.offset;
 			queue.duration = entry.duration;
+			queue.visible = false;
 			entry.queueRef = queue.uuid;
 		}
 
@@ -175,8 +176,9 @@ export class QueueService {
 	private createSubsetSumEntry(start: Date, duration: number) {
 		let subsetSumQueueType = this.getSubsetSumQueueType();
 		let subsetSumQueue = this.createNewQueue(subsetSumQueueType!);
-		subsetSumQueue.name = subsetSumQueueType!.name,
-			subsetSumQueue.offset = start;
+		subsetSumQueue.visible = false;
+		subsetSumQueue.name = subsetSumQueueType!.name;
+		subsetSumQueue.offset = start;
 		subsetSumQueue.visible = false;
 		let entry = new Entry(subsetSumQueueType?.name, undefined, start, duration, subsetSumQueueType?.color)
 		entry.queueRef = subsetSumQueue.uuid;

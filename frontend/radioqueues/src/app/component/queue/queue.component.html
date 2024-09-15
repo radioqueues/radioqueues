@@ -24,10 +24,11 @@
 						&nbsp;
 						@if (item.scheduled) {
 							🔨
-						} @else if ($any(item).type && queueTypes[$any(item).type].scheduleStrategy=="subset-sum") {
+						} @else if (($any(item).type && queueTypes[$any(item).type].scheduleStrategy=="subset-sum")
+									|| (item.queueRef && queueTypes[queues[item.queueRef].type].scheduleStrategy=="subset-sum")) {
 							↕️
 						} @else {
-							🏊
+							🏊 X {{item.queueRef}} 
 						}
 					}
 				</span> &nbsp; 

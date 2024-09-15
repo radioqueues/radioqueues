@@ -3,14 +3,18 @@ import { Entry } from "../model/entry";
 import { Queue } from "../model/queue";
 import { QueueType } from "../model/queue-type";
 import { DatabaseService } from "./database.service";
+import { DynamicQueueService } from "./dynamic-queue.service";
+import { FileMetaData } from "../model/file-meta-data";
 
 @Injectable()
 export class QueueService {
 
-	readonly databaseService = inject(DatabaseService);
+	private readonly databaseService = inject(DatabaseService);
+	private readonly dynamicQueueService = inject(DynamicQueueService);
 
 	queueTypes!: Record<string, QueueType>;
 	queues!: Record<string, Queue>;
+    files!: Record<string, FileMetaData>;
 
 	constructor() {
 		this.init();
@@ -19,7 +23,7 @@ export class QueueService {
 	private async init() {
 		this.queueTypes = await this.databaseService.getQueueTypes();
 		this.queues = await this.databaseService.getQueues();
-
+		this.files = await this.databaseService.getFiles();
 	}
 
 	createNewQueueOrShowInternalQueue(queueTypeName: string) {
@@ -65,7 +69,7 @@ export class QueueService {
 		}
 	}
 
-	async createNewQueue(queueType: QueueType) {
+	async createNewQueue(queueType: QueueType): Promise<Queue> {
 		let queue = {
 			uuid: Date.now().toString(36) + "-" + crypto.randomUUID(),
 			name: queueType.name + " (unscheduled)",
@@ -77,14 +81,13 @@ export class QueueService {
 			entries: new Array<Entry>()
 		};
 		let temp = 0;
-		let files = await this.databaseService.getFiles();
 		if (queueType.jingleStart) {
-			let duration = files[queueType.jingleStart]?.duration;
+			let duration = this.files[queueType.jingleStart]?.duration;
 			queue.entries.push(new Entry(queueType.jingleStart, undefined, queue.offset, duration, queue.color));
 			temp = duration ? duration : 0;
 		}
 		if (queueType.jingleEnd) {
-			let duration = files[queueType.jingleEnd]?.duration;
+			let duration = this.files[queueType.jingleEnd]?.duration;
 			queue.entries.push(new Entry(queueType.jingleEnd, undefined, new Date(queue.offset.getTime() + temp), duration, queue.color));
 		}
 		this.queues[queue.uuid] = queue;
@@ -130,6 +133,47 @@ export class QueueService {
 		return undefined;
 	}
 
+
+	async fillQueue(entry: Entry) {
+		if (!entry.duration) {
+			return;
+		}
+
+		let queueTypeName = (entry as any)?.type;
+		let queueRef = entry?.queueRef;
+		if (queueRef) {
+			queueTypeName = this.queues[queueRef].type;
+		}
+		let queueType = this.queueTypes[queueTypeName];
+		if (queueType.scheduleStrategy !== "subset-sum") {
+			return;
+		}
+
+		if (!queueRef) {
+			let queue = await this.createNewQueue(queueType);
+			queue.name = entry.name;
+			queue.offset = entry.offset;
+			queue.duration = entry.duration;
+			entry.queueRef = queue.uuid;
+		}
+
+		let queue = this.queues[entry.queueRef!];
+		if (queue.entries?.length) {
+			return;
+		}
+
+		let filenames = await this.dynamicQueueService.scheduleQueue(queue.type, entry.duration);
+		console.log("scheduling", filenames);
+
+		let files = await this.databaseService.getFiles();
+		for (let filename of filenames!) {
+			let duration = files[filename]?.duration;
+			queue.entries.push(new Entry(filename, undefined, queue.offset, duration, queue.color));
+		}
+		this.recalculateQueue(queue);
+		// TODO: recalc main queue
+	}
+
 	async recalculateQueue(queue: Queue) {
 		let now = new Date();
 		let offset = queue.offset?.getTime() || 0;
@@ -152,10 +196,12 @@ export class QueueService {
 						subsetSumQueue.name = subsetSumQueueType!.name,
 						subsetSumQueue.offset = start;
 						subsetSumQueue.visible = false;
+						// TODO: insert entry with queueRef BUG
 						queue.entries.splice(i, 0, subsetSumQueue);
 						i++;
 					}
 				} else {
+					// TODO: entry with queueRef BUG
 					subsetSumQueue = queue.entries[i - 1] as Queue;
 				}
 				if (subsetSumQueue) {

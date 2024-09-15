@@ -67,7 +67,7 @@ export class AudioControlComponent {
 		}
 	}
 
-	onEnded() {
+	async onEnded() {
 		// TODO: schedule clone of for last automatic queue
 		// TODO: if the next (or the next after subset-sum) entry is scheduled, recalculate current (or insert) subset-sum entry 
 		this.subQueueIndex++;
@@ -77,6 +77,7 @@ export class AudioControlComponent {
 		if (this.mainQueue && this.mainQueue.entries) {
 			while (this.mainQueueIndex < this.mainQueue.entries.length) {
 				this.currentParentEntry = this.mainQueue.entries[this.mainQueueIndex];
+				await this.queueService.fillQueue(this.currentParentEntry);
 				if (!this.currentParentEntry?.queueRef) {
 					this.mainQueueIndex++;
 					this.subQueueIndex = 0;
@@ -93,6 +94,7 @@ export class AudioControlComponent {
 			}
 		}
 	}
+
 
 	onError() {
 		if (this.url) {

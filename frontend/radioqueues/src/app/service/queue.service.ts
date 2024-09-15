@@ -171,6 +171,19 @@ export class QueueService {
 		// TODO: save used songs in DynamicQueueService
 	}
 
+
+	private createSubsetSumEntry(start: Date, duration: number) {
+		let subsetSumQueueType = this.getSubsetSumQueueType();
+		let subsetSumQueue = this.createNewQueue(subsetSumQueueType!);
+		subsetSumQueue.name = subsetSumQueueType!.name,
+		subsetSumQueue.offset = start;
+		subsetSumQueue.visible = false;
+		let entry = new Entry(subsetSumQueueType?.name, undefined, start, duration, subsetSumQueueType?.color)
+		entry.queueRef = subsetSumQueue.uuid;
+		return entry;
+	}
+
+
 	recalculateQueue(queue: Queue) {
 		let now = new Date();
 		let offset = queue.offset?.getTime() || 0;
@@ -182,45 +195,42 @@ export class QueueService {
 				continue;
 			}
 			if (entry.scheduled) {
-				let subsetSumQueue: Queue|undefined = undefined;
+				let subsetSumEntry: Entry|undefined = undefined;
 
 				// If this is the first entry, or the previous entry is not of type subset-sub,
 				// We need to insert one.
 				if (i == 0 || this.getQueueTypeFromEntry(queue.entries[i - 1])?.scheduleStrategy !== "subset-sum") {
 					if (entry.scheduled > start) {
-						let subsetSumQueueType = this.getSubsetSumQueueType();
-						subsetSumQueue = this.createNewQueue(subsetSumQueueType!);
-						subsetSumQueue.name = subsetSumQueueType!.name,
-						subsetSumQueue.offset = start;
-						subsetSumQueue.visible = false;
-						
-						// TODO: insert entry with queueRef BUG
-						queue.entries.splice(i, 0, subsetSumQueue);
+						subsetSumEntry = this.createSubsetSumEntry(start, 0);
+						queue.entries.splice(i, 0, subsetSumEntry);
 						i++;
 					}
 				} else {
 					// TODO: entry with queueRef BUG
-					subsetSumQueue = queue.entries[i - 1] as Queue;
+					subsetSumEntry = queue.entries[i - 1];
 				}
-				if (subsetSumQueue) {
-					if (!subsetSumQueue.duration) {
-						subsetSumQueue.duration = 0;
+				if (subsetSumEntry) {
+					if (!subsetSumEntry.duration) {
+						subsetSumEntry.duration = 0;
 					}
 					let diff = entry.scheduled.getTime() - (offset + durationSum);
 					if (diff < 0) {
-						if (subsetSumQueue.duration && subsetSumQueue.duration >= -diff) {
-							subsetSumQueue.duration = subsetSumQueue.duration + diff;
+						if (subsetSumEntry.duration && subsetSumEntry.duration >= -diff) {
+							subsetSumEntry.duration = subsetSumEntry.duration + diff;
 							durationSum = durationSum + diff; 
 						} else {
 							console.error("Unable to fit schedule", entry);
-							if (subsetSumQueue.duration) {
-								durationSum = durationSum - subsetSumQueue.duration; 
-								subsetSumQueue.duration = 0;
+							if (subsetSumEntry.duration) {
+								durationSum = durationSum - subsetSumEntry.duration; 
+								subsetSumEntry.duration = 0;
 							}
 						}
 					} else if (diff > 0) {
-						subsetSumQueue.duration = subsetSumQueue.duration + diff;
+						subsetSumEntry.duration = subsetSumEntry.duration + diff;
 						durationSum = durationSum + diff; 
+					}
+					if (subsetSumEntry.queueRef) {
+						this.queues[subsetSumEntry.queueRef].duration = subsetSumEntry.duration;
 					}
 				}
 

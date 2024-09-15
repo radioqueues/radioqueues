@@ -14,12 +14,12 @@ export class QueueService {
 
 	queueTypes!: Record<string, QueueType>;
 	queues!: Record<string, Queue>;
-    files!: Record<string, FileMetaData>;
+	files!: Record<string, FileMetaData>;
 
 	constructor() {
 		this.init();
 	}
-	
+
 	private async init() {
 		this.queueTypes = await this.databaseService.getQueueTypes();
 		this.queues = await this.databaseService.getQueues();
@@ -35,7 +35,7 @@ export class QueueService {
 		}
 	}
 
-	getQueueByType(queueTypeName: string): Queue|undefined {
+	getQueueByType(queueTypeName: string): Queue | undefined {
 		if (!this.queues) {
 			return undefined;
 		}
@@ -59,7 +59,7 @@ export class QueueService {
 				}
 			}
 		}
-		return res; 
+		return res;
 	}
 
 	private showQueueByTypeName(queueTypeName: string) {
@@ -92,10 +92,10 @@ export class QueueService {
 		}
 		this.queues[queue.uuid] = queue;
 		return queue;
-	}		
+	}
 
 	cloneQueue(queue: Queue) {
-	    let newQueue: Queue = JSON.parse(JSON.stringify(queue));
+		let newQueue: Queue = JSON.parse(JSON.stringify(queue));
 		// prefix uuid with timestamp for sorting
 		newQueue.uuid = Date.now().toString(36) + "-" + crypto.randomUUID();
 		newQueue.name = newQueue.type + " (unscheduled)";
@@ -111,7 +111,7 @@ export class QueueService {
 		return new Entry(entry.name, undefined, entry.offset, entry.duration, entry.color, entry.queueRef);
 	}
 
-	private getQueueTypeFromEntry(entry?: Entry): QueueType|undefined {
+	private getQueueTypeFromEntry(entry?: Entry): QueueType | undefined {
 		let queueTypeName = (entry as Queue).type;
 		let queueRef = entry?.queueRef;
 		if (queueRef) {
@@ -176,7 +176,7 @@ export class QueueService {
 		let subsetSumQueueType = this.getSubsetSumQueueType();
 		let subsetSumQueue = this.createNewQueue(subsetSumQueueType!);
 		subsetSumQueue.name = subsetSumQueueType!.name,
-		subsetSumQueue.offset = start;
+			subsetSumQueue.offset = start;
 		subsetSumQueue.visible = false;
 		let entry = new Entry(subsetSumQueueType?.name, undefined, start, duration, subsetSumQueueType?.color)
 		entry.queueRef = subsetSumQueue.uuid;
@@ -195,7 +195,7 @@ export class QueueService {
 				continue;
 			}
 			if (entry.scheduled) {
-				let subsetSumEntry: Entry|undefined = undefined;
+				let subsetSumEntry: Entry | undefined = undefined;
 
 				// If this is the first entry, or the previous entry is not of type subset-sub,
 				// We need to insert one.
@@ -217,17 +217,17 @@ export class QueueService {
 					if (diff < 0) {
 						if (subsetSumEntry.duration && subsetSumEntry.duration >= -diff) {
 							subsetSumEntry.duration = subsetSumEntry.duration + diff;
-							durationSum = durationSum + diff; 
+							durationSum = durationSum + diff;
 						} else {
 							console.error("Unable to fit schedule", entry);
 							if (subsetSumEntry.duration) {
-								durationSum = durationSum - subsetSumEntry.duration; 
+								durationSum = durationSum - subsetSumEntry.duration;
 								subsetSumEntry.duration = 0;
 							}
 						}
 					} else if (diff > 0) {
 						subsetSumEntry.duration = subsetSumEntry.duration + diff;
-						durationSum = durationSum + diff; 
+						durationSum = durationSum + diff;
 					}
 					if (subsetSumEntry.queueRef) {
 						this.queues[subsetSumEntry.queueRef].duration = subsetSumEntry.duration;
@@ -239,7 +239,7 @@ export class QueueService {
 			} else {
 				entry.offset = start;
 				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
-			} 
+			}
 		}
 		queue.duration = durationSum;
 

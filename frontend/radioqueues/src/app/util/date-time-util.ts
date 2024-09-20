@@ -23,4 +23,22 @@ export class DateTimeUtil {
 
 		return hours * 60 + minutes;
 	}
+
+	static datetimeFromTime(now: Date, time: number) {
+		let currentTime = now.getHours() * 60 + now.getMinutes();
+		let schedule = new Date(now);
+		let diff = currentTime - time;
+		if (time < currentTime) {
+			if (diff < 2 * 60) {
+				throw new Error("Time is in the past.");
+			}
+			schedule.setDate(now.getDate() + 1);
+		} else if (diff < -22 * 60) {
+			throw new Error("Time is in the past.");
+		}
+		schedule.setHours(Math.floor(time / 60));
+		schedule.setMinutes(time % 60);
+		schedule.setSeconds(0);
+		return schedule;
+	}
 }

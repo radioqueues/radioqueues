@@ -70,6 +70,10 @@ export class QueueManagerMainWindowComponent implements OnInit {
 			}
 		});
 
+		if (!window['showDirectoryPicker']) {
+			this.errorService.errorDialog("You browser does not support access to your filesystem. Please use Chrome or Edge.");
+		}
+
 		console.log(this.queues);
 	}
 

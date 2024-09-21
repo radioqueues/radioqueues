@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-	"upload": "ng build --aot && cp -ax dist/radioqueues/browser/* ../../../radioqueues_website/ && cd ../../../radioqueues_website/ && git push"
+	"upload": "ng build --aot && rm ../../../radioqueues_website/*.js ../../../radioqueues_website/*.css && cp -ax dist/radioqueues/browser/* ../../../radioqueues_website/ && cd ../../../radioqueues_website/ && git push"
   },
   "private": true,
   "dependencies": {

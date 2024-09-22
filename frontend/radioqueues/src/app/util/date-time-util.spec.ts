@@ -35,22 +35,29 @@ describe('DateTimeUtil', () => {
 	});
 
 	it('datetimeFromTime', () => {
-		expect(DateTimeUtil.datetimeFromTime(new Date("2024-01-01 15:00"), 15 * 60 + 5)).toEqual(new Date("2024-01-01 15:05"));
-		expect(DateTimeUtil.datetimeFromTime(new Date("2024-01-01 18:00"), 15 * 60 + 5)).toEqual(new Date("2024-01-02 15:05"));
-		expect(DateTimeUtil.datetimeFromTime(new Date("2024-01-31 18:00"), 15 * 60 + 5)).toEqual(new Date("2024-02-01 15:05"));
-		expect(DateTimeUtil.datetimeFromTime(new Date("2024-01-31 23:00"), 23 * 60 + 40)).toEqual(new Date("2024-01-31 23:40"));
-		expect(DateTimeUtil.datetimeFromTime(new Date("2024-01-31 23:00"), 0 *  60 + 5)).toEqual(new Date("2024-02-01 00:05"));
+		DateTimeUtil.fakeNow = new Date("2024-01-01 15:00");
+		expect(DateTimeUtil.datetimeFromTime(15 * 60 + 6)).toEqual(new Date("2024-01-01 15:06"));
+		DateTimeUtil.fakeNow = new Date("2024-01-01 18:00");
+		expect(DateTimeUtil.datetimeFromTime(15 * 60 + 7)).toEqual(new Date("2024-01-02 15:07"));
+		DateTimeUtil.fakeNow = new Date("2024-01-31 18:00");
+		expect(DateTimeUtil.datetimeFromTime(15 * 60 + 8)).toEqual(new Date("2024-02-01 15:08"));
+		DateTimeUtil.fakeNow = new Date("2024-01-31 23:00");
+		expect(DateTimeUtil.datetimeFromTime(23 * 60 + 40)).toEqual(new Date("2024-01-31 23:40"));
+		expect(DateTimeUtil.datetimeFromTime(0 *  60 + 5)).toEqual(new Date("2024-02-01 00:05"));
 
 		expect(function() {
-			DateTimeUtil.datetimeFromTime(new Date("2024-01-31 18:00"), 17 * 60);
+			DateTimeUtil.fakeNow = new Date("2024-01-31 18:00");
+			DateTimeUtil.datetimeFromTime(17 * 60);
 		}).toThrowError("Time is in the past.");
 
 		expect(function() {
-			DateTimeUtil.datetimeFromTime(new Date("2024-01-31 00:20"), 23 * 60);
+			DateTimeUtil.fakeNow = new Date("2024-01-31 00:20");
+			DateTimeUtil.datetimeFromTime(23 * 60);
 		}).toThrowError("Time is in the past.");
 
 		expect(function() {
-			DateTimeUtil.datetimeFromTime(new Date("2024-01-31 00:20"), 22 * 60 + 21);
+			DateTimeUtil.fakeNow = new Date("2024-01-31 00:20");
+			DateTimeUtil.datetimeFromTime(22 * 60 + 21);
 		}).toThrowError("Time is in the past.");
 	});
 });

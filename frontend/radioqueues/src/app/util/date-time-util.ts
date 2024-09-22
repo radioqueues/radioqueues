@@ -1,5 +1,11 @@
 export class DateTimeUtil {
 
+	public static fakeNow?: Date;
+
+	static now(): Date {
+		return this.fakeNow || new Date();
+	}
+
 	static parseTime(str?: string) {
 		if (!str) {
 			throw new Error("The time must not be empty.");
@@ -24,7 +30,8 @@ export class DateTimeUtil {
 		return hours * 60 + minutes;
 	}
 
-	static datetimeFromTime(now: Date, time: number) {
+	static datetimeFromTime(time: number) {
+		let now = this.now();
 		let currentTime = now.getHours() * 60 + now.getMinutes();
 		let schedule = new Date(now);
 		let diff = currentTime - time;

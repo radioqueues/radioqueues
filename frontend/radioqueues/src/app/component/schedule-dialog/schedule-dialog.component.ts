@@ -44,7 +44,7 @@ export class ScheduleDialogComponent {
 		if (this.option == "schedule") {
 			try {
 				let time = DateTimeUtil.parseTime(this.time);
-				let date = DateTimeUtil.datetimeFromTime(new Date(), time);
+				let date = DateTimeUtil.datetimeFromTime(time);
 				this.dialogRef.close(date);
 			} catch (error) {
 				if (error instanceof Error) {

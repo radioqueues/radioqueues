@@ -1,12 +1,20 @@
 <h2 mat-dialog-title>Schedule</h2>
 <mat-dialog-content>
+	
+	<div>
+	<mat-radio-group [(ngModel)]="option">
+		<mat-radio-button value="next">Player next</mat-radio-button><br>
+		<mat-radio-button value="schedule">
+			<label>Schedule Time (HH:MM) <input size="6" [(ngModel)]="time" (click)="onTimeClicked()"></label>
+		</mat-radio-button>
+	</mat-radio-group>
+	</div>
 
-	<label>Time (HH:MM) <input [(ngModel)]="time"></label>
+	
 	
 </mat-dialog-content>
 
 <mat-dialog-actions>
-	<button mat-button mat-dialog-close>Schedule</button>
-	<button mat-button mat-dialog-close>Next</button>
+	<button mat-button (click)="onOkClicked()">OK</button>
 	<button mat-button mat-dialog-close>Cancel</button>
 </mat-dialog-actions>

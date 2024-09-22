@@ -107,7 +107,7 @@ export class QueueComponent {
 			let entry = this.queueService.cloneEntry(orgEntry);
 
 			let movedToEntry = event.container.data[event.currentIndex] as Entry;
-			if (movedToEntry.offset && movedToEntry.offset < new Date()) {
+			if (movedToEntry && movedToEntry.offset && movedToEntry.offset < new Date()) {
 				this.errorService.errorDialog("Cannot move an entry into the past.");
 				return;
 			}

@@ -13,7 +13,7 @@
 	@for (item of queue.entries; track item; let i=$index) {
 		<div class="queue-entry" 
 			[style.color]="item.color"
-			[class.selectedEntry]="i == selectedIndex"
+			[class.selectedEntry]="i === selectedIndex"
 			cdkDrag
 			(click)="onClick($event)"
 			(dblclick)="onDoubleClick($event)">
@@ -24,8 +24,8 @@
 						&nbsp;
 						@if (item.scheduled) {
 							🔨
-						} @else if (($any(item).type && queueTypes[$any(item).type].scheduleStrategy=="subset-sum")
-									|| (item.queueRef && queueTypes[queues[item.queueRef].type].scheduleStrategy=="subset-sum")) {
+						} @else if (($any(item).type && queueTypes[$any(item).type].scheduleStrategy === "subset-sum")
+									|| (item.queueRef && queueTypes[queues[item.queueRef].type].scheduleStrategy === "subset-sum")) {
 							↕️
 						} @else {
 							🏊

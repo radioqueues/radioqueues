@@ -1,6 +1,7 @@
 import { Injectable, inject } from "@angular/core";
 import { IndexeddbCacheService } from "./indexeddb-cache.service";
 import { Subject } from "rxjs";
+import { ProgressStatusService } from "./progress-status.service";
 
 @Injectable()
 export class FileSystemService {
@@ -9,6 +10,7 @@ export class FileSystemService {
 	newFiles: Subject<any> = new Subject();
 
 	private indexeddbCacheService = inject(IndexeddbCacheService);
+	private progressStatusService = inject(ProgressStatusService);
 
 	constructor() {
 		this.worker = new Worker(new URL('./filesystem.worker', import.meta.url));
@@ -64,6 +66,11 @@ export class FileSystemService {
 			mode: "readwrite",
 			startIn: "music"
 		});
+
+		this.progressStatusService.next({
+			message: "Listing folder content..."
+		});
+
 		this.indexeddbCacheService.saveDirectoryHandle(this.rootHandle);
 
 		this.worker.postMessage({

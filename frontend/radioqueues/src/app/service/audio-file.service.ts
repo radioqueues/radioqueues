@@ -1,14 +1,14 @@
 import { Injectable, inject } from "@angular/core";
 import { FileSystemService } from "./filesystem.service";
 import { DatabaseService } from "./database.service";
-import { Subject } from "rxjs";
 import { FileMetaData } from "../model/file-meta-data";
+import { ProgressStatusService } from "./progress-status.service";
 
 @Injectable()
 export class AudioFileService {
-	fileSystemService = inject(FileSystemService);
-	databaseService = inject(DatabaseService);
-	process: Subject<any> = new Subject();
+	private databaseService = inject(DatabaseService);
+	private fileSystemService = inject(FileSystemService);
+	private progressStatusService = inject(ProgressStatusService);
 
 	init() {
 		this.fileSystemService.newFiles.subscribe((loadedFiles: any) => {
@@ -25,9 +25,10 @@ export class AudioFileService {
 	}
 
 	private updateStatus(current: number, count: number) {
-		this.process.next({
+		this.progressStatusService.next({
 			current: current,
-			count: count
+			count: count,
+			message: "Reading duration of audio files"
 		});
 		console.log("status", current, count);
 	}
@@ -76,7 +77,7 @@ export class AudioFileService {
 			await promise;
 		}
 		this.databaseService.saveFiles();
-		this.process.next(undefined);
+		this.progressStatusService.next(undefined);
 		if (!this.databaseService.loaded) {
 			window.location.reload();
 		}

@@ -9,6 +9,7 @@ import { FileSystemService } from './service/filesystem.service';
 import { IndexeddbCacheService } from './service/indexeddb-cache.service';
 import { QueueManagerMainWindowComponent } from './component/queuemanager/queue-manager-main-window.component';
 import { QueueService } from './service/queue.service';
+import { ProgressStatusService } from './service/progress-status.service';
 
 const routes: Routes = [
 	{
@@ -28,6 +29,7 @@ const routes: Routes = [
 		ErrorService,
 		FileSystemService,
 		IndexeddbCacheService,
+		ProgressStatusService,
 		QueueService
 	],
 	exports: [

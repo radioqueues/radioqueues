@@ -1,5 +1,12 @@
 <h2 mat-dialog-title>Working...</h2>
 <mat-dialog-content>
-	Working... {{status?.current}} / {{status?.count}}
+	@if (status?.message) {
+		{{status?.message}}
+	} @else {
+		Working... 
+	}
+	@if (status?.current && status?.count) {
+		{{status?.current}} / {{status?.count}}
+	}
 </mat-dialog-content>
 

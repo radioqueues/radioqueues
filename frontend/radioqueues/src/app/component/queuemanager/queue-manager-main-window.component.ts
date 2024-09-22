@@ -23,6 +23,7 @@ import { AudioControlComponent } from '../audio-control/audio-control.component'
 import { ProgressOverlayComponent } from '../progress-overlay/progress-overlay.component';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { Entry } from 'src/app/model/entry';
+import { ProgressStatusService } from 'src/app/service/progress-status.service';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -34,10 +35,11 @@ import { Entry } from 'src/app/model/entry';
 export class QueueManagerMainWindowComponent implements OnInit {
 
 	readonly audioFileService = inject(AudioFileService);
-	readonly dialog = inject(MatDialog);
 	readonly databaseService = inject(DatabaseService);
-	readonly errorService = inject(ErrorService);
+	readonly dialog = inject(MatDialog);
 	readonly fileSystemService = inject(FileSystemService);
+	readonly errorService = inject(ErrorService);
+	readonly progressStatusService = inject(ProgressStatusService);
 	readonly queueService = inject(QueueService);
 
 	progressDialog?: MatDialogRef<ProgressOverlayComponent, any>;
@@ -48,11 +50,7 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	newQueueType: string = "";
 
 	async ngOnInit() {
-		this.queueTypes = await this.databaseService.getQueueTypes();
-		this.queueTypeArray = Object.values(this.queueTypes);
-		this.queues = await this.databaseService.getQueues();
-		this.audioFileService.init();
-		this.audioFileService.process.subscribe((status: any) => {
+		this.progressStatusService.progress.subscribe((status: any) => {
 			if (status && !this.progressDialog) {
 				this.progressDialog = this.dialog.open(ProgressOverlayComponent);
 			} else if (!status && this.progressDialog) {
@@ -69,6 +67,10 @@ export class QueueManagerMainWindowComponent implements OnInit {
 				});
 			}
 		});
+		this.queueTypes = await this.databaseService.getQueueTypes();
+		this.queueTypeArray = Object.values(this.queueTypes);
+		this.queues = await this.databaseService.getQueues();
+		this.audioFileService.init();
 
 		if (!window['showDirectoryPicker']) {
 			this.errorService.errorDialog("You browser does not support access to your filesystem. Please use Chrome or Edge.");

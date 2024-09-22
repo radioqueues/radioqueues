@@ -7,7 +7,8 @@ import {
   MatDialogContent,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { AudioFileService } from 'src/app/service/audio-file.service';
+import { ProgressStatus } from 'src/app/model/progress-status';
+import { ProgressStatusService } from 'src/app/service/progress-status.service';
 
 
 @Component({
@@ -18,14 +19,11 @@ import { AudioFileService } from 'src/app/service/audio-file.service';
 	imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose],
 })
 export class ProgressOverlayComponent implements OnInit {
-	audioFileService = inject(AudioFileService);
-	status: any = {
-		current: 0,
-		count: "?"
-	};
+	progressStatusService = inject(ProgressStatusService);
+	status?: ProgressStatus;
 
 	async ngOnInit() {
-		this.audioFileService.process.subscribe((status: any) => {
+		this.progressStatusService.progress.subscribe((status: any) => {
 			this.status = status;
 		})
 	}

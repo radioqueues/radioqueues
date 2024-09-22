@@ -24,6 +24,8 @@ import { ProgressOverlayComponent } from '../progress-overlay/progress-overlay.c
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { Entry } from 'src/app/model/entry';
 import { ProgressStatusService } from 'src/app/service/progress-status.service';
+import { ProgressStatus } from 'src/app/model/progress-status';
+import { Subject } from 'rxjs';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -48,14 +50,20 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	queueTypeArray!: QueueType[];
 	queues!: Record<string, Queue>;
 	newQueueType: string = "";
+	progressStatusSubject: Subject<ProgressStatus> = new Subject();
 
 	async ngOnInit() {
 		this.progressStatusService.progress.subscribe((status: any) => {
 			if (status && !this.progressDialog) {
-				this.progressDialog = this.dialog.open(ProgressOverlayComponent);
+				this.progressDialog = this.dialog.open(ProgressOverlayComponent, {
+					data: this.progressStatusSubject
+				});
 			} else if (!status && this.progressDialog) {
 				this.progressDialog?.close();
 				this.progressDialog = undefined;
+			}
+			if (status) {
+				this.progressStatusSubject.next(status);
 			}
 		});
 		this.errorService.errors.subscribe((status: any) => {

@@ -43,7 +43,7 @@ module.exports = function (config) {
     customLaunchers: {
       MyBrowserSettings: {
         base: "Chrome",
-       flags: ["-disable-search-engine-choice-screen"],
+       flags: ["-disable-search-engine-choice-screen", "--remote-debugging-port=9333"],
       }
     }
   });

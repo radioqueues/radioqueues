@@ -5,6 +5,7 @@ import { QueueType } from "../model/queue-type";
 import { DatabaseService } from "./database.service";
 import { DynamicQueueService } from "./dynamic-queue.service";
 import { FileMetaData } from "../model/file-meta-data";
+import { DateTimeUtil } from "../util/date-time-util";
 
 @Injectable()
 export class QueueService {
@@ -255,8 +256,36 @@ export class QueueService {
 		// TODO: save to queues.json
 	}
 
+	private getIndexByOffset(queue: Queue, offset: Date) {
+		for (let i = 0; i < queue.entries.length; i++) {
+			let entry = queue.entries[i];
+			if (entry.offset && entry.offset >= offset) {
+				return i;
+			}
+		}
+		return queue.entries.length;
+	}
+
+	private createRefEntryForQueue(queue: Queue, offset: Date) {
+		return new Entry(queue.name, undefined, offset, queue.duration, this.queueTypes[queue.type].color, queue.uuid);
+	}
+
 	enqueueNext(queue: Queue) {
-		console.log("ScheduleDialog closed", queue, "next");
+		let mainQueue = this.getQueueByType("Main Queue")!;
+		let index = this.getIndexByOffset(mainQueue, DateTimeUtil.now());
+		console.log("ScheduleDialog closed", queue, "next", index);
+		let offset = mainQueue.offset || DateTimeUtil.now();
+		if (index > 0) {
+			let previousEntry = mainQueue.entries[index - 1];
+			if (previousEntry.offset) {
+				offset = new Date(previousEntry.offset.getTime() + previousEntry.duration!);
+				// TODO: if previousEntry is subset-sum, clear future sub-entries.
+			} 
+		}
+		let entry = this.createRefEntryForQueue(queue, offset);
+		mainQueue.entries.splice(index, 0, entry);
+		// TODO: recalc main queue
+		// TODO: save queues
 	}
 
 	schedule(queue: Queue, date: Date) {

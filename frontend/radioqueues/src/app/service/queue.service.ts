@@ -251,5 +251,16 @@ export class QueueService {
 		}
 		// TODO: recalc main queue
 		// TODO: recalc all referencing queues without circle
+
+		// TODO: save to queues.json
+	}
+
+	enqueueNext(queue: Queue) {
+		console.log("ScheduleDialog closed", queue, "next");
+	}
+
+	schedule(queue: Queue, date: Date) {
+		console.log("ScheduleDialog closed", queue, date);
+
 	}
 }

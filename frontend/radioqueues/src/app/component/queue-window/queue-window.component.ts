@@ -11,6 +11,8 @@ import { Queue } from 'src/app/model/queue';
 import { QueueComponent } from '../queue/queue.component';
 import { QueueService } from 'src/app/service/queue.service';
 import { QueueType } from 'src/app/model/queue-type';
+import { ScheduleDialogComponent } from '../schedule-dialog/schedule-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
 	selector: 'app-queue-window',
@@ -20,12 +22,14 @@ import { QueueType } from 'src/app/model/queue-type';
 	imports: [FormsModule, MatCheckboxModule, MatToolbarModule, MatButtonModule, MatIconModule, MatExpansionModule, QueueComponent],
 })
 export class QueueWindowComponent {
+
+	private dialog = inject(MatDialog);
 	private queueService = inject(QueueService);
 
-	@Input({required: true}) queues!: Record<string, Queue>;
-	@Input({required: true}) queueTypes!: Record<string, QueueType>;
+	@Input({ required: true }) queues!: Record<string, Queue>;
+	@Input({ required: true }) queueTypes!: Record<string, QueueType>;
 	@Output() queuesChange = new EventEmitter<Record<string, Queue>>();
-	
+
 	@Input({ required: true }) queue!: Queue;
 	@Input() readonly?: boolean;
 	@Input() supportsSubQueues: boolean = false;
@@ -42,5 +46,18 @@ export class QueueWindowComponent {
 
 	onQueuesChange(queues: Record<string, Queue>) {
 		this.queuesChange.emit(queues);
+	}
+
+	onScheduleClicked() {
+		let dialogRef: MatDialogRef<ScheduleDialogComponent, "next"|Date> = this.dialog.open(ScheduleDialogComponent);
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				if (result === "next") {
+					this.queueService.enqueueNext(this.queue);
+				} else {
+					this.queueService.schedule(this.queue, result);
+				}
+			}
+		});
 	}
 }

@@ -91,6 +91,7 @@ export class QueueService {
 			let duration = this.files[queueType.jingleEnd]?.duration;
 			queue.entries.push(new Entry(queueType.jingleEnd, undefined, new Date(queue.offset.getTime() + temp), duration, queue.color));
 		}
+		this.recalculateQueue(queue);
 		this.queues[queue.uuid] = queue;
 		return queue;
 	}

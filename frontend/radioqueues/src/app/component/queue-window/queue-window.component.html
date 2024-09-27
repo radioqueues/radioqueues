@@ -1,28 +1,30 @@
-<mat-expansion-panel expanded="true">
-	<mat-expansion-panel-header>
-		<mat-panel-title [style.color]="queue.color"> {{queue.name}} </mat-panel-title>
-	</mat-expansion-panel-header>
-	<div>
+<div class="window"
+	[ngStyle]="{ 'top.px': position.top, 'left.px': position.left, 'width.px': size.width, 'height.px': size.height, 'z-index': zIndex }"
+	(mousedown)="bringToFront()">
+	<!-- Header (for dragging) -->
+	<div class="header" (mousedown)="onMouseDown($event)">
+		<h5 [style.color]="queue.color"> {{queue.name}}</h5>
+	</div>
 
+	<!-- Content -->
+	<div class="content">
 		<mat-toolbar>
 			@if (supportsSubQueues) {
-				<mat-checkbox [(ngModel)]="showSubQueueContent">Show sub-queue content</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
+			<mat-checkbox [(ngModel)]="showSubQueueContent">Show sub-queue
+				content</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
 			}
 			@if (!readonly) {
-				<button (click)="onCloneClicked()">Clone</button>&nbsp;
-				<button (click)="onScheduleClicked()">Schedule</button>&nbsp;
+			<button (click)="onCloneClicked()">Clone</button>&nbsp;
+			<button (click)="onScheduleClicked()">Schedule</button>&nbsp;
 			}
 			<button (click)="onCloseClicked()">&nbsp;X&nbsp;</button>
 		</mat-toolbar>
 		<br>
 
-		<app-queue
-			[(queues)]="queues"
-			[supportsSubQueues]="supportsSubQueues"
-			(queuesChange)="onQueuesChange($event)"
-			[queue]="queue"
-			[queueTypes]="queueTypes"
-			[readonly]="readonly"
+		<app-queue [(queues)]="queues" [supportsSubQueues]="supportsSubQueues" (queuesChange)="onQueuesChange($event)"
+			[queue]="queue" [queueTypes]="queueTypes" [readonly]="readonly"
 			[showSubQueueContent]="showSubQueueContent" />
 	</div>
-</mat-expansion-panel>
+	<!-- Resizer (for resizing) -->
+	<div class="resizer" (mousedown)="onMouseDown($event)"></div>
+</div>

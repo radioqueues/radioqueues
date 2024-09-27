@@ -13,11 +13,17 @@ export class QueueService {
 	private readonly databaseService = inject(DatabaseService);
 	private readonly dynamicQueueService = inject(DynamicQueueService);
 
+	private formatter: Intl.DateTimeFormat;
 	queueTypes!: Record<string, QueueType>;
 	queues!: Record<string, Queue>;
 	files!: Record<string, FileMetaData>;
 
 	constructor() {
+		this.formatter = new Intl.DateTimeFormat('en-GB', {
+		  hour: '2-digit',
+		  minute: '2-digit',
+		  hour12: false
+		});
 		this.init();
 	}
 
@@ -195,7 +201,8 @@ export class QueueService {
 		for (let i = 0; i < queue.entries.length; i++) {
 			let entry = queue.entries[i];
 			let start = new Date(offset + durationSum);
-			if (start < now || (entry.scheduled && entry.scheduled < now)) {
+			if (start < now && (!entry.scheduled || entry.scheduled < now)) {
+				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
 				continue;
 			}
 			if (entry.scheduled) {
@@ -271,9 +278,9 @@ export class QueueService {
 		return new Entry(queue.name, undefined, offset, queue.duration, this.queueTypes[queue.type].color, queue.uuid);
 	}
 
-	enqueueNext(queue: Queue) {
+	private enqueue(queue: Queue, targetOffset: Date, schedule: boolean) {
 		let mainQueue = this.getQueueByType("Main Queue")!;
-		let index = this.getIndexByOffset(mainQueue, DateTimeUtil.now());
+		let index = this.getIndexByOffset(mainQueue, targetOffset);
 		console.log("ScheduleDialog closed", queue, "next", index);
 		let offset = mainQueue.offset || DateTimeUtil.now();
 		if (index > 0) {
@@ -283,14 +290,26 @@ export class QueueService {
 				// TODO: if previousEntry is subset-sum, clear future sub-entries.
 			} 
 		}
+		if (schedule) {
+			offset = targetOffset;
+		}
 		let entry = this.createRefEntryForQueue(queue, offset);
+		if (schedule) {
+			entry.scheduled = targetOffset;
+		}
 		mainQueue.entries.splice(index, 0, entry);
-		// TODO: recalc main queue
+		this.recalculateQueue(mainQueue);
 		// TODO: save queues
+		return entry;
+	}
+	enqueueNext(queue: Queue) {
+		this.enqueue(queue, DateTimeUtil.now(), false);
 	}
 
 	schedule(queue: Queue, date: Date) {
 		console.log("ScheduleDialog closed", queue, date);
-
+		// TODO: Replace "unscheduled" in queue name
+		queue.name = queue.type + " " + this.formatter.format(date); 
+		this.enqueue(queue, date, true);
 	}
 }

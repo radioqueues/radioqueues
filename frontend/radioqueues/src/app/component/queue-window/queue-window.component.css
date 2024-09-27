@@ -23,6 +23,8 @@ h5 {
   cursor: default;
   overflow: hidden;
   user-select: none;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Draggable header */
@@ -36,7 +38,16 @@ h5 {
 
 /* Content area of the window */
 .content {
+  flex-grow: 1;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+app-queue {
+	flex-grow: 1;
+	overflow: auto;
 }
 
 /* Resizer at the bottom-right corner */

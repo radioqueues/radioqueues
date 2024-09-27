@@ -40,6 +40,7 @@ export class QueueWindowComponent {
 	isDragging = false;
 	zIndex = 1;
 	static highestZIndex = 2;
+	static numberOfOpenedWindows = 0;
 	position = { top: 100, left: 100 };  // Starting position
 	size = { width: 500, height: 400 };  // Default size
 
@@ -47,7 +48,11 @@ export class QueueWindowComponent {
 	private lastMouseY = 0;
 
 	constructor() {
-		this.bringToFront();		
+		this.bringToFront();
+		let modifier = QueueWindowComponent.numberOfOpenedWindows % 10;
+		this.position.top = 20 + modifier * 50;
+		this.position.left = 20 + modifier * 100;
+		QueueWindowComponent.numberOfOpenedWindows++;
 	}
 
 	// Handle mouse down to start dragging or resizing

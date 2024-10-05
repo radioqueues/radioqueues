@@ -8,6 +8,7 @@ import { Entry } from 'src/app/model/entry';
 import { DurationPipe } from 'src/app/pipe/duration.pipe';
 import { TitlePipe } from 'src/app/pipe/title.pipe';
 import { FormsModule } from '@angular/forms';
+import { AudioFileService } from 'src/app/service/audio-file.service';
 
 @Component({
 	selector: 'app-audio-control',
@@ -16,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 	imports: [DurationPipe, FormsModule, TitlePipe],
 })
 export class AudioControlComponent {
+	audioFileService = inject(AudioFileService);
 	fileSystemService = inject(FileSystemService);
 	databaseService = inject(DatabaseService);
 	queueService = inject(QueueService);
@@ -56,7 +58,9 @@ export class AudioControlComponent {
 			return;
 		}
 		try {
-			let fileHandle = await this.fileSystemService.getFileHandle(this.currentEntry?.name);
+			this.audioFileService.markFileAsPlayed(this.currentEntry.name);
+			this.queueService.addToHistory(this.currentEntry);
+			let fileHandle = await this.fileSystemService.getFileHandle(this.currentEntry.name);
 			let blob = await fileHandle?.getFile();
 			if (blob) {
 				this.url = URL.createObjectURL(blob);

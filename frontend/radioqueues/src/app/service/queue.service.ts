@@ -312,4 +312,14 @@ export class QueueService {
 		queue.name = queue.type + " " + this.formatter.format(date); 
 		this.enqueue(queue, date, true);
 	}
+
+	addToHistory(entry: Entry) {
+		let queue = this.getQueueByType("History");
+		if (!queue) {
+			return;
+		}
+	    let historyEntry = new Entry(entry.name, undefined, new Date(), entry.duration, entry.color);
+		queue.entries.push(historyEntry);
+		this.databaseService.saveQueues();
+	}
 }

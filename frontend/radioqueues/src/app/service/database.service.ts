@@ -67,7 +67,7 @@ export class DatabaseService {
 	private files: Record<string, FileMetaData> = {};
 
 	private jsonDeserializer(key: string, value: any): any {
-		if ((key === "offset") || (key === "scheduled")) {
+		if ((key === "offset") || (key === "scheduled") || key === "lastPlayed") {
 			return new Date(value);
 		}
 		return value;
@@ -80,7 +80,7 @@ export class DatabaseService {
 			return;
 		}
 		try {
-			this.files = await this.fileSystemService.getJsonFromFilename("radioqueues/files.json")
+			this.files = await this.fileSystemService.getJsonFromFilename("radioqueues/files.json", this.jsonDeserializer)
 		} catch (e) {
 			console.log("loading files", e);
 		}
@@ -99,11 +99,11 @@ export class DatabaseService {
 	}
 
 	public async saveFiles() {
-		this.fileSystemService.saveJsonToFilename("radioqueues/files.json", this.files);
+		await this.fileSystemService.saveJsonToFilename("radioqueues/files.json", this.files);
 	}
 
 	public async saveQueues() {
-		this.fileSystemService.saveJsonToFilename("radioqueues/queues.json", this.queues);
+		await this.fileSystemService.saveJsonToFilename("radioqueues/queues.json", this.queues);
 	}
 
 	public async getQueues(): Promise<Record<string, Queue>> {

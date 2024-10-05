@@ -76,11 +76,19 @@ export class AudioFileService {
 			});
 			await promise;
 		}
-		this.databaseService.saveFiles();
+		await this.databaseService.saveFiles();
 		this.progressStatusService.next(undefined);
 		if (!this.databaseService.loaded) {
 			window.location.reload();
 		}
 	}
 
+	async markFileAsPlayed(filename: string) {
+		let files = await this.databaseService.getFiles();
+		let fileInfo = files[filename];
+		if (fileInfo) {
+			fileInfo.lastPlayed = new Date();
+		}
+		await this.databaseService.saveFiles();
+	}
 }

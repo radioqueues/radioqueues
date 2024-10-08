@@ -9,17 +9,22 @@ mat-toolbar {
 	padding: 5px;
 }
 
-h5 {
-	margin: 0 0 0 0.5em; 
+h3 {
+	font-size: 100%;
+	line-height: 150%;
+	margin: 0; 
+	flex-grow: 1;
 }
 
 
 /* Basic styles for the window */
 .window {
   position: absolute;
-  border: 1px solid #000;
+  border: 1px solid rgb(154, 153, 150);
+  border-radius: 15px 15px 5px 5px;
   background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
+  box-shadow: 4.0px 8.0px 8.0px hsl(0deg 0% 0% / 0.38);
   cursor: default;
   overflow: hidden;
   user-select: none;
@@ -31,9 +36,10 @@ h5 {
 .header {
   background-color: #e0f0ff;
   color: #000;
-  padding: 5px;
+  padding: 5px 10px;
   cursor: move;
   user-select: none;
+  display: flex;
 }
 
 /* Content area of the window */

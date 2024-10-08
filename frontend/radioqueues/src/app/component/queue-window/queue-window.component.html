@@ -3,7 +3,8 @@
 	(mousedown)="bringToFront()">
 	<!-- Header (for dragging) -->
 	<div class="header" (mousedown)="onMouseDown($event)">
-		<h5 [style.color]="queue.color"> {{queue.name}}</h5>
+		<h3 class="windowtitle" [style.color]="queue.color"> {{queue.name}}</h3>
+		<button (click)="onCloseClicked()">&nbsp;X&nbsp;</button>
 	</div>
 
 	<!-- Content -->
@@ -17,7 +18,6 @@
 			<button (click)="onCloneClicked()">Clone</button>&nbsp;
 			<button (click)="onScheduleClicked()">Schedule</button>&nbsp;
 			}
-			<button (click)="onCloseClicked()">&nbsp;X&nbsp;</button>
 		</mat-toolbar>
 		<br>
 

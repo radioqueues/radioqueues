@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 
@@ -25,5 +25,11 @@ export class AppComponent {
 			prefix = "";
 		}
 		this.title.setTitle(prefix + version);
+	}
+
+	@HostListener('window:dragover', ['$event'])
+	@HostListener('window:drop', ['$event'])
+	onDragOver(event: Event) {
+		event.preventDefault();
 	}
 }

@@ -16,13 +16,10 @@ RadioQueues is under heavy development. Several key features are still on the TO
 
 ## TODO: Important Features
 
-- Executing subset-sum on playing an empty subset-sum queue
-- Drag&Dropping entries and files after the last entry
-- handling of errors
+- Handle exclusion of recently played music from subset-sum
 - Playing entries based on current time
 
 - Fade out current audio file
-- Scheduling of queues
 - Automatic cloning and scheduling of queues e. g. news
 - Redesign application toolbar
 - Redesign queue windows

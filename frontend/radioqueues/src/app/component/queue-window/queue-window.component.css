@@ -45,7 +45,7 @@ h3 {
 /* Content area of the window */
 .content {
   flex-grow: 1;
-  padding: 10px;
+  padding: 0px;
   display: flex;
   flex-direction: column;
   overflow: hidden;

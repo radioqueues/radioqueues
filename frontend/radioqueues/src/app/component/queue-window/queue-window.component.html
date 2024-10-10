@@ -15,11 +15,11 @@
 				content</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
 			}
 			@if (!readonly) {
+			&nbsp;
 			<button (click)="onCloneClicked()">Clone</button>&nbsp;
 			<button (click)="onScheduleClicked()">Schedule</button>&nbsp;
 			}
 		</mat-toolbar>
-		<br>
 
 		<app-queue [(queues)]="queues" [supportsSubQueues]="supportsSubQueues" (queuesChange)="onQueuesChange($event)"
 			[queue]="queue" [queueTypes]="queueTypes" [readonly]="readonly"

@@ -15,6 +15,13 @@ import { ScheduleDialogComponent } from '../schedule-dialog/schedule-dialog.comp
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 
+class Rect {
+	left: number = 0;
+	top: number = 0;
+	width: number = 0;
+	height: number = 0;
+}
+
 @Component({
 	selector: 'app-queue-window',
 	templateUrl: './queue-window.component.html',
@@ -26,6 +33,8 @@ export class QueueWindowComponent {
 
 	private dialog = inject(MatDialog);
 	private queueService = inject(QueueService);
+
+	private elRef = inject(ElementRef);
 
 	@Input({ required: true }) queues!: Record<string, Queue>;
 	@Input({ required: true }) queueTypes!: Record<string, QueueType>;
@@ -41,18 +50,70 @@ export class QueueWindowComponent {
 	zIndex = 1;
 	static highestZIndex = 2;
 	static numberOfOpenedWindows = 0;
-	position = { top: 100, left: 100 };  // Starting position
-	size = { width: 500, height: 400 };  // Default size
+	windowRect = { top: 30, left: 5, width: 500, height: 300 };
 
 	private lastMouseX = 0;
 	private lastMouseY = 0;
 
 	constructor() {
 		this.bringToFront();
-		let modifier = QueueWindowComponent.numberOfOpenedWindows % 10;
-		this.position.top = 20 + modifier * 50;
-		this.position.left = 20 + modifier * 100;
+
 		QueueWindowComponent.numberOfOpenedWindows++;
+		this.findPosition();
+	}
+
+	getRect(element: HTMLElement): Rect {
+	    const rect = element.getBoundingClientRect();
+	    return {
+	        left: rect.left + document.documentElement.scrollLeft,
+	        top: rect.top + document.documentElement.scrollTop,
+			height: rect.height,
+			width: rect.width
+	    };
+	}
+
+	isOverlaping(rect1: Rect, rect2: Rect) {
+		console.log(rect1.left < rect2.left + rect2.width, 
+					rect1.left + rect1.width > rect2.left,
+					rect1.top < rect2.top + rect2.height,
+					rect1.top + rect1.height > rect2.top)
+		return rect1.left < rect2.left + rect2.width
+			&& rect1.left + rect1.width > rect2.left
+			&& rect1.top < rect2.top + rect2.height
+			&& rect1.top + rect1.height > rect2.top 
+	}
+
+	findPosition() {
+		let me = this.elRef.nativeElement;
+		let containerElement = document.getElementsByTagName("app-queue-manager-main-window")[0];
+		let knownRects: any[] = [];
+		for (let child of containerElement.querySelectorAll("div.window") as NodeListOf<HTMLElement>) {
+			if (child !== me) {
+				knownRects.push(this.getRect(child));
+			}
+		}
+		let workspaceRect = this.getRect(document.documentElement);
+
+		for (let h = 30; h < workspaceRect.height - 30 - this.windowRect.height; h = h + 20) {
+			for (let w = 5; w < workspaceRect.width - 30 - this.windowRect.width; w = w + 20) {
+				this.windowRect.left = w;
+				this.windowRect.top = h;
+				let overlap = false;
+				for (let knownRect of knownRects) {
+					if (this.isOverlaping(knownRect, this.windowRect)) {
+						overlap = true;
+						break;
+					}
+				}
+				if (!overlap) {
+					return;
+				}
+			}
+		}
+		console.log("Cannot place window, stacking");
+		let modifier = QueueWindowComponent.numberOfOpenedWindows % 10;
+		this.windowRect.top = 20 + modifier * 50;
+		this.windowRect.left = 20 + modifier * 100;
 	}
 
 	// Handle mouse down to start dragging or resizing
@@ -74,12 +135,18 @@ export class QueueWindowComponent {
 		const dy = event.clientY - this.lastMouseY;
 
 		if (this.isDragging) {
-			this.position.left += dx;
-			this.position.top += dy;
+			this.windowRect.left += dx;
+			this.windowRect.top += dy;
+			if (this.windowRect.left < 0) {
+				this.windowRect.left = 0;
+			}
+			if (this.windowRect.top < 0) {
+				this.windowRect.top = 0;
+			}
 		}
 		if (this.isResizing) {
-			this.size.width += dx;
-			this.size.height += dy;
+			this.windowRect.width += dx;
+			this.windowRect.height += dy;
 		}
 
 		this.lastMouseX = event.clientX;

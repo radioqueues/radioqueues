@@ -1,5 +1,5 @@
 <div class="window"
-	[ngStyle]="{ 'top.px': position.top, 'left.px': position.left, 'width.px': size.width, 'height.px': size.height, 'z-index': zIndex }"
+	[ngStyle]="{ 'top.px': windowRect.top, 'left.px': windowRect.left, 'width.px': windowRect.width, 'height.px': windowRect.height, 'z-index': zIndex }"
 	(mousedown)="bringToFront()">
 	<!-- Header (for dragging) -->
 	<div class="header" (mousedown)="onMouseDown($event)">

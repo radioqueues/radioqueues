@@ -87,15 +87,13 @@ export class QueueService {
 			type: queueType.name,
 			entries: new Array<Entry>()
 		};
-		let temp = 0;
-		if (queueType.jingleStart) {
-			let duration = this.files[queueType.jingleStart]?.duration;
-			queue.entries.push(new Entry(queueType.jingleStart, undefined, queue.offset, duration, queue.color));
-			temp = duration ? duration : 0;
-		}
-		if (queueType.jingleEnd) {
-			let duration = this.files[queueType.jingleEnd]?.duration;
-			queue.entries.push(new Entry(queueType.jingleEnd, undefined, new Date(queue.offset.getTime() + temp), duration, queue.color));
+		if (queueType.jingles) {
+			let temp = 0;
+			for (let jingle of queueType.jingles) {
+				let duration = this.files[jingle]?.duration;
+				queue.entries.push(new Entry(jingle, undefined, new Date(queue.offset.getTime() + temp), duration, queue.color));
+				temp = duration ? duration : 0;
+			}
 		}
 		this.recalculateQueue(queue);
 		this.queues[queue.uuid] = queue;

@@ -21,8 +21,6 @@ RadioQueues is under heavy development. Several key features are still on the TO
 
 - Fade out current audio file
 - Automatic cloning and scheduling of queues e. g. news
-- Redesign application toolbar
-- Redesign queue windows
 - Option to only show future entries of Main Queue
 - QueueType editor
 - Crossfading music

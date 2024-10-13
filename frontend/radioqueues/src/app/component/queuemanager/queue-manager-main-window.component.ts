@@ -111,4 +111,7 @@ export class QueueManagerMainWindowComponent implements OnInit {
 		this.databaseService.saveQueues();
 	}
 
+	onHelp() {
+		window.open("https://github.com/radioqueues/radioqueues");
+	}
 }

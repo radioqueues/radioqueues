@@ -320,4 +320,18 @@ export class QueueService {
 		queue.entries.push(historyEntry);
 		this.databaseService.saveQueues();
 	}
+
+	getEntryByTime(queue: Queue, date: Date): Entry|undefined {
+		if (!queue?.entries?.length) {
+			return undefined;
+		}
+		let lastEntry: Entry|undefined = undefined
+		for (let entry of queue.entries) {
+			if (entry.offset && entry.duration && entry.duration > 0 && entry.offset > date) {
+				return lastEntry;
+			}
+			lastEntry = entry;
+		}
+		return undefined;
+	}
 }

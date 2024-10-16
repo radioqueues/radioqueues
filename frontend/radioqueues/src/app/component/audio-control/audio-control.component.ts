@@ -9,6 +9,7 @@ import { DurationPipe } from 'src/app/pipe/duration.pipe';
 import { TitlePipe } from 'src/app/pipe/title.pipe';
 import { FormsModule } from '@angular/forms';
 import { AudioFileService } from 'src/app/service/audio-file.service';
+import { ErrorService } from 'src/app/service/error.service';
 
 @Component({
 	selector: 'app-audio-control',
@@ -18,8 +19,9 @@ import { AudioFileService } from 'src/app/service/audio-file.service';
 })
 export class AudioControlComponent {
 	audioFileService = inject(AudioFileService);
-	fileSystemService = inject(FileSystemService);
 	databaseService = inject(DatabaseService);
+	errorService = inject(ErrorService);
+	fileSystemService = inject(FileSystemService);
 	queueService = inject(QueueService);
 	
 	@Input() queues!: Record<string, Queue>;
@@ -36,6 +38,7 @@ export class AudioControlComponent {
 	volumne = 0.8;
 
 	async onPlayClicked() {
+		console.log("pickNext", this.pickNext());
 		console.log("onPlayClicked", this.mainQueueIndex, this.subQueueIndex);
 		this.play();
 	}
@@ -99,6 +102,27 @@ export class AudioControlComponent {
 		}
 	}
 
+	pickNext() {
+		let queue = this.queueService.getQueueByType("Main Queue")!;
+		if (!queue || !queue.entries?.length) {
+			this.errorService.errorDialog("No Main Queue or Main Queue is empty");
+			return;
+		}
+		
+		let entry: Entry|undefined;
+		let path: Entry[] = [];
+		while (queue) {
+			entry = this.queueService.getEntryByTime(queue, new Date());
+			if (!entry) {
+				break;
+			}
+			path.push(entry);
+			if (entry?.queueRef) {
+				queue = this.queues[entry.queueRef];
+			}
+		}
+		return path;
+	}
 
 	onError() {
 		if (this.url) {

@@ -10,6 +10,7 @@ import { IndexeddbCacheService } from './service/indexeddb-cache.service';
 import { QueueManagerMainWindowComponent } from './component/queuemanager/queue-manager-main-window.component';
 import { QueueService } from './service/queue.service';
 import { ProgressStatusService } from './service/progress-status.service';
+import { PlayService } from './service/play.service';
 
 const routes: Routes = [
 	{
@@ -29,6 +30,7 @@ const routes: Routes = [
 		ErrorService,
 		FileSystemService,
 		IndexeddbCacheService,
+		PlayService,
 		ProgressStatusService,
 		QueueService
 	],

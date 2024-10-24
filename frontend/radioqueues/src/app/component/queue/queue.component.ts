@@ -111,6 +111,7 @@ export class QueueComponent {
 				this.errorService.errorDialog("Cannot move an entry into the past.");
 				return;
 			}
+			entry.color = this.queue.color;
 			event.container.data.splice(event.currentIndex, 0, entry);
 		}
 		this.queueService.recalculateQueue(this.queue);

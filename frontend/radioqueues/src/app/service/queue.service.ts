@@ -193,6 +193,13 @@ export class QueueService {
 
 
 	recalculateQueue(queue: Queue) {
+
+		// do not recalculate empty queues
+		// especially don't overwrite playholder duration of subset-sum queues
+		if (!queue.entries.length) {
+			return;
+		}
+
 		let now = new Date();
 		let offset = queue.offset?.getTime() || 0;
 		let durationSum = 0;

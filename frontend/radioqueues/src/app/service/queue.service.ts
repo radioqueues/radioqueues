@@ -301,6 +301,8 @@ export class QueueService {
 		let entry = this.createRefEntryForQueue(queue, offset);
 		if (schedule) {
 			entry.scheduled = targetOffset;
+			queue.offset = targetOffset;
+			this.recalculateQueue(queue);
 		}
 		mainQueue.entries.splice(index, 0, entry);
 		this.recalculateQueue(mainQueue);

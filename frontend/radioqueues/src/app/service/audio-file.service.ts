@@ -87,7 +87,10 @@ export class AudioFileService {
 		let files = await this.databaseService.getFiles();
 		let fileInfo = files[filename];
 		if (fileInfo) {
-			fileInfo.lastPlayed = new Date();
+			if (!fileInfo.lastPlayed) {
+				fileInfo.lastPlayed = [];
+			}
+			fileInfo.lastPlayed.push(new Date());
 		}
 		await this.databaseService.saveFiles();
 	}

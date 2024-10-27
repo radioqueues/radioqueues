@@ -173,8 +173,6 @@ export class QueueService {
 			queue.entries.push(new Entry(filename, undefined, queue.offset, duration, queue.color));
 		}
 		this.recalculateQueue(queue);
-		// TODO: recalc main queue
-		// TODO: save queue
 		// TODO: save used songs in DynamicQueueService
 	}
 
@@ -311,7 +309,6 @@ export class QueueService {
 		}
 		mainQueue.entries.splice(index, 0, entry);
 		this.recalculateQueue(mainQueue);
-		// TODO: save queues
 		return entry;
 	}
 	enqueueNext(queue: Queue) {

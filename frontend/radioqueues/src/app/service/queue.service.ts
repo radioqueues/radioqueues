@@ -263,10 +263,15 @@ export class QueueService {
 		for (let entry of this.getEntryRefsForQueue(queue)) {
 			entry.duration = durationSum;
 		}
-		// TODO: recalc main queue
+		
 		// TODO: recalc all referencing queues without circle
 
-		// TODO: save to queues.json
+		let mainQueue = this.getQueueByType("Main Queue");
+		if (mainQueue && queue !== mainQueue) {
+			this.recalculateQueue(mainQueue);
+		}
+
+		this.databaseService.saveQueues();
 	}
 
 	private getIndexByOffset(queue: Queue, offset: Date) {

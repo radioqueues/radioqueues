@@ -22,7 +22,6 @@ import { AudioFileService } from 'src/app/service/audio-file.service';
 import { AudioControlComponent } from '../audio-control/audio-control.component';
 import { ProgressOverlayComponent } from '../progress-overlay/progress-overlay.component';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
-import { Entry } from 'src/app/model/entry';
 import { ProgressStatusService } from 'src/app/service/progress-status.service';
 import { ProgressStatus } from 'src/app/model/progress-status';
 import { Subject } from 'rxjs';

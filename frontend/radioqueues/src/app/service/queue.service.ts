@@ -38,7 +38,9 @@ export class QueueService {
 		if (queueType.scheduleStrategy === "internal") {
 			this.showQueueByTypeName(queueTypeName);
 		} else {
-			this.createNewQueue(queueType);
+			let newQueue = this.createNewQueue(queueType);
+			this.enqueue(newQueue, newQueue.offset!, false);
+
 		}
 	}
 
@@ -110,6 +112,7 @@ export class QueueService {
 		newQueue.offset = new Date("+100000-01-01T00:00:00");
 		this.queues[newQueue.uuid] = newQueue;
 		this.recalculateQueue(newQueue);
+		this.enqueue(newQueue, newQueue.offset, false);
 	}
 
 

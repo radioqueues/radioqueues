@@ -190,7 +190,7 @@ export class QueueService {
 	}
 
 
-	recalculateQueue(queue: Queue) {
+	recalculateQueue(queue: Queue, save = true) {
 
 		// do not recalculate empty queues
 		// especially don't overwrite playholder duration of subset-sum queues
@@ -265,11 +265,11 @@ export class QueueService {
 		// TODO: recalc all referencing queues without circle
 
 		let mainQueue = this.getQueueByType("Main Queue");
-		if (mainQueue && queue !== mainQueue) {
+		if (queue === mainQueue) {
+			this.databaseService.saveQueues();
+		} else if (save && mainQueue) {
 			this.recalculateQueue(mainQueue);
 		}
-
-		this.databaseService.saveQueues();
 	}
 
 	private getIndexByOffset(queue: Queue, offset: Date) {
@@ -288,8 +288,9 @@ export class QueueService {
 
 	private enqueue(queue: Queue, targetOffset: Date, schedule: boolean) {
 		let mainQueue = this.getQueueByType("Main Queue")!;
+		this.deleteSubqueueReferenceFromQueue(mainQueue, queue);
+		this.recalculateQueue(mainQueue, false);
 		let index = this.getIndexByOffset(mainQueue, targetOffset);
-		console.log("ScheduleDialog closed", queue, "next", index);
 		let offset = mainQueue.offset || DateTimeUtil.now();
 		if (index > 0) {
 			let previousEntry = mainQueue.entries[index - 1];
@@ -311,6 +312,7 @@ export class QueueService {
 		this.recalculateQueue(mainQueue);
 		return entry;
 	}
+
 	enqueueNext(queue: Queue) {
 		this.enqueue(queue, DateTimeUtil.now(), false);
 	}
@@ -344,5 +346,26 @@ export class QueueService {
 			lastEntry = entry;
 		}
 		return undefined;
+	}
+
+	deleteEntryFromQueueByIndex(queue: Queue|undefined, index: number) {
+		if (!queue || index < 0 || !queue.entries?.length || index >= queue.entries.length) {
+			return;
+		}
+
+		queue.entries.splice(index, 1);
+		this.recalculateQueue(queue);
+	}
+
+	deleteSubqueueReferenceFromQueue(queue?: Queue, subQueue?: Queue) {
+		if (!queue || !queue.entries?.length || !subQueue) {
+			return;
+		}
+		let uuid = subQueue.uuid;
+		for (let i = queue.entries.length - 1; i >= 0; i--) {
+			if (queue.entries[i].queueRef === uuid) {
+				this.deleteEntryFromQueueByIndex(queue, i);
+			}
+		}
 	}
 }

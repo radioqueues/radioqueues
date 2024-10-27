@@ -192,12 +192,9 @@ export class QueueComponent {
 
 	onKeydown(event: KeyboardEvent) {
 		if (event.key === "Delete") {
-			if (this.selectedIndex > -1) {
-				this.queue.entries.splice(this.selectedIndex, 1);
-				this.selectedIndex = -1;
-				this.queueService.recalculateQueue(this.queue);
-				this.queuesChange.emit(this.queues);
-			}
+			this.queueService.deleteEntryFromQueueByIndex(this.queue, this.selectedIndex);
+			this.selectedIndex = -1;
+			this.queuesChange.emit(this.queues);
 		}
 	}
 

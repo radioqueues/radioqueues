@@ -24,4 +24,7 @@ RadioQueues is under heavy development. Several key features are still on the TO
 - Option to only show future entries of Main Queue
 - QueueType editor
 - Crossfading music
+- scheduling queues, that have already been scheduled must not be duplicated
+- automatically append new/cloned queues to the end of Main Queue
+- split the subset-sum folder into 10 parts based on the lastPlayed time and add the oldes 10th back to the list, if it got too small.
 - App (for example: Tauri, NeutralinoJS, Electron)

@@ -2,6 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { IndexeddbCacheService } from "./indexeddb-cache.service";
 import { Subject } from "rxjs";
 import { ProgressStatusService } from "./progress-status.service";
+import { ErrorService } from "./error.service";
 
 @Injectable()
 export class FileSystemService {
@@ -9,6 +10,7 @@ export class FileSystemService {
 	rootHandle?: FileSystemDirectoryHandle;
 	newFiles: Subject<any> = new Subject();
 
+	private errorService = inject(ErrorService);
 	private indexeddbCacheService = inject(IndexeddbCacheService);
 	private progressStatusService = inject(ProgressStatusService);
 
@@ -34,7 +36,11 @@ export class FileSystemService {
 		let file = await fileHandle?.getFile();
 		let text = await file?.text();
 		if (text) {
-			return JSON.parse(text, deserializer);
+			try {
+				return JSON.parse(text, deserializer);
+			} catch (e) {
+				this.errorService.errorDialog("Cannot read file " + filename + ": " + e);
+			}
 		}
 		return undefined;
 	}

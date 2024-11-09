@@ -1,13 +1,14 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
+import { QueueManagerMainWindowComponent } from './component/queuemanager/queue-manager-main-window.component';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
     standalone: true,
-    imports: [RouterOutlet]
+    imports: [QueueManagerMainWindowComponent]
 })
 export class AppComponent {
 	private title = inject(Title);

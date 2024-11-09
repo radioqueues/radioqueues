@@ -41,10 +41,6 @@ export class QueueManagerMainWindowComponent implements OnInit {
 		this.queues = await this.databaseService.getQueues();
 		this.audioFileService.init();
 
-		if (!window['showDirectoryPicker']) {
-			this.errorService.errorDialog("You browser does not support access to your filesystem. Please use Chrome or Edge.");
-		}
-
 		console.log(this.queues);
 	}
 

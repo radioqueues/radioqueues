@@ -26,6 +26,7 @@ export class FileSystemService {
 	public async init() {
 		let handle = await this.indexeddbCacheService.getSavedDirectoryHandle() as any;
 		let permission = await handle?.queryPermission({ mode: 'readwrite' });
+		console.log("saved directory handle", handle, permission);
 		if (permission === 'granted') {
 		    this.rootHandle = handle;
 		}

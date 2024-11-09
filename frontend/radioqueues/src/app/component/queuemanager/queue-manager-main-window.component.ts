@@ -1,13 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import {
-	CdkDropListGroup,
-} from '@angular/cdk/drag-drop';
-
-import {
-	MatDialog,
-	MatDialogRef
-} from '@angular/material/dialog';
-
+import { CdkDropListGroup } from '@angular/cdk/drag-drop';
+import { MatDialog } from '@angular/material/dialog';
 import { QueueWindowComponent } from '../queue-window/queue-window.component';
 import { QueueTypeEditorComponent } from '../queue-type-editor/queue-type-editor.component';
 import { FileSystemService } from 'src/app/service/filesystem.service';
@@ -20,11 +13,6 @@ import { QueueService } from 'src/app/service/queue.service';
 import { KeyValuePipe } from '@angular/common';
 import { AudioFileService } from 'src/app/service/audio-file.service';
 import { AudioControlComponent } from '../audio-control/audio-control.component';
-import { ProgressOverlayComponent } from '../progress-overlay/progress-overlay.component';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
-import { ProgressStatusService } from 'src/app/service/progress-status.service';
-import { ProgressStatus } from 'src/app/model/progress-status';
-import { Subject } from 'rxjs';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -40,40 +28,14 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	readonly dialog = inject(MatDialog);
 	readonly fileSystemService = inject(FileSystemService);
 	readonly errorService = inject(ErrorService);
-	readonly progressStatusService = inject(ProgressStatusService);
 	readonly queueService = inject(QueueService);
-
-	progressDialog?: MatDialogRef<ProgressOverlayComponent, any>;
 
 	queueTypes!: Record<string, QueueType>;
 	queueTypeArray!: QueueType[];
 	queues!: Record<string, Queue>;
 	newQueueType: string = "";
-	progressStatusSubject: Subject<ProgressStatus> = new Subject();
 
 	async ngOnInit() {
-		this.progressStatusService.progress.subscribe((status: any) => {
-			if (status && !this.progressDialog) {
-				this.progressDialog = this.dialog.open(ProgressOverlayComponent, {
-					data: this.progressStatusSubject
-				});
-			} else if (!status && this.progressDialog) {
-				this.progressDialog?.close();
-				this.progressDialog = undefined;
-			}
-			if (status) {
-				this.progressStatusSubject.next(status);
-			}
-		});
-		this.errorService.errors.subscribe((status: any) => {
-			if (status) {
-				this.dialog.open(ErrorDialogComponent, {
-					data: {
-						errorMessage: status.errorMessage
-					}
-				});
-			}
-		});
 		this.queueTypes = await this.databaseService.getQueueTypes();
 		this.queueTypeArray = Object.values(this.queueTypes);
 		this.queues = await this.databaseService.getQueues();

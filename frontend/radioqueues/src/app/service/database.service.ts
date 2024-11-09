@@ -80,7 +80,7 @@ export class DatabaseService {
 		return value;
 	}
 	
-	private async init() {
+	public async init() {
 		await this.fileSystemService.init();
 		if (!this.fileSystemService.rootHandle) {
 			this.loaded = false;

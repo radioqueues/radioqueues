@@ -1,1 +1,6 @@
-<app-queue-manager-main-window />
+@if (showFirstScreen) {
+	<app-first-screen />
+}
+@if (showMainWindow) {
+	<app-queue-manager-main-window />
+}

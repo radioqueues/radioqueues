@@ -11,7 +11,6 @@ import { FormsModule } from '@angular/forms';
 import { ErrorService } from 'src/app/service/error.service';
 import { QueueService } from 'src/app/service/queue.service';
 import { KeyValuePipe } from '@angular/common';
-import { AudioFileService } from 'src/app/service/audio-file.service';
 import { AudioControlComponent } from '../audio-control/audio-control.component';
 
 @Component({
@@ -23,7 +22,6 @@ import { AudioControlComponent } from '../audio-control/audio-control.component'
 })
 export class QueueManagerMainWindowComponent implements OnInit {
 
-	readonly audioFileService = inject(AudioFileService);
 	readonly databaseService = inject(DatabaseService);
 	readonly dialog = inject(MatDialog);
 	readonly fileSystemService = inject(FileSystemService);
@@ -39,7 +37,6 @@ export class QueueManagerMainWindowComponent implements OnInit {
 		this.queueTypes = await this.databaseService.getQueueTypes();
 		this.queueTypeArray = Object.values(this.queueTypes);
 		this.queues = await this.databaseService.getQueues();
-		this.audioFileService.init();
 
 		console.log(this.queues);
 	}

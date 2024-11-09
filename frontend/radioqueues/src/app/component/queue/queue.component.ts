@@ -191,8 +191,12 @@ export class QueueComponent {
 	}
 
 	onKeydown(event: KeyboardEvent) {
-		if (event.key === "Delete") {
-			this.queueService.deleteEntryFromQueueByIndex(this.queue, this.selectedIndex);
+		if (event.key === "Delete" && this.selectedIndex > -1) {
+			let entry = this.queue.entries[this.selectedIndex];
+			if (entry.offset && entry.offset < new Date()) {
+				this.errorService.errorDialog("Cannot delete an entry from the past.");
+				return;
+			}
 			this.selectedIndex = -1;
 			this.queuesChange.emit(this.queues);
 		}

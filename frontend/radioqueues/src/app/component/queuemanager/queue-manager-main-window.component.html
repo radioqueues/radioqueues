@@ -6,9 +6,9 @@
 	      <option [value]="queueType.name" [style.color]="queueType.color">{{queueType.name}}</option>
 	    }
 	</select>
-	<button (click)="onPickRoot()">📂</button>
-	<button (click)="onSettingsClicked()">⚙️</button>
-	<button (click)="onHelp()">❓</button>
+	<button title="Close project" (click)="onCloseProject()">📁</button>
+	<button title="Open settings" (click)="onSettingsClicked()">⚙️</button>
+	<button title="Show documentation" (click)="onHelp()">❓</button>
 </div>
 <div cdkDropListGroup>
 	<div class="queue-container">

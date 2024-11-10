@@ -12,6 +12,7 @@ import { ErrorService } from 'src/app/service/error.service';
 import { QueueService } from 'src/app/service/queue.service';
 import { KeyValuePipe } from '@angular/common';
 import { AudioControlComponent } from '../audio-control/audio-control.component';
+import { IndexeddbCacheService } from 'src/app/service/indexeddb-cache.service';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -24,8 +25,9 @@ export class QueueManagerMainWindowComponent implements OnInit {
 
 	readonly databaseService = inject(DatabaseService);
 	readonly dialog = inject(MatDialog);
-	readonly fileSystemService = inject(FileSystemService);
 	readonly errorService = inject(ErrorService);
+	readonly fileSystemService = inject(FileSystemService);
+	readonly indexeddbCacheService = inject(IndexeddbCacheService);
 	readonly queueService = inject(QueueService);
 
 	queueTypes!: Record<string, QueueType>;
@@ -57,8 +59,9 @@ export class QueueManagerMainWindowComponent implements OnInit {
 		this.dialog.open(QueueTypeEditorComponent);
 	}
 
-	onPickRoot() {
-		this.fileSystemService.pickRoot();
+	async onCloseProject() {
+		await this.indexeddbCacheService.saveDirectoryHandle(undefined);
+		window.location.reload();
 	}
 
 	onQueueChange() {

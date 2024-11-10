@@ -39,9 +39,18 @@ export class IndexeddbCacheService {
 		const store = transaction.objectStore(this.STORE_NAME);
 
 		// Use put to store the handle
-		const request = store.put(dirHandle, 'directory-handle');
-		request.onsuccess = () => console.log('Directory handle saved to IndexedDB.');
-		request.onerror = (event) => console.error('Failed to save directory handle:', (event.target as IDBRequest).error);
+		return new Promise((success, failure) => {
+			const request = store.put(dirHandle, 'directory-handle');
+			request.onsuccess = () => {
+				console.log('Directory handle saved to IndexedDB.');
+				success();
+			};
+
+			request.onerror = (event) => {
+				console.error('Failed to save directory handle:', (event.target as IDBRequest).error);
+				failure();
+			};
+		});
 	}
 
 	/**

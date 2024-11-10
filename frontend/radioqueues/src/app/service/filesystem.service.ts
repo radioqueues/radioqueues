@@ -68,18 +68,22 @@ export class FileSystemService {
 	}
 
 	async pickRoot() {
+		console.log("Show directory picker");
 		this.rootHandle = await (window as any).showDirectoryPicker({
 			id: "QueueManager",
 			mode: "readwrite",
 			startIn: "music"
 		});
+		console.log("Picked directory: ", this.rootHandle);
 
 		this.progressStatusService.next({
 			message: "Listing folder content..."
 		});
 
-		this.indexeddbCacheService.saveDirectoryHandle(this.rootHandle);
+		return this.indexeddbCacheService.saveDirectoryHandle(this.rootHandle);
+	}
 
+	scanFiles() {
 		this.worker.postMessage({
 			cmd: "getFilesRecursively",
 			rootHandle: this.rootHandle,

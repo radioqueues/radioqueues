@@ -11,7 +11,9 @@ import { FileSystemService } from 'src/app/service/filesystem.service';
 export class FirstScreenComponent {
 	private fileSystemService = inject(FileSystemService);
 
-	onPickRoot() {
-		this.fileSystemService.pickRoot();
+	async onPickRoot() {
+		await this.fileSystemService.pickRoot();
+		this.fileSystemService.scanFiles();
+
 	}
 }

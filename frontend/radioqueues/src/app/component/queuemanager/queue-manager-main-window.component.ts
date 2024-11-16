@@ -8,7 +8,6 @@ import { Queue } from 'src/app/model/queue';
 import { DatabaseService } from 'src/app/service/database.service';
 import { QueueType } from 'src/app/model/queue-type';
 import { FormsModule } from '@angular/forms';
-import { ErrorService } from 'src/app/service/error.service';
 import { QueueService } from 'src/app/service/queue.service';
 import { KeyValuePipe } from '@angular/common';
 import { AudioControlComponent } from '../audio-control/audio-control.component';

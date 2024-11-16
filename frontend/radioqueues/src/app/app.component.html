@@ -1,5 +1,5 @@
 @if (showFirstScreen) {
-	<app-first-screen />
+	<app-first-screen (accessGranted)="onAccessGranted()"/>
 }
 @if (showMainWindow) {
 	<app-queue-manager-main-window />

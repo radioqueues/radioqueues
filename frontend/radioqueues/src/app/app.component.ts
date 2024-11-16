@@ -41,6 +41,21 @@ export class AppComponent implements OnInit {
 		this.displayVersion();
 	}
 
+
+	/*
+	Startup sequences
+	1. init status und error dialog listeners
+	2. check browser support
+	3. init filesystem access
+	4. If no filesystem access possible, show FirstScreenComponent
+	   ---> continue after directory was picked
+	5. If filesystem access is possible, load database
+	6. Show main window
+	7. init AudioFileService
+	8. rescan folder
+	9. setup interval timer to rescan folder
+	 */	
+
 	async ngOnInit() {
 		this.initStatusDialogSubscription();
 		this.initErrorDialogSubscription();
@@ -57,6 +72,11 @@ export class AppComponent implements OnInit {
 		} else {
 			this.showFirstScreen = true;
 		}
+	}
+
+	onAccessGranted() {
+		this.showFirstScreen = false;
+		this.showMainWindow = true;
 	}
 
 	async displayVersion() {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { FileSystemService } from 'src/app/service/filesystem.service';
 
 @Component({
@@ -9,11 +9,12 @@ import { FileSystemService } from 'src/app/service/filesystem.service';
   styleUrl: './first-screen.component.css'
 })
 export class FirstScreenComponent {
+	accessGranted = output();
 	private fileSystemService = inject(FileSystemService);
 
 	async onPickRoot() {
 		await this.fileSystemService.pickRoot();
+		this.accessGranted.emit();
 		this.fileSystemService.scanFiles();
-
 	}
 }

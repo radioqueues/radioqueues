@@ -26,7 +26,7 @@ export class FileSystemService {
 	public async init() {
 		let handle = await this.indexeddbCacheService.getSavedDirectoryHandle() as any;
 		let permission = await handle?.queryPermission({ mode: 'readwrite' });
-		console.log("saved directory handle", handle, permission);
+		console.log("loaded directory handle", handle, permission);
 		if (permission === 'granted') {
 		    this.rootHandle = handle;
 		}
@@ -76,14 +76,14 @@ export class FileSystemService {
 		});
 		console.log("Picked directory: ", this.rootHandle);
 
-		this.progressStatusService.next({
-			message: "Listing folder content..."
-		});
-
 		return this.indexeddbCacheService.saveDirectoryHandle(this.rootHandle);
 	}
 
 	scanFiles() {
+		this.progressStatusService.next({
+			message: "Listing folder content..."
+		});
+
 		this.worker.postMessage({
 			cmd: "getFilesRecursively",
 			rootHandle: this.rootHandle,

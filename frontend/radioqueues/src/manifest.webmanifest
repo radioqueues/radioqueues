@@ -1,9 +1,12 @@
 {
+  "categories": ["radio", "larp", "radioprogram", "radio queues", "entertainment", "education"],
+  "description": "RadioQueues can be used to manage a radio station by supporting multiple schedulable queues for news, advertisment and music.",
   "name": "RadioQueues",
   "short_name": "RadioQueues",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
+  "orientation": "any",
   "scope": "./",
   "start_url": "/",
   "icons": [

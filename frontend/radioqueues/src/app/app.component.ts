@@ -10,8 +10,6 @@ import { ProgressOverlayComponent } from './component/progress-overlay/progress-
 import { ErrorDialogComponent } from './component/error-dialog/error-dialog.component';
 import { FileSystemService } from './service/filesystem.service';
 import { FirstScreenComponent } from './component/first-screen/first-screen.component';
-import { AudioFileService } from './service/audio-file.service';
-import { DatabaseService } from './service/database.service';
 
 @Component({
     selector: 'app-root',
@@ -25,8 +23,6 @@ export class AppComponent implements OnInit {
 	private readonly dialog = inject(MatDialog);
 	private readonly title = inject(Title);
 
-	private readonly audioFileService = inject(AudioFileService);
-	private readonly databaseService = inject(DatabaseService);
 	private readonly errorService = inject(ErrorService);
 	private readonly fileSystemService = inject(FileSystemService);
 	private readonly progressStatusService = inject(ProgressStatusService);
@@ -64,8 +60,6 @@ export class AppComponent implements OnInit {
 			this.errorService.errorDialog("You browser does not support access to your filesystem. Please use Chrome or Edge.");
 		}
 
-		await this.databaseService.init();
-		this.audioFileService.init();
 		await this.fileSystemService.init();
 		if (this.fileSystemService.rootHandle) {
 			this.showMainWindow = true;

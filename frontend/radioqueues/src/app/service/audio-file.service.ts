@@ -78,9 +78,6 @@ export class AudioFileService {
 		}
 		await this.databaseService.saveFiles();
 		this.progressStatusService.next(undefined);
-		if (!this.databaseService.loaded) {
-			window.location.reload();
-		}
 	}
 
 	async markFileAsPlayed(filename: string) {

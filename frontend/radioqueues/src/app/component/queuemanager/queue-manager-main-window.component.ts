@@ -13,6 +13,7 @@ import { QueueService } from 'src/app/service/queue.service';
 import { KeyValuePipe } from '@angular/common';
 import { AudioControlComponent } from '../audio-control/audio-control.component';
 import { IndexeddbCacheService } from 'src/app/service/indexeddb-cache.service';
+import { AudioFileService } from 'src/app/service/audio-file.service';
 
 @Component({
 	selector: 'app-queue-manager-main-window',
@@ -23,12 +24,12 @@ import { IndexeddbCacheService } from 'src/app/service/indexeddb-cache.service';
 })
 export class QueueManagerMainWindowComponent implements OnInit {
 
-	readonly databaseService = inject(DatabaseService);
-	readonly dialog = inject(MatDialog);
-	readonly errorService = inject(ErrorService);
-	readonly fileSystemService = inject(FileSystemService);
-	readonly indexeddbCacheService = inject(IndexeddbCacheService);
-	readonly queueService = inject(QueueService);
+	private readonly audioFileService = inject(AudioFileService);
+	private readonly databaseService = inject(DatabaseService);
+	private readonly dialog = inject(MatDialog);
+	private readonly fileSystemService = inject(FileSystemService);
+	private readonly indexeddbCacheService = inject(IndexeddbCacheService);
+	private readonly queueService = inject(QueueService);
 
 	queueTypes!: Record<string, QueueType>;
 	queueTypeArray!: QueueType[];
@@ -36,6 +37,10 @@ export class QueueManagerMainWindowComponent implements OnInit {
 	newQueueType: string = "";
 
 	async ngOnInit() {
+		await this.databaseService.init();
+		this.audioFileService.init();
+		this.fileSystemService.scanFiles();
+
 		this.queueTypes = await this.databaseService.getQueueTypes();
 		this.queueTypeArray = Object.values(this.queueTypes);
 		this.queues = await this.databaseService.getQueues();

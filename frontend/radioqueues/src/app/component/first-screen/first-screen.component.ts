@@ -15,6 +15,5 @@ export class FirstScreenComponent {
 	async onPickRoot() {
 		await this.fileSystemService.pickRoot();
 		this.accessGranted.emit();
-		this.fileSystemService.scanFiles();
 	}
 }

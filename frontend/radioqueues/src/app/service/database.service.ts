@@ -9,7 +9,6 @@ export class DatabaseService {
 	fileSystemService = inject(FileSystemService);
 
 	private inited = false;
-	public loaded = true;
 
 	private queues: Record<string, Queue> = {
 		"00000000-a78095b4-0c65-44a7-9555-bdcbd93d00a6": {
@@ -83,7 +82,7 @@ export class DatabaseService {
 	public async init() {
 		await this.fileSystemService.init();
 		if (!this.fileSystemService.rootHandle) {
-			this.loaded = false;
+			console.error("Called DatabaseService.init without valid FileSystemService.rootHandle");
 			return;
 		}
 		try {

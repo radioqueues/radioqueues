@@ -143,6 +143,12 @@ export class QueueWindowComponent {
 		if (this.isResizing) {
 			this.windowRect.width += dx;
 			this.windowRect.height += dy;
+			if (this.windowRect.width < 100) {
+				this.windowRect.width = 100;
+			}
+			if (this.windowRect.height < 100) {
+				this.windowRect.height = 100;
+			}
 		}
 
 		this.lastMouseX = event.clientX;

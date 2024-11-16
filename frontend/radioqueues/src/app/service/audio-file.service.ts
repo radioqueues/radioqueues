@@ -30,7 +30,6 @@ export class AudioFileService {
 			count: count,
 			message: "Reading duration of audio files"
 		});
-		console.log("status", current, count);
 	}
 
 	async loadDurations(loadedFiles: any) {
@@ -41,7 +40,7 @@ export class AudioFileService {
 
 		// do not use an async for loop because it would do all disk reads first and then all calculations
 		for (let filename in loadedFiles) {
-			if (this.isFileKnown(files, filename, loadedFiles[filename])) {
+			if (this.isFileKnown(files, filename, loadedFiles[filename]) || filename.endsWith(".json")) {
 				i++;
 				this.updateStatus(i, Object.keys(loadedFiles).length);
 				continue;

@@ -28,3 +28,11 @@ RadioQueues is under heavy development. Several key features are still on the TO
 - automatically append new/cloned queues to the end of Main Queue
 - split the subset-sum folder into 10 parts based on the lastPlayed time and add the oldes 10th back to the list, if it got too small.
 - App (for example: Tauri, NeutralinoJS, Electron)
+- do not allow rescheduling of queues from the past
+- if not playing, update offsets of main queue until first scheduled entry
+- on playing of an empty subset-sum queue, make sure to recalcualte the request duration based on current time and scheduled time of next entry
+- make sure floating entries are never below a subset-sum queue 
+- add button to fade out current audio file
+- periodically rescan music folder for new entries
+- window position of size of main queue
+

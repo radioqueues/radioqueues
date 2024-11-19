@@ -15,7 +15,6 @@ import { FirstScreenComponent } from './component/first-screen/first-screen.comp
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
-    standalone: true,
     imports: [FirstScreenComponent, QueueManagerMainWindowComponent]
 })
 export class AppComponent implements OnInit {

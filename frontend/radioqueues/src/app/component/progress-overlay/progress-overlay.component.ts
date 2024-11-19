@@ -14,11 +14,10 @@ import { ProgressStatusService } from 'src/app/service/progress-status.service';
 
 
 @Component({
-	selector: 'app-progress-overlay',
-	templateUrl: './progress-overlay.component.html',
-	styleUrl: './progress-overlay.component.css',
-	standalone: true,
-	imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose],
+    selector: 'app-progress-overlay',
+    templateUrl: './progress-overlay.component.html',
+    styleUrl: './progress-overlay.component.css',
+    imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose]
 })
 export class ProgressOverlayComponent {
 	progressStatusService = inject(ProgressStatusService);

@@ -20,14 +20,13 @@ import { ErrorService } from 'src/app/service/error.service';
 import { AudioFileService } from 'src/app/service/audio-file.service';
 
 @Component({
-	selector: 'app-queue',
-	templateUrl: './queue.component.html',
-	styleUrl: './queue.component.css',
-	standalone: true,
-	imports: [
-		CdkDropListGroup, CdkDropList, CdkDrag,
-		DurationPipe, OffsetPipe, TitlePipe
-	],
+    selector: 'app-queue',
+    templateUrl: './queue.component.html',
+    styleUrl: './queue.component.css',
+    imports: [
+        CdkDropListGroup, CdkDropList, CdkDrag,
+        DurationPipe, OffsetPipe, TitlePipe
+    ]
 })
 export class QueueComponent {
 	audioFileService = inject(AudioFileService);

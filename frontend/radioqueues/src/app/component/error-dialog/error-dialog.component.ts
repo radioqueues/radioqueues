@@ -13,11 +13,10 @@ import { ErrorService } from 'src/app/service/error.service';
 
 
 @Component({
-	selector: 'app-error-dialog',
-	templateUrl: './error-dialog.component.html',
-	styleUrl: './error-dialog.component.css',
-	standalone: true,
-	imports: [CommonModule, MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose],
+    selector: 'app-error-dialog',
+    templateUrl: './error-dialog.component.html',
+    styleUrl: './error-dialog.component.css',
+    imports: [CommonModule, MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose]
 })
 export class ErrorDialogComponent {
 	errorService = inject(ErrorService);

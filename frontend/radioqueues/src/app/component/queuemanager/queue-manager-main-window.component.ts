@@ -15,11 +15,10 @@ import { IndexeddbCacheService } from 'src/app/service/indexeddb-cache.service';
 import { AudioFileService } from 'src/app/service/audio-file.service';
 
 @Component({
-	selector: 'app-queue-manager-main-window',
-	templateUrl: './queue-manager-main-window.component.html',
-	styleUrl: './queue-manager-main-window.component.css',
-	standalone: true,
-	imports: [CdkDropListGroup, FormsModule, KeyValuePipe, AudioControlComponent, QueueWindowComponent],
+    selector: 'app-queue-manager-main-window',
+    templateUrl: './queue-manager-main-window.component.html',
+    styleUrl: './queue-manager-main-window.component.css',
+    imports: [CdkDropListGroup, FormsModule, KeyValuePipe, AudioControlComponent, QueueWindowComponent]
 })
 export class QueueManagerMainWindowComponent implements OnInit {
 

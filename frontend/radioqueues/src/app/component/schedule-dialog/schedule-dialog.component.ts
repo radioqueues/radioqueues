@@ -16,16 +16,15 @@ import { ErrorService } from 'src/app/service/error.service';
 import { DateTimeUtil } from 'src/app/util/date-time-util';
 
 @Component({
-	selector: 'app-schedule-dialog',
-	templateUrl: './schedule-dialog.component.html',
-	styleUrl: './schedule-dialog.component.css',
-	standalone: true,
-	imports: [
-		CommonModule, FormsModule,
-		MatButtonModule,
-		MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose,
-		MatRadioModule
-	]
+    selector: 'app-schedule-dialog',
+    templateUrl: './schedule-dialog.component.html',
+    styleUrl: './schedule-dialog.component.css',
+    imports: [
+        CommonModule, FormsModule,
+        MatButtonModule,
+        MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose,
+        MatRadioModule
+    ]
 })
 export class ScheduleDialogComponent {
 

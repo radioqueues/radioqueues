@@ -23,11 +23,10 @@ class Rect {
 }
 
 @Component({
-	selector: 'app-queue-window',
-	templateUrl: './queue-window.component.html',
-	styleUrl: './queue-window.component.css',
-	standalone: true,
-	imports: [CommonModule, FormsModule, MatCheckboxModule, MatToolbarModule, MatButtonModule, MatIconModule, MatExpansionModule, QueueComponent],
+    selector: 'app-queue-window',
+    templateUrl: './queue-window.component.html',
+    styleUrl: './queue-window.component.css',
+    imports: [CommonModule, FormsModule, MatCheckboxModule, MatToolbarModule, MatButtonModule, MatIconModule, MatExpansionModule, QueueComponent]
 })
 export class QueueWindowComponent {
 

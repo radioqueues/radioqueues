@@ -13,10 +13,9 @@ import { ErrorService } from 'src/app/service/error.service';
 import { PlayService } from 'src/app/service/play.service';
 
 @Component({
-	selector: 'app-audio-control',
-	templateUrl: './audio-control.component.html',
-	standalone: true,
-	imports: [DurationPipe, FormsModule, TitlePipe],
+    selector: 'app-audio-control',
+    templateUrl: './audio-control.component.html',
+    imports: [DurationPipe, FormsModule, TitlePipe]
 })
 export class AudioControlComponent {
 	audioFileService = inject(AudioFileService);

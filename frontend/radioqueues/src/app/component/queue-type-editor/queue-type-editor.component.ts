@@ -14,11 +14,10 @@ import { DatabaseService } from 'src/app/service/database.service';
 
 
 @Component({
-	selector: 'app-queue-type-editor',
-	templateUrl: './queue-type-editor.component.html',
-	styleUrl: './queue-type-editor.component.css',
-	standalone: true,
-	imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, MatTableModule],
+    selector: 'app-queue-type-editor',
+    templateUrl: './queue-type-editor.component.html',
+    styleUrl: './queue-type-editor.component.css',
+    imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, MatTableModule]
 })
 export class QueueTypeEditorComponent implements OnInit {
 	readonly databaseService = inject(DatabaseService);

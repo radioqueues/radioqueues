@@ -39,7 +39,7 @@ export class AudioControlComponent {
 	volumne = 0.8;
 
 	async onPlayClicked() {
-		let picked = this.playService.pickByDate(new Date());
+		let picked = this.playService.pickByTime(new Date());
 		console.log("pickedByDae", picked);
 		console.log("pickNext", this.playService.pickNext(picked));
 		console.log("onPlayClicked", this.mainQueueIndex, this.subQueueIndex);

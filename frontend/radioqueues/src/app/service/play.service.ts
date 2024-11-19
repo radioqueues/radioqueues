@@ -4,6 +4,7 @@ import { DatabaseService } from "./database.service";
 import { ErrorService } from "./error.service";
 import { QueueService } from "./queue.service";
 import { Queue } from "../model/queue";
+import { QueuePath } from "../model/queue-path";
 
 @Injectable()
 export class PlayService {
@@ -21,7 +22,7 @@ export class PlayService {
 		this.queues = await this.databaseService.getQueues();
 	}
 
-	pickByDate(date: Date): Entry[]|undefined {
+	pickByTime(date: Date): QueuePath|undefined {
 		let queue = this.queueService.getQueueByType("Main Queue")!;
 		if (!queue || !queue.entries?.length) {
 			this.errorService.errorDialog("No Main Queue or Main Queue is empty");
@@ -29,7 +30,7 @@ export class PlayService {
 		}
 		
 		let entry: Entry|undefined;
-		let path: Entry[] = [];
+		let path: QueuePath = [];
 		while (queue) {
 			entry = this.queueService.getEntryByTime(queue, date);
 			if (!entry) {
@@ -45,7 +46,7 @@ export class PlayService {
 
 	pickFirst(entry: Entry): Entry[] {
 		let queue = entry as Queue;
-		let path: Entry[] = [];
+		let path: QueuePath = [];
 		
 		while (queue.entries && queue.entries.length > 0) {
 			let e = queue.entries[0];
@@ -60,7 +61,7 @@ export class PlayService {
 		return path;
 	}
 
-	pickNext(path?: Entry[]): Entry[]|undefined {
+	pickNext(path?: QueuePath): QueuePath|undefined {
 
 		// if path is empty, return undefined
 		if (!path || !path.length) {
@@ -75,7 +76,7 @@ export class PlayService {
 
 		// advance the last entry
 		//    if we are at the end of the last queue, advance the prevous queue
-		// add the end make sure that the first entry from the current queue is picked
+		// at the end make sure that the first entry from the current queue is picked
 		for (let entryIndex = 1; entryIndex < path.length; entryIndex++) {
 			let queueIndex = entryIndex + 1;
 					

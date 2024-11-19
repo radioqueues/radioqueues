@@ -3,7 +3,6 @@ import {
 	CdkDragDrop,
 	CdkDrag,
 	CdkDropList,
-	CdkDropListGroup,
 	moveItemInArray,
 } from '@angular/cdk/drag-drop';
 
@@ -24,7 +23,7 @@ import { AudioFileService } from 'src/app/service/audio-file.service';
     templateUrl: './queue.component.html',
     styleUrl: './queue.component.css',
     imports: [
-        CdkDropListGroup, CdkDropList, CdkDrag,
+        CdkDropList, CdkDrag,
         DurationPipe, OffsetPipe, TitlePipe
     ]
 })

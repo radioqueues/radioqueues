@@ -3,8 +3,6 @@ import { Component, Inject, inject } from '@angular/core';
 
 import {
     MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogClose,
   MatDialogContent,
   MatDialogTitle,
 } from '@angular/material/dialog';
@@ -17,7 +15,7 @@ import { ProgressStatusService } from 'src/app/service/progress-status.service';
     selector: 'app-progress-overlay',
     templateUrl: './progress-overlay.component.html',
     styleUrl: './progress-overlay.component.css',
-    imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose]
+    imports: [CommonModule, MatDialogTitle, MatDialogContent]
 })
 export class ProgressOverlayComponent {
 	progressStatusService = inject(ProgressStatusService);

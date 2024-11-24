@@ -18,11 +18,11 @@
 	cursor: default;
 	background: white;
 	font-size: 14px;
-	line-height: 1.5em;
+	line-height: 1.7em;
 }
 
 .selectedEntry {
-	background-color: #77F;
+	background-color:#e0f0ff;
 }
 
 .entry-title {

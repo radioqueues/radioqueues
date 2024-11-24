@@ -60,4 +60,12 @@ describe('DateTimeUtil', () => {
 			DateTimeUtil.datetimeFromTime(22 * 60 + 21);
 		}).toThrowError("Time is in the past.");
 	});
+
+	it('changeDateTimeToDate', () => {
+		let fakeNow = new Date("2024-01-01 17:12:34");
+		let someDate = new Date("2020-01-01 15:01:23");
+		DateTimeUtil.changeDateTimeToDate(someDate, fakeNow);
+		expect(someDate).toEqual(new Date("2024-01-01 15:01:23"));
+	});
+
 });

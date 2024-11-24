@@ -48,4 +48,10 @@ export class DateTimeUtil {
 		schedule.setSeconds(0);
 		return schedule;
 	}
+
+	static changeDateTimeToDate(toModify: Date, toChangeTo: Date) {
+		toModify.setFullYear(toChangeTo.getFullYear());
+		toModify.setMonth(toChangeTo.getMonth());
+		toModify.setDate(toChangeTo.getDate());
+	}
 }

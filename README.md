@@ -12,7 +12,19 @@ RadioQueues consists of static files that need to be served by a server supporti
 
 ## Current state of development
 
-RadioQueues is under heavy development. Several key features are still on the TODO list
+RadioQueues is under heavy development. Several key features are still on the TODO list. It is not quite ready for production, yet.
+
+## Development
+
+- RadioQueue is developed using the angular framework
+
+~~~~
+npm install
+ng serve
+~~~~
+
+In order to simplify development, you can add the parameter `"debugForceToday": true` to queues.json. It will automatically update all timestamps in queues.json to the current date, keeping the time value.
+
 
 ## TODO: Important Features
 

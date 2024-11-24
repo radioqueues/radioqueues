@@ -3,6 +3,7 @@ import { FileSystemService } from "./filesystem.service";
 import { Queue } from "../model/queue";
 import { QueueType } from "../model/queue-type";
 import { FileMetaData } from "../model/file-meta-data";
+import { DateTimeUtil } from "../util/date-time-util";
 
 @Injectable()
 export class DatabaseService {
@@ -85,21 +86,26 @@ export class DatabaseService {
 			console.error("Called DatabaseService.init without valid FileSystemService.rootHandle");
 			return;
 		}
+			
+		try {
+			this.queueTypes = await this.fileSystemService.getJsonFromFilename("radioqueues/queue-types.json")
+		} catch(e) {
+			console.log("loading queueTypes", e);
+		}
+
 		try {
 			this.files = await this.fileSystemService.getJsonFromFilename("radioqueues/files.json", this.jsonDeserializer)
 		} catch (e) {
 			console.log("loading files", e);
 		}
 		try {
-			this.queues = await this.fileSystemService.getJsonFromFilename("radioqueues/queues.json", this.jsonDeserializer);
+			let queues = await this.fileSystemService.getJsonFromFilename("radioqueues/queues.json", this.jsonDeserializer);
+			if (queues.debugForceToday) {
+				DatabaseService.debugForceToday(queues);
+			}
+			this.queues = queues;
 		} catch(e) {
 			console.log("loading queues", e);
-		}
-			
-		try {
-			this.queueTypes = await this.fileSystemService.getJsonFromFilename("radioqueues/queue-types.json")
-		} catch(e) {
-			console.log("loading queueTypes", e);
 		}
 		this.inited = true;
 	}
@@ -132,5 +138,28 @@ export class DatabaseService {
 			await this.init();
 		}
 		return this.files;
+	}
+
+	private static debugForceToday(queues: Record<string, Queue>) {
+		let now = new Date();
+
+		for (let queue of Object.values(queues)) {
+			if (queue.scheduled) {
+				DateTimeUtil.changeDateTimeToDate(queue.scheduled, now);
+			}
+			if (queue.offset) {
+				DateTimeUtil.changeDateTimeToDate(queue.offset, now);
+			}
+			if (queue.entries) {
+				for (let entry of queue.entries) {
+					if (entry.scheduled) {
+						DateTimeUtil.changeDateTimeToDate(entry.scheduled, now);
+					}
+					if (entry.offset) {
+						DateTimeUtil.changeDateTimeToDate(entry.offset, now);
+					}
+				}
+			}
+		}
 	}
 }

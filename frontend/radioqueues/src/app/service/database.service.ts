@@ -88,6 +88,15 @@ export class DatabaseService {
 		}
 			
 		try {
+			let queues = await this.fileSystemService.getJsonFromFilename("radioqueues/queues.json", this.jsonDeserializer);
+			if (queues.debugForceToday) {
+				DatabaseService.debugForceToday(queues);
+			}
+			this.queues = queues;
+		} catch(e) {
+			console.log("loading queues", e);
+		}
+		try {
 			this.queueTypes = await this.fileSystemService.getJsonFromFilename("radioqueues/queue-types.json")
 		} catch(e) {
 			console.log("loading queueTypes", e);
@@ -97,15 +106,6 @@ export class DatabaseService {
 			this.files = await this.fileSystemService.getJsonFromFilename("radioqueues/files.json", this.jsonDeserializer)
 		} catch (e) {
 			console.log("loading files", e);
-		}
-		try {
-			let queues = await this.fileSystemService.getJsonFromFilename("radioqueues/queues.json", this.jsonDeserializer);
-			if (queues.debugForceToday) {
-				DatabaseService.debugForceToday(queues);
-			}
-			this.queues = queues;
-		} catch(e) {
-			console.log("loading queues", e);
 		}
 		this.inited = true;
 	}

@@ -36,8 +36,8 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 - Option to only show future entries of Main Queue
 - QueueType editor
 - Crossfading music
-- scheduling queues, that have already been scheduled must not be duplicated
-- automatically append new/cloned queues to the end of Main Queue
+- scheduling queues, that have already been scheduled must not be modified, when they are in the past
+- do not enqueue entries/queues into the past
 - split the subset-sum folder into 10 parts based on the lastPlayed time and add the oldes 10th back to the list, if it got too small.
 - App (for example: Tauri, NeutralinoJS, Electron)
 - do not allow rescheduling of queues from the past

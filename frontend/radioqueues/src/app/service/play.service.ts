@@ -37,9 +37,10 @@ export class PlayService {
 				break;
 			}
 			path.push(entry);
-			if (entry?.queueRef) {
-				queue = this.queues[entry.queueRef];
+			if (!entry?.queueRef) {
+				return path;
 			}
+			queue = this.queues[entry.queueRef];
 		}
 		return path;
 	}

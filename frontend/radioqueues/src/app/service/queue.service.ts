@@ -348,7 +348,7 @@ export class QueueService {
 			}
 			lastEntry = entry;
 		}
-		return undefined;
+		return lastEntry;
 	}
 
 	deleteEntryFromQueueByIndex(queue: Queue|undefined, index: number) {

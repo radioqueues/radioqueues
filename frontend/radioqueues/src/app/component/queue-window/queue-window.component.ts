@@ -14,6 +14,7 @@ import { QueueType } from 'src/app/model/queue-type';
 import { ScheduleDialogComponent } from '../schedule-dialog/schedule-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { ErrorService } from 'src/app/service/error.service';
 
 class Rect {
 	left: number = 0;
@@ -31,6 +32,7 @@ class Rect {
 export class QueueWindowComponent {
 
 	private dialog = inject(MatDialog);
+	private errorService = inject(ErrorService);
 	private queueService = inject(QueueService);
 
 	private elRef = inject(ElementRef);
@@ -179,9 +181,22 @@ export class QueueWindowComponent {
 	}
 
 	onScheduleClicked() {
+		if (this.queue.offset && this.queue.offset <= new Date()) {
+			this.errorService.errorDialog("The queue cannot be scheduled because it is from the past. But you can clone it.");
+			return;
+		}
+
 		let dialogRef: MatDialogRef<ScheduleDialogComponent, "next" | Date> = this.dialog.open(ScheduleDialogComponent);
 		dialogRef.afterClosed().subscribe(result => {
 			if (result) {
+
+				// We need to repeat the check here, because some time has past
+				// between opening and closing the dialog.
+				if (this.queue.offset && this.queue.offset <= new Date()) {
+					this.errorService.errorDialog("The queue cannot be scheduled because it is from the past. But you can clone it.");
+					return;
+				}
+
 				if (result === "next") {
 					this.queueService.enqueueNext(this.queue);
 				} else {

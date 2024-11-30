@@ -66,6 +66,11 @@ describe('DateTimeUtil', () => {
 		let someDate = new Date("2020-01-01 15:01:23");
 		DateTimeUtil.changeDateTimeToDate(someDate, fakeNow);
 		expect(someDate).toEqual(new Date("2024-01-01 15:01:23"));
+
+		let pseudoDateByondEndOfTime = new Date("+099999-12-31T23:00:00.000Z");
+		DateTimeUtil.changeDateTimeToDate(pseudoDateByondEndOfTime, fakeNow);
+		expect(pseudoDateByondEndOfTime).toEqual(pseudoDateByondEndOfTime);
+		
 	});
 
 });

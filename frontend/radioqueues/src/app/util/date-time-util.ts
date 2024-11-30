@@ -1,6 +1,7 @@
 export class DateTimeUtil {
 
 	public static fakeNow?: Date;
+	private static readonly END_OF_TIME = new Date("+199999-01-01T00:00:00.000Z");
 
 	static now(): Date {
 		return this.fakeNow || new Date();
@@ -49,7 +50,17 @@ export class DateTimeUtil {
 		return schedule;
 	}
 
+	/**
+	 * changes the date of a datetime value to today, 
+	 * unless it is a pseudo data from beyond the end of time.
+	 *
+	 * @param toModify date object to modify
+	 * @param toDate date to which the first parameter should be changed to
+	 */
 	static changeDateTimeToDate(toModify: Date, toChangeTo: Date) {
+		if (toModify > DateTimeUtil.END_OF_TIME) {
+			return;
+		}
 		toModify.setFullYear(toChangeTo.getFullYear());
 		toModify.setMonth(toChangeTo.getMonth());
 		toModify.setDate(toChangeTo.getDate());

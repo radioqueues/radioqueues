@@ -73,9 +73,7 @@ export class AppComponent implements OnInit {
 	}
 
 	async displayVersion() {
-		let response = await fetch("ngsw.json");
-		let json = await response.json();
-		let version = "v" + new Date(json['timestamp']).toISOString().slice(0, 10).replace(/-/g, ".");
+		let version = "v" + new Date(document.lastModified).toISOString().slice(0, 10)?.replace(/-/g, ".");
 		let prefix = "RadioQueues ";
 		if (window.matchMedia('(display-mode: standalone)').matches) {
 			prefix = "";

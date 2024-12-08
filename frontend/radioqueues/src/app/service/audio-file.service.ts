@@ -4,7 +4,9 @@ import { DatabaseService } from "./database.service";
 import { FileMetaData } from "../model/file-meta-data";
 import { ProgressStatusService } from "./progress-status.service";
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class AudioFileService {
 	private databaseService = inject(DatabaseService);
 	private fileSystemService = inject(FileSystemService);

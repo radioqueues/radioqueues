@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PlayService } from './play.service';
-import { AppModule } from '../app.module';
 import { Entry } from '../model/entry';
 import { Queue } from '../model/queue';
 
@@ -11,7 +10,6 @@ describe('PlayService', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			imports: [
-				AppModule
 			]
 		});
 		service = TestBed.inject(PlayService);

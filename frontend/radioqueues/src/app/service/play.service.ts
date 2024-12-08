@@ -6,7 +6,9 @@ import { QueueService } from "./queue.service";
 import { Queue } from "../model/queue";
 import { QueuePath } from "../model/queue-path";
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class PlayService {
 
 	databaseService = inject(DatabaseService);

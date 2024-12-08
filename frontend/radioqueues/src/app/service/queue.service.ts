@@ -7,7 +7,9 @@ import { DynamicQueueService } from "./dynamic-queue.service";
 import { FileMetaData } from "../model/file-meta-data";
 import { DateTimeUtil } from "../util/date-time-util";
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class QueueService {
 
 	private readonly databaseService = inject(DatabaseService);

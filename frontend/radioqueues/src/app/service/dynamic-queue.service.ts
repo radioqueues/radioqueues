@@ -7,7 +7,9 @@ class Item {
 	constructor(public name: string, public duration: number) {}
 }
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class DynamicQueueService {
 	private databaseService = inject(DatabaseService);
 

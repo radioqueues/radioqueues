@@ -5,7 +5,9 @@ import { QueueType } from "../model/queue-type";
 import { FileMetaData } from "../model/file-meta-data";
 import { DateTimeUtil } from "../util/date-time-util";
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class DatabaseService {
 	fileSystemService = inject(FileSystemService);
 

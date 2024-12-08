@@ -4,7 +4,9 @@ import { Subject } from "rxjs";
 import { ProgressStatusService } from "./progress-status.service";
 import { ErrorService } from "./error.service";
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class FileSystemService {
 	worker: Worker;
 	rootHandle?: FileSystemDirectoryHandle;

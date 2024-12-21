@@ -27,7 +27,8 @@ class Rect {
     selector: 'app-queue-window',
     templateUrl: './queue-window.component.html',
     styleUrl: './queue-window.component.css',
-    imports: [CommonModule, FormsModule, MatCheckboxModule, MatToolbarModule, MatButtonModule, MatIconModule, MatExpansionModule, QueueComponent]
+    imports: [CommonModule, FormsModule, MatCheckboxModule, MatToolbarModule, MatButtonModule, MatIconModule,
+		MatExpansionModule, QueueComponent]
 })
 export class QueueWindowComponent {
 

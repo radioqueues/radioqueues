@@ -3,7 +3,6 @@ import { FileSystemService } from 'src/app/service/filesystem.service';
 
 @Component({
     selector: 'app-first-screen',
-    imports: [],
     templateUrl: './first-screen.component.html',
     styleUrl: './first-screen.component.css'
 })

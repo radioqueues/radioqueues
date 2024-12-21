@@ -4,31 +4,32 @@ import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import {
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
+	MatDialogActions,
+	MatDialogClose,
+	MatDialogContent,
+	MatDialogRef,
+	MatDialogTitle,
 } from '@angular/material/dialog';
 
-import {MatRadioModule} from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
 import { ErrorService } from 'src/app/service/error.service';
 import { DateTimeUtil } from 'src/app/util/date-time-util';
 
 @Component({
-    selector: 'app-schedule-dialog',
-    templateUrl: './schedule-dialog.component.html',
-    styleUrl: './schedule-dialog.component.css',
-    imports: [
-        CommonModule, FormsModule,
-        MatButtonModule,
-        MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose,
-        MatRadioModule
-    ]
+	selector: 'app-schedule-dialog',
+	templateUrl: './schedule-dialog.component.html',
+	styleUrl: './schedule-dialog.component.css',
+	imports: [
+		CommonModule, FormsModule,
+		MatButtonModule,
+		MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose,
+		MatRadioModule
+	],
+	standalone: true
 })
 export class ScheduleDialogComponent {
 
-	private dialogRef: MatDialogRef<ScheduleDialogComponent, "next"|Date> = inject(MatDialogRef);
+	private dialogRef: MatDialogRef<ScheduleDialogComponent, "next" | Date> = inject(MatDialogRef);
 	private errorService = inject(ErrorService);
 
 	time: string = "";
@@ -50,7 +51,7 @@ export class ScheduleDialogComponent {
 					this.errorService.errorDialog(error.message);
 				}
 			}
-			return;	
+			return;
 		}
 		this.dialogRef.close("next");
 	}

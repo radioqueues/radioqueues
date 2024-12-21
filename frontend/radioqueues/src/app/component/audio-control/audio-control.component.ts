@@ -13,9 +13,10 @@ import { ErrorService } from 'src/app/service/error.service';
 import { PlayService } from 'src/app/service/play.service';
 
 @Component({
-    selector: 'app-audio-control',
-    templateUrl: './audio-control.component.html',
-    imports: [DurationPipe, FormsModule, TitlePipe]
+	selector: 'app-audio-control',
+	templateUrl: './audio-control.component.html',
+	imports: [DurationPipe, FormsModule, TitlePipe],
+	standalone: true
 })
 export class AudioControlComponent {
 	audioFileService = inject(AudioFileService);
@@ -24,14 +25,14 @@ export class AudioControlComponent {
 	fileSystemService = inject(FileSystemService);
 	playService = inject(PlayService);
 	queueService = inject(QueueService);
-	
+
 	@Input() queues!: Record<string, Queue>;
 	@ViewChild("audio") audio!: ElementRef<HTMLAudioElement>;
 	mainQueue!: Queue;
 
 	currentParentEntry?: Entry;
 	currentEntry?: Entry;
-    remainingTime?: number;
+	remainingTime?: number;
 	url?: string;
 
 	mainQueueIndex = 0;
@@ -99,7 +100,7 @@ export class AudioControlComponent {
 					this.subQueueIndex = 0;
 					continue;
 				}
-		 		this.play();
+				this.play();
 				break;
 			}
 		}
@@ -118,7 +119,7 @@ export class AudioControlComponent {
 			console.log(duration, currentTime);
 			this.remainingTime = duration;
 		} else {
-			this.remainingTime = duration - currentTime;		
+			this.remainingTime = duration - currentTime;
 		}
 	}
 }

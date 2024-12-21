@@ -24,11 +24,12 @@ class Rect {
 }
 
 @Component({
-    selector: 'app-queue-window',
-    templateUrl: './queue-window.component.html',
-    styleUrl: './queue-window.component.css',
-    imports: [CommonModule, FormsModule, MatCheckboxModule, MatToolbarModule, MatButtonModule, MatIconModule,
-		MatExpansionModule, QueueComponent]
+	selector: 'app-queue-window',
+	templateUrl: './queue-window.component.html',
+	styleUrl: './queue-window.component.css',
+	imports: [CommonModule, FormsModule, MatCheckboxModule, MatToolbarModule, MatButtonModule, MatIconModule,
+		MatExpansionModule, QueueComponent],
+	standalone: true
 })
 export class QueueWindowComponent {
 
@@ -65,20 +66,20 @@ export class QueueWindowComponent {
 	}
 
 	getRect(element: HTMLElement): Rect {
-	    const rect = element.getBoundingClientRect();
-	    return {
-	        left: rect.left + document.documentElement.scrollLeft,
-	        top: rect.top + document.documentElement.scrollTop,
+		const rect = element.getBoundingClientRect();
+		return {
+			left: rect.left + document.documentElement.scrollLeft,
+			top: rect.top + document.documentElement.scrollTop,
 			height: rect.height,
 			width: rect.width
-	    };
+		};
 	}
 
 	isOverlaping(rect1: Rect, rect2: Rect) {
 		return rect1.left < rect2.left + rect2.width
 			&& rect1.left + rect1.width > rect2.left
 			&& rect1.top < rect2.top + rect2.height
-			&& rect1.top + rect1.height > rect2.top 
+			&& rect1.top + rect1.height > rect2.top
 	}
 
 	findPosition() {

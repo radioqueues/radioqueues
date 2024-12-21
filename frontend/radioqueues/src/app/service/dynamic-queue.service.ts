@@ -13,17 +13,12 @@ class Item {
 export class DynamicQueueService {
 	private databaseService = inject(DatabaseService);
 
-	private lists: Record<string, Item[]> = {};
-
 	public async scheduleQueue(queueTypeName: string, duration: number) {
 		while (duration > 70 * MINUTES) {
 			// TODO: for realy long duration, just pick long files, subset-sum is too expensive
 			duration = duration - 1 * HOURS;
 		}
-		let list: Item[] | undefined = this.lists[queueTypeName];
-		if (!list || !list.length) {
-			list = await this.createList(queueTypeName);
-		}
+		let list = await this.createList(queueTypeName);
 		if (!list || !list.length) {
 			console.error("Cannot find files for subset-sum queue type " + queueTypeName);
 			return;
@@ -46,7 +41,6 @@ export class DynamicQueueService {
 
 		if (result.indexes) {
 			console.log(list!.length, (result.totalDuration - duration) / SECONDS, result);
-			this.removeUsed(list!, result.indexes);
 			return result.names;
 		}
 
@@ -55,21 +49,10 @@ export class DynamicQueueService {
 		return undefined;
 	}
 
-	private removeUsed(list: Item[], indexes: number[]) {
-		indexes.sort((a: number, b: number) => b - a);
-		for (let i = 0; i < indexes.length; i++) {
-			list.splice(indexes[i], 1)
-		}
-	}
-
 	private async createList(queueTypeName: string) {
 		let queueTypes = await this.databaseService.getQueueTypes();
 		let queueType = queueTypes[queueTypeName];
 		let folder = queueType?.folder;
-		if (!folder) {
-			this.lists[queueTypeName] = [];
-			return;
-		}
 
 		let files = await this.databaseService.getFiles();
 		let list: Item[] = [];
@@ -82,7 +65,6 @@ export class DynamicQueueService {
 				list.push(new Item(filename, file.duration));
 			}
 		}
-		this.lists[queueTypeName] = list;
 		return list;
 	}
 

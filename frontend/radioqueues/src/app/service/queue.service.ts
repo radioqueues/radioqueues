@@ -144,6 +144,15 @@ export class QueueService {
 		return undefined;
 	}
 
+	public resolveQueue(queue: Entry): Queue {
+		if (queue.queueRef) {
+			let res = this.queues[queue.queueRef];
+			if (res) {
+				return res;
+			}
+		}
+		return queue as Queue;
+	}
 
 	async fillQueue(entry: Entry) {
 		if (!entry.duration) {

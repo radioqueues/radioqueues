@@ -85,6 +85,7 @@ export class PlayService {
 					
 			let previousEntry = path[path.length - entryIndex];
 			let queue = path[path.length - queueIndex] as Queue
+			queue = this.queueService.resolveQueue(queue);
 	
 			let idx = queue.entries.indexOf(previousEntry);
 			if (idx < 0) {

@@ -18,7 +18,7 @@ export class DatabaseService {
 			"uuid": "00000000-a78095b4-0c65-44a7-9555-bdcbd93d00a6",
 			"name": "History",
 			"type": "History",
-			"visible": true,
+			"visible": false,
 			"entries": []
 		},
 

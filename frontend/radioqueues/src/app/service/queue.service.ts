@@ -187,11 +187,10 @@ export class QueueService {
 			queue.entries.push(new Entry(filename, undefined, queue.offset, duration, queue.color));
 		}
 		this.recalculateQueue(queue);
-		// TODO: save used songs in DynamicQueueService
 	}
 
 
-	private createSubsetSumEntry(start: Date, duration: number) {
+	public createSubsetSumEntry(start: Date, duration: number) {
 		let subsetSumQueueType = this.getSubsetSumQueueType();
 		let subsetSumQueue = this.createNewQueue(subsetSumQueueType!);
 		subsetSumQueue.visible = false;

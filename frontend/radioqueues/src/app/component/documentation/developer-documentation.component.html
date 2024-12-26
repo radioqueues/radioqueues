@@ -1,0 +1,42 @@
+<h2>Developer Dokumentation></h2>
+
+<h3>Picking the next song</h3>
+
+<ul>
+	<li> Pick the next entry from the current queue, if there is one, you are done.
+
+	<li> If you are at the end of a queue, pick the next queue
+
+	<li> If there is no next queue, create a new subset-sum queue with a configurable duration, continue with this queue
+		as "next queue"
+
+	<li> For the next queue, check:
+		<ul>
+			<li> Is this queue scheduled?
+				<ul>
+					<li> If yes: If it is significantly (!) in the future, insert a subset-sum queue, start this algorithm again
+					<li> If no:
+						<ul>
+							<li> Set the offset (and entry offsets) to the current timestamp
+							<li> Recalculate the main queue
+							<li> Play the first song, you are done.
+						</ul>
+				</ul>
+
+			<li> Is it an empty (!) subset sum queue?
+				<ul>
+					<li> If the next queue is not scheduled, remove this subset sum queue, recalculate the main queue and start this algorithm again
+					<li> If the next queue is scheduled:
+						<ul>
+							<li> Set the offset to the current timestamp, adjust the duration to fill in until the next queue scheduled timestamp
+							<li> Fill the queue using the subset-sum algorithm
+							<li> If the subset-sum algorithm fails: TODO
+						</ul>
+					<li> Recalculate the main queue, ensure that the offset of the next queue is correct (which most likey diverts from the scheduled timestamp)
+					<li> Play the first song, you are done.
+				</ul>
+		</ul>
+		<li> Play the first song
+</ul>
+
+TODO: "next queue" referes to differt queues, depending on the position in the algorithm, this term is used.

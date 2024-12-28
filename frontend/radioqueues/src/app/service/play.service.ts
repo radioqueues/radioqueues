@@ -48,21 +48,65 @@ export class PlayService {
 		return path;
 	}
 
+	// TODO: reimplement this method. The current implementation is not correct.
 	pickFirst(entry: Entry): Entry[] {
 		let queue = entry as Queue;
 		let path: QueuePath = [];
 
 		while (queue.entries && queue.entries.length > 0) {
 			let e = queue.entries[0];
+			path.push(e);
 			if (e.queueRef) {
 				queue = this.queues[e.queueRef];
-				path.push(queue);
 			} else {
-				path.push(e);
 				return path;
 			}
 		}
 		return path;
+	}
+
+	isQueue(path?: QueuePath): boolean {
+		if (!path?.length) {
+			return false;
+		}
+		let lastElement = path[path.length - 1];
+		return !!(lastElement as Queue).entries || lastElement.queueRef;
+	}
+
+	isEntry(path?: QueuePath): boolean {
+		if (!path?.length) {
+			return false;
+		}
+		let lastElement = path[path.length - 1];
+		return !(lastElement as Queue).entries && !lastElement.queueRef;
+	}
+
+	// TODO: write test
+	pickNextEntryInSameQueue(path?: QueuePath): QueuePath | undefined {
+		if (!path || !path.length) {
+			return undefined;
+		}
+		let queue = this.queueService.resolveQueue(path[path.length - 1]);
+		if (this.isQueue(path)) {
+			let additionalPath = this.pickFirst(queue);
+			return [...path.slice(0, path.length), ...additionalPath!];
+		}
+
+		if (path.length < 2) {
+			console.log("QueuePath " + path + " has only one component and this component is not a queue");
+			return undefined;
+		}
+
+		queue = this.queueService.resolveQueue(path[path.length - 2]);
+		if (!queue?.entries?.length) {
+			console.log("Queue at second but last component of QueuePath " + path + " has no entries");
+			return undefined;
+		}
+		let idx = queue.entries.indexOf(path[path.length - 1]);
+		if (idx < 0 || idx >= queue.entries.length - 1) {
+			return undefined;
+		}
+		return [...path.slice(0, -1), queue.entries[idx + 1]];
 	}
 
 	pickNext(path?: QueuePath): QueuePath | undefined {
@@ -95,7 +139,7 @@ export class PlayService {
 			}
 			if (queue.entries.length > idx + 1) {
 				let additionalPath = this.pickFirst(queue.entries[idx + 1]);
-				return [...path.slice(0, -1 * entryIndex), queue.entries[idx + 1], ...additionalPath];
+				return [...path.slice(0, -1 * entryIndex), queue.entries[idx + 1], ...additionalPath!];
 			}
 		}
 		return undefined;

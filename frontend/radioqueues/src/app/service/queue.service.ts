@@ -381,4 +381,14 @@ export class QueueService {
 			}
 		}
 	}
+
+	isSubsetSumQueue(queue?: Queue): boolean {
+		if (!queue) {
+			return false;
+		}
+		let queueTypeName = queue.type;
+		let queueType = this.queueTypes[queueTypeName];
+		return queueType?.scheduleStrategy === "subset-sum";
+	}
+
 }

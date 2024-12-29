@@ -17,6 +17,8 @@ export class PlayService {
 	queueService = inject(QueueService);
 	queues!: Record<string, Queue>;
 
+	private current: QueuePath | undefined;
+
 	constructor() {
 		this.init();
 	}
@@ -48,7 +50,6 @@ export class PlayService {
 		return path;
 	}
 
-	// TODO: reimplement this method. The current implementation is not correct.
 	pickFirst(entry: Entry): Entry[] {
 		let queue = entry as Queue;
 		let path: QueuePath = [];
@@ -81,7 +82,6 @@ export class PlayService {
 		return !(lastElement as Queue).entries && !lastElement.queueRef;
 	}
 
-	// TODO: write test
 	pickNextEntryInSameQueue(path?: QueuePath): QueuePath | undefined {
 		if (!path || !path.length) {
 			return undefined;
@@ -145,6 +145,22 @@ export class PlayService {
 		return undefined;
 	}
 
+	pickNextQueue(path: QueuePath | undefined): Queue | undefined {
+		if (this.empty(path)) {
+			return undefined;
+		}
+		let mainQueue = this.queueService.getQueueByType("Main Queue")!;
+		if (!mainQueue.entries) {
+			return undefined;
+		}
+
+		let idx = mainQueue.entries.indexOf(path![0]);
+		if (idx < 0 || (idx + 1) >= mainQueue.entries.length) {
+			return undefined;
+		}
+		return mainQueue.entries![idx + 1] as Queue;
+	}
+
 	handleEndOfMainQueue() {
 		let entry = this.queueService.createSubsetSumEntry(new Date(), 15 * MINUTES);
 		let mainQueue = this.queueService.getQueueByType("Main Queue")!;
@@ -152,5 +168,104 @@ export class PlayService {
 			mainQueue.entries = [];
 		}
 		mainQueue.entries.push(entry);
+		// TODO: fill subset-sum queue
+		return entry;
 	}
+
+	empty(path?: QueuePath): boolean {
+		return !path || !path.length;
+	}
+
+
+	logic() {
+		let path = this.current;
+		let now = new Date();
+
+		// at program start, pick based on current time
+		if (this.empty(path)) {
+			path = this.pickByTime(new Date());
+		}
+
+		// end of main queue?
+		if (this.empty(path)) {
+			let queue = this.handleEndOfMainQueue()
+			path = [queue, ...this.pickFirst(queue)];
+			this.current = path;
+			return;
+		}
+
+		// play next entry in same queue
+		path = this.pickNextEntryInSameQueue(this.current);
+		if (!this.empty(path)) {
+			this.current = path;
+			return;
+		}
+
+		// end of main queue?
+		let nextQueue = this.pickNextQueue(path);
+		if (!nextQueue) {
+			let queue = this.handleEndOfMainQueue();
+			path = [queue, ...this.pickFirst(queue)];
+			this.current = path;
+			return;
+		}
+
+		nextQueue.offset = now;
+
+		// Is this queue scheduled?
+		if (nextQueue.scheduled) {
+
+			
+			let diff = nextQueue.scheduled.getTime() - now.getTime();
+			if (diff > 2 * MINUTES) {
+				let queue = this.queueService.createSubsetSumEntry(now, diff);
+				// TODO: insert queue into main queue at the correct position
+				// TODO: fill subset-sum queue
+				// TODO: recalculate main queue // use actual offset on next+1
+				path = [queue, ...this.pickFirst(queue)];
+				this.current = path;
+				return;
+			}
+
+			// TODO: set offset of nextQueue to now
+			// TODO: recalculate the main queue using the current time as offset to nextQueue
+			path = [nextQueue, ...this.pickFirst(nextQueue)];
+			this.current = path;
+			return;
+		}
+
+		// is this an empty subset sum queue?
+		if (this.queueService.isSubsetSumQueue(nextQueue) && !nextQueue.entries?.length) {
+			let nextNextQueue = this.pickNextQueue([nextQueue]);
+			if (!nextNextQueue) {
+				// TODO: fill subset-sum queue
+				path = [nextQueue, ...this.pickFirst(nextQueue)];
+				this.current = path;
+				return;
+			}
+			
+			// is the next-next queue not scheduled?
+			if (!nextNextQueue.scheduled) {
+				// TODO: remove this subset sum queue
+				// TODO: recalculate the main queue
+				// TODO: start this algorithm again
+			}
+
+			if (nextNextQueue.scheduled) {
+				let duration = nextNextQueue.scheduled.getTime() - now.getTime();
+                nextQueue.duration = duration;
+				// TODO: fill subset-sum queue
+				// TODO: recalculate main queue // use actual offset on next+1
+                path = [nextQueue, ...this.pickFirst(nextQueue)];
+				this.current = path;
+				return;
+			}
+		}
+
+		// Play the first song from nextQueue
+		path = [nextQueue, ...this.pickFirst(nextQueue)];
+		this.current = path;
+	}
+
+
 }

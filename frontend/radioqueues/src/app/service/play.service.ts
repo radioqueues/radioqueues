@@ -6,6 +6,7 @@ import { QueueService } from "./queue.service";
 import { Queue } from "../model/queue";
 import { QueuePath } from "../model/queue-path";
 import { MINUTES } from "../model/time";
+import { DateTimeUtil } from "../util/date-time-util";
 
 @Injectable({
 	providedIn: 'root'
@@ -162,7 +163,7 @@ export class PlayService {
 	}
 
 	handleEndOfMainQueue() {
-		let entry = this.queueService.createSubsetSumEntry(new Date(), 15 * MINUTES);
+		let entry = this.queueService.createSubsetSumEntry(DateTimeUtil.now(), 15 * MINUTES);
 		let mainQueue = this.queueService.getQueueByType("Main Queue")!;
 		if (!mainQueue.entries) {
 			mainQueue.entries = [];
@@ -183,7 +184,7 @@ export class PlayService {
 
 		// at program start, pick based on current time
 		if (this.empty(path)) {
-			path = this.pickByTime(new Date());
+			path = this.pickByTime(now);
 		}
 
 		// end of main queue?

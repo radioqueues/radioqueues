@@ -211,7 +211,7 @@ export class QueueService {
 			return;
 		}
 
-		let now = new Date();
+		let now = DateTimeUtil.now();
 		let offset = queue.offset?.getTime() || 0;
 		let durationSum = 0;
 		for (let i = 0; i < queue.entries.length; i++) {
@@ -342,7 +342,7 @@ export class QueueService {
 		if (!queue) {
 			return;
 		}
-	    let historyEntry = new Entry(entry.name, undefined, new Date(), entry.duration, entry.color);
+		let historyEntry = new Entry(entry.name, undefined, DateTimeUtil.now(), entry.duration, entry.color);
 		queue.entries.push(historyEntry);
 		this.databaseService.saveQueues();
 	}

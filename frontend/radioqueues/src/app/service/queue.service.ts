@@ -385,7 +385,8 @@ export class QueueService {
 		if (!queue) {
 			return false;
 		}
-		let queueTypeName = queue.type;
+		let resolvedQueue = this.resolveQueue(queue);
+		let queueTypeName = resolvedQueue.type;
 		let queueType = this.queueTypes[queueTypeName];
 		return queueType?.scheduleStrategy === "subset-sum";
 	}

@@ -52,7 +52,7 @@ export class PlayService {
 	}
 
 	pickFirst(entry: Entry): Entry[] {
-		let queue = entry as Queue;
+		let queue = this.queueService.resolveQueue(entry);
 		let path: QueuePath = [];
 
 		while (queue.entries && queue.entries.length > 0) {

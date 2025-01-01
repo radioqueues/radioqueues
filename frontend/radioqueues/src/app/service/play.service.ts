@@ -178,7 +178,7 @@ export class PlayService {
 	}
 
 
-	logic() {
+	async logic() {
 		let mainQueue = this.queueService.getQueueByType("Main Queue")!;
 		let path = this.current;
 		let now = DateTimeUtil.now();
@@ -204,6 +204,8 @@ export class PlayService {
 			return;
 		}
 
+		path = this.current;
+
 		// end of main queue?
 		let nextQueue = this.pickNextQueue(path);
 		if (!nextQueue) {
@@ -222,7 +224,7 @@ export class PlayService {
 			let diff = nextQueue.scheduled.getTime() - now.getTime();
 			if (diff > 2 * MINUTES) {
 				let queue = this.queueService.createSubsetSumEntry(now, diff);
-				this.queueService.fillQueue(queue);
+				await this.queueService.fillQueue(queue);
 				this.queueService.insertIntoQueue(mainQueue, queue);
 				// TODO: recalculate main queue // use actual offset on next+1
 				path = [queue, ...this.pickFirst(queue)];
@@ -242,7 +244,7 @@ export class PlayService {
 		if (this.queueService.isSubsetSumQueue(nextQueue) && !nextQueue.entries?.length) {
 			let nextNextQueue = this.pickNextQueue([nextQueue]);
 			if (!nextNextQueue) {
-				this.queueService.fillQueue(nextQueue);
+				await this.queueService.fillQueue(nextQueue);
 				path = [nextQueue, ...this.pickFirst(nextQueue)];
 				this.current = path;
 				return;
@@ -259,7 +261,7 @@ export class PlayService {
 			if (nextNextQueue.scheduled) {
 				let duration = nextNextQueue.scheduled.getTime() - now.getTime();
 				nextQueue.duration = duration;
-				this.queueService.fillQueue(nextQueue);
+				await this.queueService.fillQueue(nextQueue);
 				// TODO: recalculate main queue // use actual offset on next+1
 				path = [nextQueue, ...this.pickFirst(nextQueue)];
 				this.current = path;

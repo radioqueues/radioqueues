@@ -11,7 +11,6 @@ import { DateTimeUtil } from "../util/date-time-util";
 	providedIn: 'root'
 })
 export class QueueService {
-
 	private readonly databaseService = inject(DatabaseService);
 	private readonly dynamicQueueService = inject(DynamicQueueService);
 
@@ -389,6 +388,16 @@ export class QueueService {
 		let queueTypeName = queue.type;
 		let queueType = this.queueTypes[queueTypeName];
 		return queueType?.scheduleStrategy === "subset-sum";
+	}
+
+	// TODO: Test for off by one errors
+	// TODO: Handle empty queues
+	// TODO: Test inserting before first entry
+	// TODO: Test inserting after last entry
+	insertIntoQueue(queue: Queue, entry: Entry) {
+		let index = this.getIndexByOffset(queue, entry.offset!);
+		queue.entries.splice(index, 0, entry);
+		this.recalculateQueue(queue);
 	}
 
 }

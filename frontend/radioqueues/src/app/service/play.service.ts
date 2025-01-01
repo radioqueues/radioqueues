@@ -18,7 +18,7 @@ export class PlayService {
 	queueService = inject(QueueService);
 	queues!: Record<string, Queue>;
 
-	private current: QueuePath | undefined;
+	current: QueuePath | undefined;
 
 	constructor() {
 		this.init();
@@ -179,14 +179,16 @@ export class PlayService {
 
 
 	logic() {
+		let mainQueue = this.queueService.getQueueByType("Main Queue")!;
 		let path = this.current;
-		let now = new Date();
+		let now = DateTimeUtil.now();
 
 		// at program start, pick based on current time
 		if (this.empty(path)) {
 			path = this.pickByTime(now);
 		}
 
+		// TODO: handle case in which "now" before the first entry
 		// end of main queue?
 		if (this.empty(path)) {
 			let queue = this.handleEndOfMainQueue()
@@ -196,7 +198,7 @@ export class PlayService {
 		}
 
 		// play next entry in same queue
-		path = this.pickNextEntryInSameQueue(this.current);
+		path = this.pickNextEntryInSameQueue(path);
 		if (!this.empty(path)) {
 			this.current = path;
 			return;
@@ -216,20 +218,21 @@ export class PlayService {
 		// Is this queue scheduled?
 		if (nextQueue.scheduled) {
 
-			
+
 			let diff = nextQueue.scheduled.getTime() - now.getTime();
 			if (diff > 2 * MINUTES) {
 				let queue = this.queueService.createSubsetSumEntry(now, diff);
-				// TODO: insert queue into main queue at the correct position
-				// TODO: fill subset-sum queue
+				this.queueService.fillQueue(queue);
+				this.queueService.insertIntoQueue(mainQueue, queue);
 				// TODO: recalculate main queue // use actual offset on next+1
 				path = [queue, ...this.pickFirst(queue)];
 				this.current = path;
 				return;
 			}
 
-			// TODO: set offset of nextQueue to now
+			nextQueue.offset = now;
 			// TODO: recalculate the main queue using the current time as offset to nextQueue
+			this.queueService.recalculateQueue(mainQueue);
 			path = [nextQueue, ...this.pickFirst(nextQueue)];
 			this.current = path;
 			return;
@@ -239,25 +242,26 @@ export class PlayService {
 		if (this.queueService.isSubsetSumQueue(nextQueue) && !nextQueue.entries?.length) {
 			let nextNextQueue = this.pickNextQueue([nextQueue]);
 			if (!nextNextQueue) {
-				// TODO: fill subset-sum queue
+				this.queueService.fillQueue(nextQueue);
 				path = [nextQueue, ...this.pickFirst(nextQueue)];
 				this.current = path;
 				return;
 			}
-			
+
 			// is the next-next queue not scheduled?
 			if (!nextNextQueue.scheduled) {
-				// TODO: remove this subset sum queue
-				// TODO: recalculate the main queue
-				// TODO: start this algorithm again
+				this.queueService.deleteSubqueueReferenceFromQueue(mainQueue, nextQueue);
+				this.queueService.recalculateQueue(mainQueue);
+				// start the algorithm again // TODO: make it more effient by not starting from scratch
+				return this.logic();
 			}
 
 			if (nextNextQueue.scheduled) {
 				let duration = nextNextQueue.scheduled.getTime() - now.getTime();
-                nextQueue.duration = duration;
-				// TODO: fill subset-sum queue
+				nextQueue.duration = duration;
+				this.queueService.fillQueue(nextQueue);
 				// TODO: recalculate main queue // use actual offset on next+1
-                path = [nextQueue, ...this.pickFirst(nextQueue)];
+				path = [nextQueue, ...this.pickFirst(nextQueue)];
 				this.current = path;
 				return;
 			}

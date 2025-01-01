@@ -45,7 +45,7 @@ export class DatabaseService {
 			"color": "#0A0",
 			"scheduleTime": "xx:00:00",
 			"scheduleStrategy": "clone"
-			},
+		},
 		"Music Request": {
 			"name": "Music Request",
 			"color": "#00A",
@@ -63,7 +63,7 @@ export class DatabaseService {
 			"scheduleStrategy": "subset-sum",
 			"folder": "Musik"
 		}
-		
+
 	};
 
 	private files: Record<string, FileMetaData> = {};
@@ -81,26 +81,26 @@ export class DatabaseService {
 		}
 		return value;
 	}
-	
+
 	public async init() {
 		await this.fileSystemService.init();
 		if (!this.fileSystemService.rootHandle) {
 			console.error("Called DatabaseService.init without valid FileSystemService.rootHandle");
 			return;
 		}
-			
+
 		try {
 			let queues = await this.fileSystemService.getJsonFromFilename("radioqueues/queues.json", this.jsonDeserializer);
 			if (queues.debugForceToday) {
 				DatabaseService.debugForceToday(queues);
 			}
 			this.queues = queues;
-		} catch(e) {
+		} catch (e) {
 			console.log("loading queues", e);
 		}
 		try {
 			this.queueTypes = await this.fileSystemService.getJsonFromFilename("radioqueues/queue-types.json")
-		} catch(e) {
+		} catch (e) {
 			console.log("loading queueTypes", e);
 		}
 
@@ -164,4 +164,11 @@ export class DatabaseService {
 			}
 		}
 	}
+
+	initTest(queues: Record<string, Queue>, queueTypes: Record<string, QueueType>, files: Record<string, FileMetaData>) {
+		this.queues = queues;
+		this.queueTypes = queueTypes;
+		this.files = files;
+	}
+
 }

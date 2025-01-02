@@ -6,6 +6,7 @@ import { DatabaseService } from "./database.service";
 import { DynamicQueueService } from "./dynamic-queue.service";
 import { FileMetaData } from "../model/file-meta-data";
 import { DateTimeUtil } from "../util/date-time-util";
+import { SECONDS } from "../model/time";
 
 @Injectable({
 	providedIn: 'root'
@@ -13,6 +14,8 @@ import { DateTimeUtil } from "../util/date-time-util";
 export class QueueService {
 	private readonly databaseService = inject(DatabaseService);
 	private readonly dynamicQueueService = inject(DynamicQueueService);
+
+	private readonly tolerance = 120 * SECONDS;
 
 	private formatter: Intl.DateTimeFormat;
 	queueTypes!: Record<string, QueueType>;
@@ -222,24 +225,30 @@ export class QueueService {
 			}
 			if (entry.scheduled) {
 				let subsetSumEntry: Entry | undefined = undefined;
-
-				// If this is the first entry, or the previous entry is not of type subset-sub,
-				// We need to insert one.
-				if (i == 0 || this.getQueueTypeFromEntry(queue.entries[i - 1])?.scheduleStrategy !== "subset-sum") {
-					if (entry.scheduled > start) {
-						subsetSumEntry = this.createSubsetSumEntry(start, 0);
-						queue.entries.splice(i, 0, subsetSumEntry);
-						i++;
-					}
-				} else {
-					// TODO: entry with queueRef BUG
+				let diff = entry.scheduled.getTime() - (offset + durationSum);
+				
+				if (i > 0 && this.isEmptySubsetSumQueue(queue.entries[i - 1])) {
 					subsetSumEntry = queue.entries[i - 1];
 				}
+
+				// TODO: only insert a subset-sum queue, if there difference between the calcuclated offset and the scheduled time is above the tollerance
+				if (!subsetSumEntry && (diff > this.tolerance)) {
+					// TODO: treat non empty subset-sum queues as normal queues, i. r. do not change duration and add a second subset-sum queue afterwards, if required
+					// If this is the first entry, or the previous entry is not of type subset-sub,
+					// We need to insert one.
+					if (i == 0 || !this.isEmptySubsetSumQueue(queue.entries[i - 1])) {
+						if (entry.scheduled > start) {
+							subsetSumEntry = this.createSubsetSumEntry(start, 0);
+							queue.entries.splice(i, 0, subsetSumEntry);
+							i++;
+						}
+					}
+				}
+
 				if (subsetSumEntry) {
 					if (!subsetSumEntry.duration) {
 						subsetSumEntry.duration = 0;
 					}
-					let diff = entry.scheduled.getTime() - (offset + durationSum);
 					if (diff < 0) {
 						if (subsetSumEntry.duration && subsetSumEntry.duration >= -diff) {
 							subsetSumEntry.duration = subsetSumEntry.duration + diff;
@@ -260,7 +269,7 @@ export class QueueService {
 					}
 				}
 
-				entry.offset = new Date(offset + durationSum);;
+				entry.offset = new Date(offset + durationSum);
 				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
 			} else {
 				entry.offset = start;
@@ -282,6 +291,14 @@ export class QueueService {
 		} else if (save && mainQueue) {
 			this.recalculateQueue(mainQueue);
 		}
+	}
+
+	private isEmptySubsetSumQueue(entry: Entry) {
+		if (this.getQueueTypeFromEntry(entry)?.scheduleStrategy !== "subset-sum") {
+			return false;
+		}
+		let queue = this.resolveQueue(entry);
+		return !(queue.entries?.length > 0);
 	}
 
 	private getIndexByOffset(queue: Queue, offset: Date) {

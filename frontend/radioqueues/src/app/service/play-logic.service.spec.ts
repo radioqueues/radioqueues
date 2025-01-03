@@ -74,18 +74,30 @@ describe('PlayService (logic)', () => {
 	it('should fill subset-sum queue', async () => {
 		DateTimeUtil.fakeNow = new Date("3025-01-01T00:00:26.123Z");
 		playService.current = [mainQueue.entries[0], queueService.resolveQueue(mainQueue.entries[0]).entries[3]];
-		console.log(queueService.queues, queueService.files);
 
 		await playService.logic();
 		let current = playService.current;
 		console.log(queueService.queues, queueService.files, current);
 		expect(current.length).toBe(2);
-		// expect(current[0].offset?.toString()).toBe(new Date("3025-01-01T00:00:26.123Z").toString());
-		expect(current[0].offset?.toString()).toEqual(new Date("3025-01-01T00:00:27.123Z").toString());
-		
+		expect(current[0].offset?.toString()).toBe(new Date("3025-01-01T00:00:26.123Z").toString());
+
 		let next = playService.pickNextQueue(current);
-		// expect(next?.offset?.toString()).toEqual(new Date("3025-01-01T00:14:51.123Z").toString());
 		expect(next?.offset?.toString()).toEqual(new Date("3025-01-01T00:14:52.123Z").toString());
+	});
+
+	it('should play the next queue after subset-sum queue', async () => {
+		DateTimeUtil.fakeNow = new Date("3025-01-01T00:00:26.123Z");
+		playService.current = [mainQueue.entries[0], queueService.resolveQueue(mainQueue.entries[0]).entries[3]];
+
+		await playService.logic();
+		let current = playService.current;
+		DateTimeUtil.fakeNow = new Date("3025-01-01T00:14:52.123Z");
+
+		await playService.logic();
+		current = playService.current
+		console.log(queueService.queues, queueService.files, current);
+		expect(current.length).toBe(2);
+		expect(current[0]).toBe(mainQueue.entries[2]);
 	});
 
 });

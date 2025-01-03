@@ -219,7 +219,7 @@ export class QueueService {
 		for (let i = 0; i < queue.entries.length; i++) {
 			let entry = queue.entries[i];
 			let start = new Date(offset + durationSum);
-			if (start < now && (!entry.scheduled || entry.scheduled < now)) {
+			if ((start <= now && (!entry.scheduled || entry.scheduled <= now)) || (entry.offset && entry.offset <= now)) {
 				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
 				continue;
 			}

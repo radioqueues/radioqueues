@@ -162,14 +162,14 @@ export class PlayService {
 		return mainQueue.entries![idx + 1] as Queue;
 	}
 
-	handleEndOfMainQueue() {
+	async handleEndOfMainQueue() {
 		let entry = this.queueService.createSubsetSumEntry(DateTimeUtil.now(), 15 * MINUTES);
 		let mainQueue = this.queueService.getQueueByType("Main Queue")!;
 		if (!mainQueue.entries) {
 			mainQueue.entries = [];
 		}
 		mainQueue.entries.push(entry);
-		// TODO: fill subset-sum queue
+		await this.queueService.fillQueue(entry);
 		return entry;
 	}
 
@@ -191,25 +191,34 @@ export class PlayService {
 		// TODO: handle case in which "now" before the first entry
 		// end of main queue?
 		if (this.empty(path)) {
-			let queue = this.handleEndOfMainQueue()
+			let queue = await this.handleEndOfMainQueue()
 			path = [queue, ...this.pickFirst(queue)];
 			this.current = path;
 			return;
 		}
 
 		// play next entry in same queue
-		path = this.pickNextEntryInSameQueue(path);
-		if (!this.empty(path)) {
-			this.current = path;
+		let tempPath = this.pickNextEntryInSameQueue(path);
+		if (!this.empty(tempPath) && tempPath!.length > 1) {
+			this.current = tempPath;
 			return;
 		}
-
-		path = this.current;
 
 		// end of main queue?
 		let nextQueue = this.pickNextQueue(path);
 		if (!nextQueue) {
-			let queue = this.handleEndOfMainQueue();
+
+			// is the last queue an empty subset sum queue? Fill it.
+			// TODO: test case in which the pre-existing subset-sum queue is already completely in the past
+			if (path && this.queueService.isEmptySubsetSumQueue(path[0])) {
+				await this.queueService.fillQueue(path[0]);
+				this.queueService.recalculateQueue(mainQueue);
+				path = [path[0], ...this.pickFirst(path[0])];
+				this.current = path;
+				return;
+			}
+
+			let queue = await this.handleEndOfMainQueue();
 			path = [queue, ...this.pickFirst(queue)];
 			this.current = path;
 			return;
@@ -219,7 +228,6 @@ export class PlayService {
 
 		// Is this queue scheduled?
 		if (nextQueue.scheduled) {
-
 
 			let diff = nextQueue.scheduled.getTime() - now.getTime();
 			if (diff > 2 * MINUTES) {
@@ -273,6 +281,5 @@ export class PlayService {
 		path = [nextQueue, ...this.pickFirst(nextQueue)];
 		this.current = path;
 	}
-
 
 }

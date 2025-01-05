@@ -293,7 +293,7 @@ export class QueueService {
 		}
 	}
 
-	private isEmptySubsetSumQueue(entry: Entry) {
+	public isEmptySubsetSumQueue(entry: Entry) {
 		if (this.getQueueTypeFromEntry(entry)?.scheduleStrategy !== "subset-sum") {
 			return false;
 		}
@@ -398,7 +398,7 @@ export class QueueService {
 		}
 	}
 
-	isSubsetSumQueue(queue?: Queue): boolean {
+	isSubsetSumQueue(queue?: Entry): boolean {
 		if (!queue) {
 			return false;
 		}

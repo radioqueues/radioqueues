@@ -213,6 +213,8 @@ export class QueueService {
 			return;
 		}
 
+		// TODO: offset and durationSum should not start on the queue offset but on the last entry that is in the past
+
 		let now = DateTimeUtil.now();
 		let offset = queue.offset?.getTime() || 0;
 		let durationSum = 0;

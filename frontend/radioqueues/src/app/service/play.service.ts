@@ -192,15 +192,14 @@ export class PlayService {
 		// end of main queue?
 		if (this.empty(path)) {
 			let queue = await this.handleEndOfMainQueue()
-			path = [queue, ...this.pickFirst(queue)];
-			this.current = path;
+			await this.prepareCurrent([queue]);
 			return;
 		}
 
 		// play next entry in same queue
 		let tempPath = this.pickNextEntryInSameQueue(path);
 		if (!this.empty(tempPath) && tempPath!.length > 1) {
-			this.current = tempPath;
+			await this.prepareCurrent(tempPath);
 			return;
 		}
 
@@ -211,16 +210,12 @@ export class PlayService {
 			// is the last queue an empty subset sum queue? Fill it.
 			// TODO: test case in which the pre-existing subset-sum queue is already completely in the past
 			if (path && this.queueService.isEmptySubsetSumQueue(path[0])) {
-				await this.queueService.fillQueue(path[0]);
-				this.queueService.recalculateQueue(mainQueue);
-				path = [path[0], ...this.pickFirst(path[0])];
-				this.current = path;
+				await this.prepareCurrent([path[0]]);
 				return;
 			}
 
 			let queue = await this.handleEndOfMainQueue();
-			path = [queue, ...this.pickFirst(queue)];
-			this.current = path;
+			await this.prepareCurrent([queue]);
 			return;
 		}
 
@@ -235,16 +230,14 @@ export class PlayService {
 				await this.queueService.fillQueue(queue);
 				this.queueService.insertIntoQueue(mainQueue, queue);
 				// TODO: recalculate main queue // use actual offset on next+1
-				path = [queue, ...this.pickFirst(queue)];
-				this.current = path;
+				await this.prepareCurrent([queue]);
 				return;
 			}
 
 			nextQueue.offset = now;
 			// TODO: recalculate the main queue using the current time as offset to nextQueue
 			this.queueService.recalculateQueue(mainQueue);
-			path = [nextQueue, ...this.pickFirst(nextQueue)];
-			this.current = path;
+			await this.prepareCurrent([nextQueue]);
 			return;
 		}
 
@@ -252,9 +245,7 @@ export class PlayService {
 		if (this.queueService.isSubsetSumQueue(nextQueue) && !nextQueue.entries?.length) {
 			let nextNextQueue = this.pickNextQueue([nextQueue]);
 			if (!nextNextQueue) {
-				await this.queueService.fillQueue(nextQueue);
-				path = [nextQueue, ...this.pickFirst(nextQueue)];
-				this.current = path;
+				await this.prepareCurrent([nextQueue]);
 				return;
 			}
 
@@ -269,17 +260,42 @@ export class PlayService {
 			if (nextNextQueue.scheduled) {
 				let duration = nextNextQueue.scheduled.getTime() - now.getTime();
 				nextQueue.duration = duration;
-				await this.queueService.fillQueue(nextQueue);
-				// TODO: recalculate main queue // use actual offset on next+1
-				path = [nextQueue, ...this.pickFirst(nextQueue)];
-				this.current = path;
+				await this.prepareCurrent([nextQueue]);
 				return;
 			}
 		}
 
 		// Play the first song from nextQueue
-		path = [nextQueue, ...this.pickFirst(nextQueue)];
-		this.current = path;
+		await this.prepareCurrent([nextQueue]);
 	}
 
+	private async prepareCurrent(path?: QueuePath) {
+		if (!path || this.empty(path)) {
+			this.current = undefined;
+			return;
+		}
+
+		let now =  DateTimeUtil.now();
+		let queueRef = path[0];
+		let queue = this.queueService.resolveQueue(queueRef);
+
+		if (this.queueService.isEmptySubsetSumQueue(queueRef)) {
+			await this.queueService.fillQueue(queueRef);
+			let mainQueue = this.queueService.getQueueByType("Main Queue")!;
+			this.queueService.recalculateQueue(mainQueue);
+		}
+
+		if (this.isQueue(path)) {
+			if (path.length === 1) {
+				queueRef.offset = now
+				queue.offset = now;
+			}
+			path = [...path, ...this.pickFirst(path[path.length - 1])];
+		}
+
+		let entry = path[path.length - 1];
+		entry.offset = now;
+
+		this.current = path;
+	}
 }

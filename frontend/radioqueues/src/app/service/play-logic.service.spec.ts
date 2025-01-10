@@ -56,12 +56,12 @@ describe('PlayService (logic)', () => {
 		let current = playService.current;
 		expect(current).toEqual([
 			{ "color": "#0A0", "name": "News 01:00", "offset": new Date("3025-01-01T00:00:00.383Z"), "duration": 27216, "queueRef": "m5cxtb0g-b3709016-1dce-4bc7-b279-7edb79049bb6", "scheduled": new Date("3025-01-01T00:00:00.383Z") },
-			{ "color": "#0A0", "name": "news/Heat! Our count.mp3", "offset": new Date("3025-01-01T00:00:03.743Z"), "duration": 13560 }
+			{ "color": "#0A0", "name": "news/Heat! Our count.mp3", "offset": new Date("3025-01-01T00:00:01.383Z"), "duration": 13560 }
 		]);
 	});
 
 	it('should pick next in same queue', async () => {
-		DateTimeUtil.fakeNow = new Date("3025-01-01T00:00:01.383Z");
+		DateTimeUtil.fakeNow = new Date("3025-01-01T00:00:17.303Z");
 		playService.current = [mainQueue.entries[0], queueService.resolveQueue(mainQueue.entries[0]).entries[1]];
 		await playService.logic();
 		let current = playService.current;

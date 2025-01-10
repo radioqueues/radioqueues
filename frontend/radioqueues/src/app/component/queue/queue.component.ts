@@ -110,6 +110,11 @@ export class QueueComponent {
 				this.errorService.errorDialog("Cannot move an entry into the past.");
 				return;
 			}
+			if (movedToEntry?.offset) {
+				entry.offset = new Date(movedToEntry.offset.getTime() + movedToEntry.duration!);
+			} else {
+				entry.offset = new Date("9999-12-31 00:00:00");
+			}
 			entry.color = this.queue.color;
 			event.container.data.splice(event.currentIndex, 0, entry);
 		}

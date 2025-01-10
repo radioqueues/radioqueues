@@ -1,10 +1,11 @@
   <label for="volume">Volume:</label>
   <input id="volume" type="range" min="0" max="1" step="0.01" [(ngModel)]="volumne" />
 
-<span [style.color]="currentParentEntry?.color">{{currentParentEntry?.name | title}}</span>
-➡
-<span [style.color]="currentEntry?.color">{{currentEntry?.name | title}}</span>
-
+@if (current && current.length > 1) {
+	<span [style.color]="current[0].color">{{current[0].name | title}}</span>
+	➡
+	<span [style.color]="current[1].color">{{current[1].name | title}}</span>
+}
 &nbsp;
 
 {{remainingTime | duration}}

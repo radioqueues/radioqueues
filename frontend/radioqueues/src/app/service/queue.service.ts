@@ -7,6 +7,7 @@ import { DynamicQueueService } from "./dynamic-queue.service";
 import { FileMetaData } from "../model/file-meta-data";
 import { DateTimeUtil } from "../util/date-time-util";
 import { SECONDS } from "../model/time";
+import { ErrorService } from "./error.service";
 
 @Injectable({
 	providedIn: 'root'
@@ -14,6 +15,7 @@ import { SECONDS } from "../model/time";
 export class QueueService {
 	private readonly databaseService = inject(DatabaseService);
 	private readonly dynamicQueueService = inject(DynamicQueueService);
+	private readonly errorService = inject(ErrorService);
 
 	private readonly tolerance = 120 * SECONDS;
 
@@ -182,6 +184,10 @@ export class QueueService {
 
 		let filenames = await this.dynamicQueueService.scheduleQueue(queue.type, entry.duration);
 		console.log("scheduling", filenames);
+		if (!filenames) {
+			this.errorService.errorDialog("Cannot create music queue because the music folder is undefined or empty: " + queueType.folder);
+			return;
+		}
 
 		let files = await this.databaseService.getFiles();
 		let durationSum = 0;

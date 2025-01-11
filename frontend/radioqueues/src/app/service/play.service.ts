@@ -288,6 +288,10 @@ export class PlayService {
 
 		if (this.queueService.isEmptySubsetSumQueue(queueRef)) {
 			await this.queueService.fillQueue(queueRef);
+			if (!queue.entries?.length) {
+				this.current = [queueRef];
+				return;
+			}
 			let mainQueue = this.queueService.getQueueByType("Main Queue")!;
 			this.queueService.recalculateQueue(mainQueue);
 		}

@@ -48,6 +48,11 @@ export class AudioControlComponent {
 			this.errorService.errorDialog("No entry to play");
 			return;
 		}
+		if (this.current.length === 1) {
+			this.url = undefined;
+			setTimeout(() => {this.onEnded()}, this.current[0].duration);
+			return;
+		}
 		let currentEntry: Entry = this.current[this.current.length - 1];
 		try {
 			this.audioFileService.markFileAsPlayed(currentEntry.name!);

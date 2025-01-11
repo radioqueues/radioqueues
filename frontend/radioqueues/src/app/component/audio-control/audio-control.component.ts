@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 
 import { FileSystemService } from 'src/app/service/filesystem.service';
 import { DatabaseService } from 'src/app/service/database.service';
@@ -12,6 +12,7 @@ import { AudioFileService } from 'src/app/service/audio-file.service';
 import { ErrorService } from 'src/app/service/error.service';
 import { PlayService } from 'src/app/service/play.service';
 import { QueuePath } from 'src/app/model/queue-path';
+import { ProgressStatusService } from 'src/app/service/progress-status.service';
 
 @Component({
 	selector: 'app-audio-control',
@@ -19,12 +20,14 @@ import { QueuePath } from 'src/app/model/queue-path';
 	imports: [DurationPipe, FormsModule, TitlePipe],
 	standalone: true
 })
-export class AudioControlComponent {
+export class AudioControlComponent implements AfterViewInit {
+
 	audioFileService = inject(AudioFileService);
 	databaseService = inject(DatabaseService);
 	errorService = inject(ErrorService);
 	fileSystemService = inject(FileSystemService);
 	playService = inject(PlayService);
+	progressStatusService = inject(ProgressStatusService);
 	queueService = inject(QueueService);
 
 	@Input() queues!: Record<string, Queue>;
@@ -37,8 +40,18 @@ export class AudioControlComponent {
 	volumne = 0.8;
 	current?: QueuePath;
 
-	async onPlayClicked() {
-		this.play();
+	startWhenReady() {
+		setTimeout(() => {
+			if (this.playService.queues && !this.progressStatusService.lastStatus) {
+				this.play()
+			} else {
+				this.startWhenReady();
+			}
+		}, 1000);
+	}
+
+	async ngAfterViewInit() {
+		this.startWhenReady();
 	}
 
 	async play() {

@@ -7,9 +7,11 @@ import { ProgressStatus } from "../model/progress-status";
 })
 export class ProgressStatusService {
 
-	progress: Subject<ProgressStatus|undefined> = new Subject<ProgressStatus|undefined>();
+	progress: Subject<ProgressStatus | undefined> = new Subject<ProgressStatus | undefined>();
+	lastStatus: any;
 
 	next(progressStatus?: ProgressStatus) {
-	    this.progress.next(progressStatus);
+		this.lastStatus = progressStatus;
+		this.progress.next(progressStatus);
 	}
 }

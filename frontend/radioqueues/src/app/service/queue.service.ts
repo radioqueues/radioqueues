@@ -184,9 +184,13 @@ export class QueueService {
 		console.log("scheduling", filenames);
 
 		let files = await this.databaseService.getFiles();
+		let durationSum = 0;
 		for (let filename of filenames!) {
 			let duration = files[filename]?.duration;
-			queue.entries.push(new Entry(filename, undefined, queue.offset, duration, queue.color));
+			if (duration) {
+				queue.entries.push(new Entry(filename, undefined, new Date(queue.offset!.getTime() + durationSum), duration, queue.color));
+				durationSum = durationSum + duration;
+			}
 		}
 		this.recalculateQueue(queue);
 	}

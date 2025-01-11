@@ -279,6 +279,13 @@ export class PlayService {
 		let queueRef = path[0];
 		let queue = this.queueService.resolveQueue(queueRef);
 
+		if (this.isQueue(path)) {
+			if (path.length === 1) {
+				queueRef.offset = now
+				queue.offset = now;
+			}
+		}
+
 		if (this.queueService.isEmptySubsetSumQueue(queueRef)) {
 			await this.queueService.fillQueue(queueRef);
 			let mainQueue = this.queueService.getQueueByType("Main Queue")!;
@@ -286,10 +293,6 @@ export class PlayService {
 		}
 
 		if (this.isQueue(path)) {
-			if (path.length === 1) {
-				queueRef.offset = now
-				queue.offset = now;
-			}
 			path = [...path, ...this.pickFirst(path[path.length - 1])];
 		}
 

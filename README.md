@@ -28,14 +28,15 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 
 ## TODO: Important Features
 
-- Handle exclusion of recently played music from subset-sum
-- Playing entries based on current time
+- subset-sum of 69 Minute queue did not finish
+
+- automatically start playing entries based on current time
 - scheduling queues, that have already been scheduled must not be modified, when they are in the past
 - do not enqueue entries/queues into the past
-- on playing of an empty subset-sum queue, make sure to recalcualte the request duration based on current time and scheduled time of next entry
 - if a entry is moved around, offsets of a referenced queues (and its entries) must be updated
 - prevent adding new entries at the end of a queue, if the queue is completely in the past
 - visually mark past entries and queues (grey background?)
+- shorten a subset-sum queue, if it is followed by unscheduled queues or if a scheduled queue is added inside its timeframe
 
 - in addition to drag&drop from file-manager, add a "multi file opening dialog" 
 
@@ -44,9 +45,7 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 - Option to only show future entries of Main Queue
 - QueueType editor
 - Crossfading music
-- split the subset-sum folder into 10 parts based on the lastPlayed time and add the oldes 10th back to the list, if it got too small.
-- App (for example: Tauri, NeutralinoJS, Electron)
-- if not playing, update offsets of main queue until first scheduled entry // alternative: always play
+- always play
 - make sure floating entries are never below a subset-sum queue 
 - add button to fade out current audio file
 - periodically rescan music folder for new entries

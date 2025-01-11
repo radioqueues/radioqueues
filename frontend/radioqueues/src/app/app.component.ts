@@ -12,10 +12,11 @@ import { FileSystemService } from './service/filesystem.service';
 import { FirstScreenComponent } from './component/first-screen/first-screen.component';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
-    imports: [FirstScreenComponent, QueueManagerMainWindowComponent]
+	selector: 'app-root',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.css'],
+	imports: [FirstScreenComponent, QueueManagerMainWindowComponent],
+	standalone: true
 })
 export class AppComponent implements OnInit {
 
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit {
 	progressStatusSubject: Subject<ProgressStatus> = new Subject();
 
 	showFirstScreen = false;
-	showMainWindow = false;	
+	showMainWindow = false;
 
 	constructor() {
 		this.displayVersion();
@@ -49,7 +50,7 @@ export class AppComponent implements OnInit {
 	7. init AudioFileService
 	8. rescan folder
 	9. setup interval timer to rescan folder
-	 */	
+	 */
 
 	async ngOnInit() {
 		this.initStatusDialogSubscription();

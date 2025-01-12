@@ -20,7 +20,7 @@ import { ProgressStatusService } from 'src/app/service/progress-status.service';
 	imports: [DurationPipe, FormsModule, TitlePipe],
 	standalone: true
 })
-export class AudioControlComponent implements AfterViewInit {
+export class AudioControlComponent {
 
 	audioFileService = inject(AudioFileService);
 	databaseService = inject(DatabaseService);
@@ -40,18 +40,8 @@ export class AudioControlComponent implements AfterViewInit {
 	volumne = 0.8;
 	current?: QueuePath;
 
-	startWhenReady() {
-		setTimeout(() => {
-			if (this.playService.queues && !this.progressStatusService.lastStatus) {
-				this.play()
-			} else {
-				this.startWhenReady();
-			}
-		}, 1000);
-	}
-
-	async ngAfterViewInit() {
-		this.startWhenReady();
+	async onPlayClicked() {
+		this.play();
 	}
 
 	async play() {

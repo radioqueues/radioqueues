@@ -223,6 +223,7 @@ export class PlayService {
 
 		// Is this queue scheduled?
 		if (nextQueue.scheduled) {
+			nextQueue.offset = nextQueue.scheduled;
 
 			let diff = nextQueue.scheduled.getTime() - now.getTime();
 			if (diff > 2 * MINUTES) {

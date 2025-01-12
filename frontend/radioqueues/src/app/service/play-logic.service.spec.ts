@@ -82,7 +82,7 @@ describe('PlayService (logic)', () => {
 		expect(current[0].offset?.toString()).toBe(new Date("3025-01-01T00:00:26.123Z").toString());
 
 		let next = playService.pickNextQueue(current);
-		expect(next?.offset?.toString()).toEqual(new Date("3025-01-01T00:14:52.123Z").toString());
+		expect(next?.offset?.toString()).toEqual(new Date("3025-01-01T00:14:50.704Z").toString());
 	});
 
 	it('should play the next queue after subset-sum queue', async () => {

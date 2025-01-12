@@ -26,9 +26,9 @@ export class QueueService {
 
 	constructor() {
 		this.formatter = new Intl.DateTimeFormat('en-GB', {
-		  hour: '2-digit',
-		  minute: '2-digit',
-		  hour12: false
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: false
 		});
 		this.init();
 	}
@@ -198,6 +198,7 @@ export class QueueService {
 				durationSum = durationSum + duration;
 			}
 		}
+		entry.duration = durationSum;
 		this.recalculateQueue(queue);
 	}
 
@@ -223,7 +224,6 @@ export class QueueService {
 			return;
 		}
 
-
 		let now = DateTimeUtil.now();
 		if (!queue.offset) {
 			if (queue.entries?.length) {
@@ -232,27 +232,30 @@ export class QueueService {
 		}
 
 		// TODO: the offset of an entry should be based on the offset of the previous entry and its duration, not on the time from the start of the queue
-		let offset = queue.offset?.getTime() || 0;
 		let durationSum = 0;
 		for (let i = 0; i < queue.entries.length; i++) {
+			let start = queue.offset!;
+			if (i > 0) {
+				let previousEntry = queue.entries[i - 1];
+				start = new Date((previousEntry.offset?.getTime() ?? 0) + (previousEntry.duration ?? 0));
+			}
 			let entry = queue.entries[i];
-			let start = new Date(offset + durationSum);
 			if ((start <= now && (!entry.scheduled || entry.scheduled <= now)) || (entry.offset && entry.offset <= now)) {
 				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
 				continue;
 			}
+			entry.offset = start;
 			if (entry.scheduled) {
 				let subsetSumEntry: Entry | undefined = undefined;
-				let diff = entry.scheduled.getTime() - (offset + durationSum);
-				
+				let diff = entry.scheduled.getTime() - (start.getTime());
+
 				if (i > 0 && this.isEmptySubsetSumQueue(queue.entries[i - 1])) {
 					subsetSumEntry = queue.entries[i - 1];
 				}
 
-				// TODO: only insert a subset-sum queue, if there difference between the calcuclated offset and the scheduled time is above the tollerance
+				// insert a subset-sum queue, if there difference between the calcuclated offset and the scheduled time is above the tollerance
 				if (!subsetSumEntry && (diff > this.tolerance)) {
-					// TODO: treat non empty subset-sum queues as normal queues, i. r. do not change duration and add a second subset-sum queue afterwards, if required
-					// If this is the first entry, or the previous entry is not of type subset-sub,
+					// If this is the first entry, or the previous entry is not an empty subset-sub,
 					// We need to insert one.
 					if (i == 0 || !this.isEmptySubsetSumQueue(queue.entries[i - 1])) {
 						if (entry.scheduled > start) {
@@ -285,12 +288,11 @@ export class QueueService {
 					if (subsetSumEntry.queueRef) {
 						this.queues[subsetSumEntry.queueRef].duration = subsetSumEntry.duration;
 					}
+					entry.offset = new Date((subsetSumEntry.offset?.getTime() ?? 0) + (subsetSumEntry.duration ?? 0));
 				}
 
-				entry.offset = new Date(offset + durationSum);
 				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
 			} else {
-				entry.offset = start;
 				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
 			}
 		}
@@ -300,7 +302,7 @@ export class QueueService {
 		for (let entry of this.getEntryRefsForQueue(queue)) {
 			entry.duration = durationSum;
 		}
-		
+
 		// TODO: recalc all referencing queues without circle
 
 		let mainQueue = this.getQueueByType("Main Queue");
@@ -344,7 +346,7 @@ export class QueueService {
 			if (previousEntry.offset) {
 				offset = new Date(previousEntry.offset.getTime() + previousEntry.duration!);
 				// TODO: if previousEntry is subset-sum, clear future sub-entries.
-			} 
+			}
 		}
 		if (schedule) {
 			offset = targetOffset;
@@ -367,7 +369,7 @@ export class QueueService {
 	schedule(queue: Queue, date: Date) {
 		console.log("ScheduleDialog closed", queue, date);
 		// TODO: Replace "unscheduled" in queue name
-		queue.name = queue.type + " " + this.formatter.format(date); 
+		queue.name = queue.type + " " + this.formatter.format(date);
 		this.enqueue(queue, date, true);
 	}
 
@@ -381,11 +383,11 @@ export class QueueService {
 		this.databaseService.saveQueues();
 	}
 
-	getEntryByTime(queue: Queue, date: Date): Entry|undefined {
+	getEntryByTime(queue: Queue, date: Date): Entry | undefined {
 		if (!queue?.entries?.length) {
 			return undefined;
 		}
-		let lastEntry: Entry|undefined = undefined
+		let lastEntry: Entry | undefined = undefined
 		for (let entry of queue.entries) {
 			if (entry.offset && entry.duration && entry.duration > 0 && entry.offset > date) {
 				return lastEntry;
@@ -395,7 +397,7 @@ export class QueueService {
 		return lastEntry;
 	}
 
-	deleteEntryFromQueueByIndex(queue: Queue|undefined, index: number) {
+	deleteEntryFromQueueByIndex(queue: Queue | undefined, index: number) {
 		if (!queue || index < 0 || !queue.entries?.length || index >= queue.entries.length) {
 			return;
 		}

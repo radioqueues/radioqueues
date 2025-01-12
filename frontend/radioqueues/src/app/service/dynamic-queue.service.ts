@@ -18,21 +18,32 @@ export class DynamicQueueService {
 	private databaseService = inject(DatabaseService);
 	private errorService = inject(ErrorService);
 
-	public async scheduleQueue(queueTypeName: string, duration: number) {
-		while (duration > 70 * MINUTES) {
-			// TODO: for realy long duration, just pick long files, subset-sum is too expensive
-			duration = duration - 1 * HOURS;
-		}
+	public async scheduleQueue(queueTypeName: string, duration: number): Promise<string[] | undefined> {
+		let prefix: string[] = [];
+
+
 		let list = await this.createMusicFileList(queueTypeName, 50);
 		if (!list || !list.length) {
 			this.errorService.errorDialog("Cannot find files for subset-sum queue type " + queueTypeName);
-			return;
+			return undefined;
 		}
 
+		// return everything, if there is not enough music available
+		if (this.isNotEnoughMusicAvailable(list, duration)) {
+			// TODO: if this is not enough, use the complete queue not just the 50
+			// TODO: if this is still not enough, use it multiple times
+			return list.map((item) => { return item.name });
+		}
+
+		// For really long durations, just pick longest files that fit, subset-sum is too expensive
+		duration = this.handleLongDuration(list, duration, prefix);
+
+		// aim for 30 second tolerance, if that does not work aim for 60 seconds tolerance
 		let result = this.pickMusicSubset(list, duration, 30 * SECONDS);
 		if (!result.totalDuration) {
 			result = this.pickMusicSubset(list, duration, 60 * SECONDS);
 		}
+
 		if (!result.totalDuration) {
 			if (duration > 3 * MINUTES || list.length < 20) {
 				console.log("unused:", list);
@@ -49,7 +60,7 @@ export class DynamicQueueService {
 
 		if (result.indexes) {
 			console.log(list?.length, (result.totalDuration - duration) / SECONDS, result);
-			return result.names;
+			return [...prefix, ...result.names];
 		}
 
 
@@ -98,6 +109,30 @@ export class DynamicQueueService {
 		const filesToKeep = Math.ceil(musicFiles.length * (percentage / 100));
 		musicFiles.sort((a, b) => b.lastPlayedAge - a.lastPlayedAge);
 		return musicFiles.slice(0, filesToKeep);
+	}
+
+	private isNotEnoughMusicAvailable(list: Item[], duration: number): boolean {
+		let totalDuration = list.reduce((sum, item) => sum + item.duration, 0);
+		return totalDuration < duration;
+	}
+
+	private handleLongDuration(list: Item[], duration: number, prefix: string[]): number {
+		list.sort((a, b) => b.duration - a.duration);
+		let i = 0;
+		while (duration > 30 * MINUTES) {
+			if (i > list.length) {
+				break;
+			}
+			let item = list[i];
+			if (item.duration < duration) {
+				prefix.push(item.name);
+				duration = duration - item.duration;
+				list.splice(i, 1);
+			} else {
+				i++;
+			}
+		}
+		return duration;
 	}
 
 	pickMusicSubset(musicFiles: Array<Item>, targetTime: number, tolerance: number) {

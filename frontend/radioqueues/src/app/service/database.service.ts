@@ -83,6 +83,9 @@ export class DatabaseService {
 	}
 
 	public async init() {
+		if (this.inited) {
+			return;
+		}
 		await this.fileSystemService.init();
 		if (!this.fileSystemService.rootHandle) {
 			console.error("Called DatabaseService.init without valid FileSystemService.rootHandle");

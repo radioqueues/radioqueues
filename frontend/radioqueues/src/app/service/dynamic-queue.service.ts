@@ -1,6 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import { DatabaseService } from "./database.service";
-import { SECONDS, MINUTES, HOURS } from "../model/time";
+import { SECONDS, MINUTES } from "../model/time";
 import { ErrorService } from "./error.service";
 import { FileMetaData } from "../model/file-meta-data";
 

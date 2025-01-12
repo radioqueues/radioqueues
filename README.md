@@ -30,7 +30,6 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 
 - subset-sum of 69 Minute queue did not finish
 
-- automatically start playing entries based on current time
 - scheduling queues, that have already been scheduled must not be modified, when they are in the past
 - do not enqueue entries/queues into the past
 - if a entry is moved around, offsets of a referenced queues (and its entries) must be updated

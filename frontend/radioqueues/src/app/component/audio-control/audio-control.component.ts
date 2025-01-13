@@ -32,6 +32,7 @@ export class AudioControlComponent {
 
 	@Input() queues!: Record<string, Queue>;
 	@ViewChild("audio") audio!: ElementRef<HTMLAudioElement>;
+	playing = false;
 	mainQueue!: Queue;
 
 	remainingTime?: number;
@@ -41,6 +42,7 @@ export class AudioControlComponent {
 	current?: QueuePath;
 
 	async onPlayClicked() {
+		this.playing = true;
 		this.play();
 	}
 

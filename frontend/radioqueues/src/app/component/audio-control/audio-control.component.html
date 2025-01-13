@@ -27,4 +27,6 @@
 }
 &nbsp;
 
-<button (click)="onPlayClicked()">▶️</button>
+@if (!playing) {
+	<button (click)="onPlayClicked()">▶️</button>
+}

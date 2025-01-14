@@ -28,5 +28,7 @@
 &nbsp;
 
 @if (!playing) {
-	<button (click)="onPlayClicked()">▶️</button>
+	<button (click)="onPlayClicked()" title="Start playing">▶️</button>
+} @else {
+	<button (click)="onSelectClicked()" title="Select playing entry">📍</button>
 }

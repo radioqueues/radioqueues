@@ -46,6 +46,15 @@ export class AudioControlComponent {
 		this.play();
 	}
 
+	onSelectClicked() {
+		if (this.current?.length) {
+			this.queueService.resolveQueue(this.current[0]).visible = true;
+			if (this.current.length > 0) {
+				// TODO
+			}
+		}
+	}
+
 	async play() {
 		await this.playService.logic();
 		this.current = this.playService.current!;

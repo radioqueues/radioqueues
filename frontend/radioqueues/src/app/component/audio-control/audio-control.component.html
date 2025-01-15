@@ -30,5 +30,7 @@
 @if (!playing) {
 	<button (click)="onPlayClicked()" title="Start playing">▶️</button>
 } @else {
-	<button (click)="onSelectClicked()" title="Select playing entry">📍</button>
+	<button (click)="onSelectClicked()" title="Open current queue">📍</button>
+	<button (click)="onClearRestOfCurrentQueue()" title="Clears all pending files from the current queue">⏭️</button>
+	
 }

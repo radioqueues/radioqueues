@@ -55,6 +55,12 @@ export class AudioControlComponent {
 		}
 	}
 
+	onClearRestOfCurrentQueue() {
+		if (this.current?.length && this.current?.length > 1) {
+			this.queueService.deleteRestOfQueue(this.current[0], this.current[1]);
+		}
+	}
+
 	async play() {
 		await this.playService.logic();
 		this.current = this.playService.current!;

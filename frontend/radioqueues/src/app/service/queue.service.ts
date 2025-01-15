@@ -13,6 +13,7 @@ import { ErrorService } from "./error.service";
 	providedIn: 'root'
 })
 export class QueueService {
+
 	private readonly databaseService = inject(DatabaseService);
 	private readonly dynamicQueueService = inject(DynamicQueueService);
 	private readonly errorService = inject(ErrorService);
@@ -438,4 +439,12 @@ export class QueueService {
 		this.recalculateQueue(queue);
 	}
 
+	deleteRestOfQueue(queueRef: Entry, entry: Entry) {
+		let queue = this.resolveQueue(queueRef);
+		let idx = queue.entries?.indexOf(entry);
+		if (idx > -1) {
+			queue.entries.splice(idx + 1);
+		}
+		this.recalculateQueue(queue);
+	}
 }

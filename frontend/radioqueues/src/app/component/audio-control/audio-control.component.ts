@@ -61,6 +61,15 @@ export class AudioControlComponent {
 		}
 	}
 
+	async onContinue() {
+		if (this.current?.length && this.current?.length > 1) {
+			let entry = this.current[this.current.length - 1];
+			entry.duration = entry.duration! - this.remainingTime!;
+			this.queueService.recalculateQueue(this.queueService.resolveQueue(this.current[this.current.length - 2]));
+			await this.play();
+		}
+	}
+
 	async play() {
 		await this.playService.logic();
 		this.current = this.playService.current!;

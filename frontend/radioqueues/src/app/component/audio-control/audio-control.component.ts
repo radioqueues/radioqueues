@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 
 import { FileSystemService } from 'src/app/service/filesystem.service';
 import { DatabaseService } from 'src/app/service/database.service';

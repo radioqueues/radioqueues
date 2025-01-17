@@ -61,7 +61,7 @@ export class DatabaseService {
 			"name": "Music",
 			"color": "#AAA",
 			"scheduleStrategy": "subset-sum",
-			"folder": "Musik"
+			"folder": "Music"
 		}
 
 	};
@@ -105,6 +105,7 @@ export class DatabaseService {
 			this.queueTypes = await this.fileSystemService.getJsonFromFilename("radioqueues/queue-types.json")
 		} catch (e) {
 			console.log("loading queueTypes", e);
+			await this.saveQueueTypes();
 		}
 
 		try {
@@ -121,6 +122,10 @@ export class DatabaseService {
 
 	public async saveQueues() {
 		await this.fileSystemService.saveJsonToFilename("radioqueues/queues.json", this.queues);
+	}
+
+	public async saveQueueTypes() {
+		await this.fileSystemService.saveJsonToFilename("radioqueues/queue-types.json", this.queueTypes);
 	}
 
 	public async getQueues(): Promise<Record<string, Queue>> {

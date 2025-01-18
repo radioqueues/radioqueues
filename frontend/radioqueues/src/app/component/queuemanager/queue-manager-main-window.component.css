@@ -10,6 +10,16 @@
 
 .toolbar {
 	text-align: right;
+	font-size: large;
+}
+
+.toolbar select {
+	font-size: large;
+}
+
+.toolbar button {
+	font-size: large;
+	margin-left: 2px
 }
 
 app-queue-window {

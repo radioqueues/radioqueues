@@ -16,6 +16,7 @@ import { ProgressStatusService } from 'src/app/service/progress-status.service';
 
 @Component({
 	selector: 'app-audio-control',
+	styleUrl: './audio-control.component.css',
 	templateUrl: './audio-control.component.html',
 	imports: [DurationPipe, FormsModule, TitlePipe],
 	standalone: true

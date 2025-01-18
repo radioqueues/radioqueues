@@ -1,11 +1,14 @@
 <div class="toolbar">
 	<app-audio-control [queues]="queues"></app-audio-control>
+	|
 	<select id="newQueue" [(ngModel)]="newQueueType" (change)="newQueue()">
 		<option value="">-- New --</option>
-	    @for (queueType of queueTypeArray; track queueType) {
-	      <option [value]="queueType.name" [style.color]="queueType.color">{{queueType.name}}</option>
-	    }
+		@for (queueType of queueTypeArray; track queueType) {
+			<option [value]="queueType.name" [style.color]="queueType.color">{{queueType.name}}</option>
+		}
 	</select>
+	|
+	<button title="Scan files" (click)="onScanFiles()">🔄</button>
 	<button title="Close project" (click)="onCloseProject()">📁</button>
 	<button title="Open settings" (click)="onSettingsClicked()">⚙️</button>
 	<button title="Show documentation" (click)="onHelp()">❓</button>
@@ -13,14 +16,11 @@
 <div cdkDropListGroup>
 	<div class="queue-container">
 		@for (item of queues | keyvalue; track item.value) {
-			@if (item.value.visible) {
-				<app-queue-window
-					[(queues)]="queues"
-					[queue]="item.value"
-					[queueTypes]="queueTypes"
-					(queuesChange)="onQueueChange()"
-					[readonly]="item.value.name === 'History' || item.value.name === 'Main Queue'"
-					[supportsSubQueues]="item.value.name === 'Main Queue'" />
+		@if (item.value.visible) {
+			<app-queue-window [(queues)]="queues" [queue]="item.value" [queueTypes]="queueTypes"
+				(queuesChange)="onQueueChange()"
+				[readonly]="item.value.name === 'History' || item.value.name === 'Main Queue'"
+				[supportsSubQueues]="item.value.name === 'Main Queue'" />
 			}
 		}
 	</div>

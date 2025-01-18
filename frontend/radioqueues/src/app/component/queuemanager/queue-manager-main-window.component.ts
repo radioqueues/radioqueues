@@ -58,6 +58,9 @@ export class QueueManagerMainWindowComponent implements OnInit {
 		(document.getElementById("newQueue") as HTMLSelectElement).value = "";
 	}
 
+	onScanFiles() {
+		this.fileSystemService.scanFiles();
+	}
 
 	onSettingsClicked() {
 		this.dialog.open(QueueTypeEditorComponent);

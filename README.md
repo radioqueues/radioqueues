@@ -29,7 +29,7 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 ## TODO: Important Features
 
 - automatically show Main Queue on program start (even if it was hidden before)
-- button to rescan the project folder for new / modified files
+- detect deleted files from a subset-sub folder
 
 - scheduling queues, that have already been scheduled must not be modified, when they are in the past
 - do not enqueue entries/queues into the past
@@ -39,13 +39,9 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 
 - in addition to drag&drop from file-manager, add a "multi file opening dialog" 
 
-- Fade out current audio file
 - Automatic cloning and scheduling of queues e. g. news
 - Option to only show future entries of Main Queue
 - QueueType editor
 - Crossfading music
-- always play
 - make sure floating entries are never below an empty subset-sum queue
-- periodically rescan music folder for new entries
-- window position of size of main queue
 

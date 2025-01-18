@@ -1,3 +1,4 @@
+![License: AGPL](https://img.shields.io/github/license/radioqueues/radioqueues) ![Release: Alpha](https://img.shields.io/badge/Release-Alpha-red)
 # RadioQueues
 
 RadioQueues is queue manager which allows you to plan a radio program.

@@ -28,11 +28,11 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 
 ## TODO: Important Features
 
-- subset-sum of 69 Minute queue did not finish
+- automatically show Main Queue on program start (even if it was hidden before)
+- button to rescan the project folder for new / modified files
 
 - scheduling queues, that have already been scheduled must not be modified, when they are in the past
 - do not enqueue entries/queues into the past
-- if a entry is moved around, offsets of a referenced queues (and its entries) must be updated
 - prevent adding new entries at the end of a queue, if the queue is completely in the past
 - visually mark past entries and queues (grey background?)
 - shorten a subset-sum queue, if it is followed by unscheduled queues or if a scheduled queue is added inside its timeframe
@@ -45,8 +45,7 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 - QueueType editor
 - Crossfading music
 - always play
-- make sure floating entries are never below a subset-sum queue 
-- add button to fade out current audio file
+- make sure floating entries are never below an empty subset-sum queue
 - periodically rescan music folder for new entries
 - window position of size of main queue
 

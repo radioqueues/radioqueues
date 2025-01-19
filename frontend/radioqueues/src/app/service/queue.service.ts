@@ -38,6 +38,10 @@ export class QueueService {
 		this.queueTypes = await this.databaseService.getQueueTypes();
 		this.queues = await this.databaseService.getQueues();
 		this.files = await this.databaseService.getFiles();
+		let mainQueue = this.getQueueByType("Main Queue");
+		if (mainQueue) {
+			mainQueue.visible = true;
+		}
 	}
 
 	createNewQueueOrShowInternalQueue(queueTypeName: string) {

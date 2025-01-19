@@ -13,7 +13,7 @@ RadioQueues consists of static files that need to be served by a server supporti
 
 ## Current state of development
 
-RadioQueues is under heavy development. Several key features are still on the TODO list. It is not quite ready for production, yet.
+RadioQueues is under heavy development.
 
 ## Development
 
@@ -29,7 +29,6 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 
 ## TODO: Important Features
 
-- automatically show Main Queue on program start (even if it was hidden before)
 - detect deleted files from a subset-sub folder
 
 - scheduling queues, that have already been scheduled must not be modified, when they are in the past

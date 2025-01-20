@@ -30,12 +30,11 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 ## TODO: Important Features
 
 - detect deleted files from a subset-sub folder
+- shorten a subset-sum queue, if it is followed by unscheduled queues or if a scheduled queue is added inside its timeframe
 
-- scheduling queues, that have already been scheduled must not be modified, when they are in the past
 - do not enqueue entries/queues into the past
 - prevent adding new entries at the end of a queue, if the queue is completely in the past
 - visually mark past entries and queues (grey background?)
-- shorten a subset-sum queue, if it is followed by unscheduled queues or if a scheduled queue is added inside its timeframe
 
 - in addition to drag&drop from file-manager, add a "multi file opening dialog" 
 

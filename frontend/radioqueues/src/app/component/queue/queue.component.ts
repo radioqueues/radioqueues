@@ -125,7 +125,7 @@ export class QueueComponent {
 	async createQueueEntry(queue: Queue, name: string) {
 		let files = await this.databaseService.getFiles();
 		let duration = files[name]?.duration;
-		return new Entry(name, undefined, new Date("2024-01-01 00:00:00"), duration, queue.color);
+		return new Entry(name, undefined, new Date("9999-12-31 00:00:00"), duration, queue.color);
 	}
 
 	onDragEnter(event: Event) {

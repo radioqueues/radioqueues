@@ -23,7 +23,7 @@ import { DatabaseService } from 'src/app/service/database.service';
 export class QueueTypeEditorComponent implements OnInit {
 	readonly databaseService = inject(DatabaseService);
 
-	readonly displayedColumns = ["name", "color", "jingles", "scheduleTime", "scheduleStrategy", "folder"];
+	readonly displayedColumns = ["name", "color", "jingles", /*"scheduleTime",*/ "scheduleStrategy", "folder"];
 
 	queueTypes!: Array<QueueType>;
 
@@ -31,5 +31,4 @@ export class QueueTypeEditorComponent implements OnInit {
 		this.queueTypes = Object.values(await this.databaseService.getQueueTypes());
 
 	}
-
 }

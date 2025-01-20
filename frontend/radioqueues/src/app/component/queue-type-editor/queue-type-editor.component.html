@@ -4,11 +4,21 @@
 	<table mat-table [dataSource]="queueTypes" class="mat-elevation-z8">
 		<mat-text-column name="name"></mat-text-column>
 		<ng-container matColumnDef="color">
-		  <th mat-header-cell *matHeaderCellDef>Color</th>
-		  <td mat-cell *matCellDef="let queueType"><span [style.color]="queueType.color">{{queueType.color}}</span></td>
+			<th mat-header-cell *matHeaderCellDef>Color</th>
+			<td mat-cell *matCellDef="let queueType">
+				<span [style.color]="queueType.color">{{queueType.color}}</span>
+			</td>
 		</ng-container>
-		<mat-text-column name="jingles"></mat-text-column>
-		<mat-text-column name="scheduleTime"></mat-text-column>
+		<ng-container matColumnDef="jingles">
+			<th mat-header-cell *matHeaderCellDef>Jingles</th>
+			<td mat-cell *matCellDef="let queueType">
+				@for(jingle of queueType.jingles; track jingle; let last=$last) {
+					<span>{{jingle}}</span>@if(!last) {<br>}
+				}
+			</td>
+		</ng-container>
+
+		<!--<mat-text-column name="scheduleTime"></mat-text-column>-->
 		<mat-text-column name="scheduleStrategy"></mat-text-column>
 		<mat-text-column name="folder"></mat-text-column>
 

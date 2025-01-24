@@ -3,4 +3,5 @@ export class FileMetaData {
 	lastModified?: number;
 	size?: number;
 	lastPlayed?: Date[];
+	valid?: boolean;
 }

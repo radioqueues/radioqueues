@@ -27,9 +27,8 @@ ng serve
 In order to simplify development, you can add the parameter `"debugForceToday": true` to queues.json. It will automatically update all timestamps in queues.json to the current date, keeping the time value.
 
 
-## TODO: Important Features
+## TODO: Features
 
-- detect deleted files from a subset-sub folder
 - shorten a subset-sum queue, if it is followed by unscheduled queues or if a scheduled queue is added inside its timeframe
 
 - do not enqueue entries/queues into the past

@@ -30,7 +30,7 @@ export class FileSystemService {
 		let permission = await handle?.queryPermission({ mode: 'readwrite' });
 		console.log("loaded directory handle", handle, permission);
 		if (permission === 'granted') {
-		    this.rootHandle = handle;
+			this.rootHandle = handle;
 		}
 	}
 
@@ -49,7 +49,7 @@ export class FileSystemService {
 	}
 
 	public async saveJsonToFilename(filename: string, data: object) {
-		let fileHandle = await this.getFileHandle(filename, {create: true});
+		let fileHandle = await this.getFileHandle(filename, { create: true });
 		const stream = await fileHandle!.createWritable();
 		const json = JSON.stringify(data, null, 2);
 		await stream.write(json);

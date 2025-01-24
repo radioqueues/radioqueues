@@ -94,7 +94,7 @@ export class DynamicQueueService {
 		let now = new Date();
 		for (let filename in files) {
 			let file = files[filename];
-			if (filename.startsWith(folder) && file.duration && file.duration > 0) {
+			if (filename.startsWith(folder) && file.valid && file.duration && file.duration > 0) {
 				let age = Number.POSITIVE_INFINITY;
 				if (file.lastPlayed?.length) {
 					age = now.getTime() - file.lastPlayed[file.lastPlayed.length - 1].getTime();

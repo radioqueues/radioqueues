@@ -13,7 +13,7 @@ RadioQueues consists of static files that need to be served by a server supporti
 
 ## Current state of development
 
-RadioQueues is under heavy development.
+RadioQueues is fully usable at this point. But it is still under heavy development.
 
 ## Development
 
@@ -28,6 +28,9 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 
 
 ## TODO: Features
+
+- when a new queue is created, update the queue timestamp?
+- when a new queue is enqueue, update the queue timestamp (works on scheduling, but not on enqueue next)
 
 - shorten a subset-sum queue, if it is followed by unscheduled queues or if a scheduled queue is added inside its timeframe
 

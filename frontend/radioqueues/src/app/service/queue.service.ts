@@ -221,7 +221,7 @@ export class QueueService {
 	}
 
 
-	recalculateQueue(queue: Queue, save = true) {
+	private recalculateQueueInternal(queue: Queue) {
 
 		// do not recalculate empty queues
 		// especially don't overwrite playholder duration of subset-sum queues
@@ -249,6 +249,7 @@ export class QueueService {
 				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
 				continue;
 			}
+			let originalOffset = entry.offset;
 			entry.offset = start;
 			if (entry.scheduled) {
 				let subsetSumEntry: Entry | undefined = undefined;
@@ -295,9 +296,10 @@ export class QueueService {
 					}
 					entry.offset = new Date((subsetSumEntry.offset?.getTime() ?? 0) + (subsetSumEntry.duration ?? 0));
 				}
-
+				this.recalculateSubQueueIfOffsetChanged(entry, originalOffset);
 				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
 			} else {
+				this.recalculateSubQueueIfOffsetChanged(entry, originalOffset);
 				durationSum = durationSum + ((entry.duration && entry.duration > 0) ? entry.duration : 0);
 			}
 		}
@@ -307,6 +309,18 @@ export class QueueService {
 		for (let entry of this.getEntryRefsForQueue(queue)) {
 			entry.duration = durationSum;
 		}
+	}
+
+	private recalculateSubQueueIfOffsetChanged(entry: Entry, originalOffset?: Date) {
+		if (originalOffset != entry.offset && entry.queueRef) {
+			let subQueue = this.resolveQueue(entry);
+			subQueue.offset = entry.offset;
+			this.recalculateQueueInternal(subQueue);
+		}
+	}
+
+	recalculateQueue(queue: Queue, save = true) {
+		this.recalculateQueueInternal(queue);
 
 		// TODO: recalc all referencing queues without circle
 

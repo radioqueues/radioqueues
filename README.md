@@ -29,8 +29,7 @@ In order to simplify development, you can add the parameter `"debugForceToday": 
 
 ## TODO: Features
 
-- when a new queue is created, update the queue timestamp?
-- when a new queue is enqueue, update the queue timestamp (works on scheduling, but not on enqueue next)
+- when a new queue is create, and the main queue is completely in the past, treat it as an empty main queue (e. g.) initially add it 15 minutes into the future
 
 - shorten a subset-sum queue, if it is followed by unscheduled queues or if a scheduled queue is added inside its timeframe
 

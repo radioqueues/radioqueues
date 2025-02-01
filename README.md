@@ -1,4 +1,6 @@
-![License: AGPL](https://img.shields.io/github/license/radioqueues/radioqueues) ![Release: Alpha](https://img.shields.io/badge/Release-Alpha-red)
+![License: AGPL](https://img.shields.io/github/license/radioqueues/radioqueues) ![Release: Beta](https://img.shields.io/badge/Release-Beta-blue) [![Install](https://img.shields.io/badge/Install-green)](https://radioqueues.github.io)
+
+
 # RadioQueues
 
 RadioQueues is queue manager which allows you to plan a radio program.
@@ -7,7 +9,12 @@ It supports multiple queues (e. g. for music, news, ads).
 
 ## Requirements
 
+[https://radioqueues.github.io](https://radioqueues.github.io)
+
 RadioQueues works in your browser. It requires permission to a folder on your filesystem in order to play audio files and store the queues. At the time of writing only Chrome and Edge support the FileSystem-API. Therefore RadioQueues does not work in Firefox at the moment.
+
+RadioQueues can be installed for offline use by clicking on the Install-Button in the browser address bar.
+
 
 RadioQueues consists of static files that need to be served by a server supporting https, unless the server runs on localhost.
 

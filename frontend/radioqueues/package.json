@@ -24,7 +24,7 @@
     "@angular/router": "^19.1.1",
     "@angular/service-worker": "^19.1.6",
     "material": "^0.9.21",
-    "rxjs": "~7.8.1",
+    "rxjs": "~7.8.2",
     "tslib": "^2.5.2",
     "zone.js": "~0.15.0"
   },

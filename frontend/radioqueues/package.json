@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "^19.2.9",
     "@angular/router": "^20.0.3",
     "@angular/service-worker": "^20.0.3",
-    "material": "^0.9.21",
+    "material": "^0.9.24",
     "rxjs": "~7.8.2",
     "tslib": "^2.5.2",
     "zone.js": "~0.15.1"

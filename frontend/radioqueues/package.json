@@ -20,7 +20,7 @@
     "@angular/forms": "^21.0.8",
     "@angular/material": "^21.1.0",
     "@angular/platform-browser": "^21.1.1",
-    "@angular/platform-browser-dynamic": "^21.1.1",
+    "@angular/platform-browser-dynamic": "^21.1.2",
     "@angular/router": "^21.1.1",
     "@angular/service-worker": "^21.1.1",
     "material": "^1.0.3",
